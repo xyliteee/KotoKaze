@@ -1,0 +1,102 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <Platforms>AnyCPU;x64</Platforms>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ApplicationIcon>studio.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="image\Header\3000.jpg" />
+    <None Remove="image\Header\5.jpg" />
+    <None Remove="image\Header\50.jpg" />
+    <None Remove="image\Header\TestImage.jpg" />
+    <None Remove="image\icons\Clean.png" />
+    <None Remove="image\icons\Clean_b.png" />
+    <None Remove="image\icons\CPU.png" />
+    <None Remove="image\icons\Disk.png" />
+    <None Remove="image\icons\Home.png" />
+    <None Remove="image\icons\home_b.png" />
+    <None Remove="image\icons\PCTest.png" />
+    <None Remove="image\icons\PCTest_b.png" />
+    <None Remove="image\icons\RAM.png" />
+    <None Remove="image\icons\Recyclebin.png" />
+    <None Remove="image\icons\scan.png" />
+    <None Remove="image\icons\scaning.png" />
+    <None Remove="image\icons\Setting.png" />
+    <None Remove="image\icons\setting_b.png" />
+    <None Remove="image\icons\startclean.png" />
+    <None Remove="image\icons\Tools.png" />
+    <None Remove="image\icons\Tools_b.png" />
+    <None Remove="image\icons\windows10.png" />
+    <None Remove="image\icons\windows10black.png" />
+    <None Remove="image\icons\windows11.png" />
+    <None Remove="otherSource\TestHtml.html" />
+    <None Remove="otherSource\testmarkdown.MD" />
+    <None Remove="otherSource\testsql.sqlite" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="studio.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="image\Header\3000.jpg" />
+    <EmbeddedResource Include="image\Header\5.jpg" />
+    <EmbeddedResource Include="image\Header\50.jpg" />
+    <EmbeddedResource Include="image\Header\TestImage.jpg" />
+    <EmbeddedResource Include="otherSource\testmarkdown.MD" />
+    <EmbeddedResource Include="otherSource\testsql.sqlite" />
+    <Resource Include="image\icons\CPU.png" />
+    <Resource Include="image\icons\Disk.png" />
+    <Resource Include="image\icons\RAM.png" />
+    <Resource Include="image\icons\Recyclebin.png" />
+    <Resource Include="image\icons\scan.png" />
+    <Resource Include="image\icons\scaning.png" />
+    <Resource Include="image\icons\startclean.png" />
+    <Resource Include="image\icons\Tools.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HandyControl" Version="3.4.0" />
+    <PackageReference Include="HandyControls" Version="3.5.0" />
+    <PackageReference Include="HelixToolkit" Version="2.24.0" />
+    <PackageReference Include="Markdig" Version="0.34.0" />
+    <PackageReference Include="OpenCvSharp4" Version="4.9.0.20240103" />
+    <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.9.0.20240103" />
+    <PackageReference Include="SevenZip" Version="19.0.0" />
+    <PackageReference Include="SkiaSharp" Version="2.88.7" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
+    <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.118" />
+    <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.118" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.1" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="image\icons\Clean.png" />
+    <Resource Include="image\icons\Clean_b.png" />
+    <Resource Include="image\icons\Home.png" />
+    <Resource Include="image\icons\home_b.png" />
+    <Resource Include="image\icons\PCTest.png" />
+    <Resource Include="image\icons\PCTest_b.png" />
+    <Resource Include="image\icons\Setting.png" />
+    <Resource Include="image\icons\setting_b.png" />
+    <Resource Include="image\icons\Tools_b.png" />
+    <Resource Include="image\icons\windows10.png" />
+    <Resource Include="image\icons\windows10black.png" />
+    <Resource Include="image\icons\windows11.png" />
+    <EmbeddedResource Include="otherSource\TestHtml.html" />
+  </ItemGroup>
+
+</Project>

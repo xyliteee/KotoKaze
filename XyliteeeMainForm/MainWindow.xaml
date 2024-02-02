@@ -1,0 +1,88 @@
+﻿<Window x:Class="XyliteeeMainForm.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:XyliteeeMainForm"
+        mc:Ignorable="d"
+        Title="哼哼哼啊啊啊啊啊啊" WindowStyle="None" Height="540" Width="820" ResizeMode="CanMinimize" >
+    <WindowChrome.WindowChrome>
+        <WindowChrome
+     ResizeBorderThickness="0"
+     CaptionHeight="30"
+     CornerRadius="0"
+     UseAeroCaptionButtons="False"
+     GlassFrameThickness="2"/>
+    </WindowChrome.WindowChrome>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid>
+        
+        <Canvas>
+            <Canvas x:Name="topBar"  Background="#F3F8FE" Width="820" Height="30">
+
+                <Button x:Name="minButton" WindowChrome.IsHitTestVisibleInChrome="True" Click="MinButton_Click" FontSize="12" Content="—" Height="30" Width="40" Canvas.Left="740" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource minButtonStyle}"/>
+
+
+                <Button x:Name="shutDownButton" WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource ShutdownButtonStyle}" FontSize="20" Content="×" Click="ShutdownButton_Click" Height="30" Width="40" Canvas.Left="780" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+
+            </Canvas>
+            
+            <Canvas x:Name="leftDock" Background="#A0C5E0" Height="510" Canvas.Top="30" Width="150">
+                <Canvas x:Name="homePageCanvas" Height="60" Width="150" Canvas.Top="20">
+                    <Button x:Name="homePageButton" Style="{StaticResource DockButton}" VerticalAlignment="Center" Height="60" Width="150"
+                Content="          首页" TextBlock.Foreground="#1F67B3" FontSize="24" FontFamily="Microsoft Yahei" FontWeight="Bold" HorizontalAlignment="Left" Click="DockButtonAction" MouseEnter="DockButtonEnter" MouseLeave="DockButtonLeave"/>
+                    <Image x:Name="homeImage"  Height="30" Width="30" Canvas.Top="15" Canvas.Left="30" IsHitTestVisible="False" Source="\image\icons\Home_b.png"/>
+                </Canvas>
+
+                <Canvas x:Name="cleanPageCanvas" Height="60" Width="150" Canvas.Top="80">
+                    <Button x:Name="cleanPageButton" Style="{StaticResource DockButton}" VerticalAlignment="Center" Height="60" Width="150"
+                Content="          清理" TextBlock.Foreground="White" FontSize="24" FontFamily="Microsoft Yahei" FontWeight="Bold" HorizontalAlignment="Left" Click="DockButtonAction" MouseEnter="DockButtonEnter" MouseLeave="DockButtonLeave"/>
+                    <Image x:Name="cleanImage"  Height="30" Width="30" Canvas.Top="15" Canvas.Left="30" IsHitTestVisible="False" Source="\image\icons\Clean.png"/>
+                </Canvas>
+
+                <Canvas x:Name="PCTestCanvas" Height="60" Width="150" Canvas.Top="140">
+                    <Button x:Name="PCTestPageButton" Style="{StaticResource DockButton}" VerticalAlignment="Center" Height="60" Width="150"
+                Content="          测试" TextBlock.Foreground="White" FontSize="24" FontFamily="Microsoft Yahei" FontWeight="Bold" HorizontalAlignment="Left" Click="DockButtonAction" MouseEnter="DockButtonEnter" MouseLeave="DockButtonLeave"/>
+                    <Image x:Name="testImage"  Height="30" Width="30" Canvas.Top="15" Canvas.Left="30" IsHitTestVisible="False" Source="\image\icons\PCTest.png"/>
+                </Canvas>
+
+                <Canvas x:Name="toolsCanvas" Height="60" Width="150" Canvas.Top="200">
+                    <Button x:Name="toolsPageButton" Style="{StaticResource DockButton}" VerticalAlignment="Center" Height="60" Width="150"
+                Content="          工具" TextBlock.Foreground="White" FontSize="24" FontFamily="Microsoft Yahei" FontWeight="Bold" HorizontalAlignment="Left" Click="DockButtonAction" MouseEnter="DockButtonEnter" MouseLeave="DockButtonLeave"/>
+                    <Image  x:Name="toolsImage"  Height="30" Width="30" Canvas.Top="15" Canvas.Left="30" IsHitTestVisible="False" Source="\image\icons\Tools.png"/>
+                </Canvas>
+
+                <Canvas x:Name="settingCanvas" Height="60" Width="150" Canvas.Top="260">
+                    <Button x:Name="settingPageButton" Style="{StaticResource DockButton}" VerticalAlignment="Center" Height="60" Width="150"
+                Content="          设置" TextBlock.Foreground="White" FontSize="24" FontFamily="Microsoft Yahei" FontWeight="Bold" HorizontalAlignment="Left" Click="DockButtonAction" MouseEnter="DockButtonEnter" MouseLeave="DockButtonLeave"/>
+                    <Image  x:Name="settingImage" Height="30" Width="30" Canvas.Top="15" Canvas.Left="30" IsHitTestVisible="False" Source="\image\icons\setting.png"/>
+                </Canvas>
+
+                <Canvas x:Name="PageSilder" Width="10" Height="40" Background="#1F67B3" Canvas.Left="0" Canvas.Top="30"/>
+
+
+
+            </Canvas>
+            <Canvas x:Name="actionZone" Background="#F1F9FE" Margin="150,30,0,0" Height="510" Width="670">
+                <Frame x:Name="actionFrame" Background="Transparent" NavigationUIVisibility="Hidden" Height="510" Width="670">
+                    <Frame.Template>
+                        <ControlTemplate TargetType="{x:Type Frame}">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0">
+                                <ContentPresenter />
+                            </Border>
+                        </ControlTemplate>
+                    </Frame.Template>
+                </Frame>
+            </Canvas>
+        </Canvas>
+    </Grid>
+</Window>

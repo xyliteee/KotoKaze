@@ -1,0 +1,19 @@
+﻿<Page x:Class="XyliteeeMainForm.Views.toolsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:XyliteeeMainForm.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="510" d:DesignWidth="670"
+      Title="toolsPage">
+
+    <Grid>
+        <Canvas Background="#1F67B3">
+            <Label TextBlock.Foreground="White" FontSize="80" FontWeight="Bold" Content=":(" Canvas.Left="100" Canvas.Top="140"/>
+            <Label TextBlock.Foreground="White" FontSize="24" Content="这是工具页面，我还没写他的样式和逻辑" Canvas.Left="100" Canvas.Top="240"/>
+            <Label TextBlock.Foreground="White" FontSize="24" Content="别翻了真没其他东西" Canvas.Left="100" Canvas.Top="270"/>
+        </Canvas>
+
+    </Grid>
+</Page>
