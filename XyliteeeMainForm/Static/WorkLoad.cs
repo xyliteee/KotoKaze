@@ -22,19 +22,6 @@ namespace KotoKaze.Static
         public static class CPU
         {
             private static readonly int time = 5;
-            public static int Run(VoidFunction function, int times)
-            {
-                Stopwatch stopwatch = Stopwatch.StartNew();
-                int count = 0;
-
-                while (stopwatch.Elapsed.TotalSeconds < times)
-                {
-                    function();
-                    count++;
-                }
-
-                return count;
-            }
             public static class Crytography
             {
                 public static int AES()
@@ -72,7 +59,6 @@ namespace KotoKaze.Static
                             minIndex = v;
                         }
                     }
-
                     return minIndex;
                 }
                 public static int Navigation()
@@ -114,6 +100,7 @@ namespace KotoKaze.Static
                         }
                         count++;
                     }
+                    
                     return count;
                 }
 
@@ -137,7 +124,6 @@ namespace KotoKaze.Static
                         }
                         inputFile.Close();
                     }catch (Exception e) {File.WriteAllText("text.txt",e.ToString()); }
-                    
                     return count;
                 }
 
@@ -169,7 +155,7 @@ namespace KotoKaze.Static
                         decompressedOutput.SetLength(0);
                         count++;
                     }
-
+                    
                     return count;
                 }
 
@@ -191,6 +177,7 @@ namespace KotoKaze.Static
                         ms.SetLength(0);
                         count++;
                     }
+                    
                     return count;
                 }
 
@@ -217,6 +204,7 @@ namespace KotoKaze.Static
                             count++;
                         }
                     }
+                    
                     return count;
                 }
 
@@ -303,6 +291,7 @@ namespace KotoKaze.Static
                             memoryStream.SetLength(0);
                         }
                     }
+                    
                     return count;
                 }
             }
@@ -331,6 +320,7 @@ namespace KotoKaze.Static
                         }
                         count ++;
                     }
+                    
                     return count;
                 }
                 public static int GaussianBlur()
@@ -383,6 +373,7 @@ namespace KotoKaze.Static
                         }
                         count++;
                     }
+                    
                     return count;
                 }
 
@@ -406,19 +397,34 @@ namespace KotoKaze.Static
                     tonemap.Process(hdr, ldr);
                     stopwatch.Stop();
                     int time = (int)stopwatch.Elapsed.TotalMilliseconds;
+                    image1.Dispose();
+                    image2.Dispose();
+                    image3.Dispose();
+                    response.Dispose();
+                    hdr.Dispose();
+                    ldr.Dispose();
+                    
                     return time;
                 }
             }
         }
-
         public static class RAM 
         {
 
-            [DllImport(@"E:\project\VS\Cs\Graduate\Xyliteee\x64\Release\RAMTest.dll", CallingConvention = CallingConvention.Cdecl)]
-            public extern static int WriteSpeed();
-            [DllImport(@"E:\project\VS\Cs\Graduate\Xyliteee\x64\Release\RAMTest.dll", CallingConvention = CallingConvention.Cdecl)]
-            public extern static int ReadSpeed();
+            [DllImport(@"F:\project\VS\Cs\Graduate\Xyliteee\x64\Release\TestOfCPP.dll", CallingConvention = CallingConvention.Cdecl)]
+            public extern static int RamWriteSpeed();
+            [DllImport(@"F:\project\VS\Cs\Graduate\Xyliteee\x64\Release\TestOfCPP.dll", CallingConvention = CallingConvention.Cdecl)]
+            public extern static int RamReadSpeed();
             
+        }
+
+        public static class Disk 
+        {
+
+            [DllImport(@"F:\project\VS\Cs\Graduate\Xyliteee\x64\Release\TestOfCPP.dll", CallingConvention = CallingConvention.Cdecl)]
+            public extern static int DiskWriteSpeed();
+            [DllImport(@"F:\project\VS\Cs\Graduate\Xyliteee\x64\Release\TestOfCPP.dll", CallingConvention = CallingConvention.Cdecl)]
+            public extern static int DiskReadSpeed();
         }
     }
 }

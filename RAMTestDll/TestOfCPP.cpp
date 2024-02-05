@@ -1,10 +1,11 @@
 #include "pch.h"
-#include "RAMTest.h"
+#include "TestOfCPP.h"
 #include <chrono>
 #include <numeric>
 #include <vector>
+#include <fstream>
 
-Test_API int WriteSpeed()
+Test_API int RamWriteSpeed()
 {
     std::vector<int> speeds(5);
     std::vector<char> buffer(64 * 1024 * 1024);
@@ -23,7 +24,7 @@ Test_API int WriteSpeed()
     return static_cast<int>(average);
 }
 
-Test_API int ReadSpeed()
+Test_API int RamReadSpeed()
 {
     std::vector<int> speeds(5);
     std::vector<char> buffer(64 * 1024 * 1024);
@@ -42,4 +43,40 @@ Test_API int ReadSpeed()
     }
     double average = std::accumulate(speeds.begin(), speeds.end(), 0.0) / speeds.size();
     return static_cast<int>(average);
+}
+
+Test_API int DiskWriteSpeed()
+{
+    std::vector<char> buffer(1000 * 1024 * 1024, 0);
+    char* temp_path = nullptr;
+    size_t len = 0;
+    _dupenv_s(&temp_path, &len, "TEMP");
+    std::string file_path = std::string(temp_path) + "/test.bin";
+    free(temp_path);
+    auto start = std::chrono::high_resolution_clock::now();
+    std::ofstream ofs(file_path, std::ios::binary);
+    ofs.write(buffer.data(), buffer.size());
+    ofs.close();
+    auto stop = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = stop - start;
+    return static_cast<int>(1024000.0 / elapsed.count());
+}
+
+Test_API int DiskReadSpeed()
+{
+    std::vector<char> buffer(500 * 1024 * 1024);
+    char* temp_path = nullptr;
+    size_t len = 0;
+    _dupenv_s(&temp_path, &len, "TEMP");
+    std::string file_path = std::string(temp_path) + "/test.bin";
+    free(temp_path);
+    auto start = std::chrono::high_resolution_clock::now();
+    std::ifstream ifs(file_path, std::ios::binary);
+    ifs.read(buffer.data(), buffer.size());
+    ifs.close();
+    auto stop = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = stop - start;
+    int speed = static_cast<int>(1024000.0 / elapsed.count());
+    std::remove(file_path.c_str());
+    return speed;
 }

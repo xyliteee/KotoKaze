@@ -7,8 +7,10 @@ namespace XyliteeeMainForm.Views
     /// </summary>
     public partial class settingPage : Page
     {
-        public settingPage()
+        private readonly MainWindow mainWindow;
+        public settingPage(MainWindow mainWindow)
         {
+            this.mainWindow = mainWindow;
             InitializeComponent();
         }
     }

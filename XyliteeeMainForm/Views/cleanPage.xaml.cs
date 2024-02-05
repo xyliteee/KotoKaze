@@ -24,6 +24,7 @@ namespace XyliteeeMainForm.Views
 {
     public partial class cleanPage : Page
     {
+        private readonly MainWindow mainWindow;
         private bool isScanned = false;
         private readonly List<string> trashTempFiles = [];
         private readonly List<string> trashUpdateFiles = [];
@@ -34,9 +35,10 @@ namespace XyliteeeMainForm.Views
         private readonly List<Button> uninstallerButtons = [];
         private List<SoftWare> softWares = [];
         private readonly BitmapImage defaultIcon = new(new Uri("pack://application:,,,/image/icons/windows11.png"));
-        public cleanPage()
+        public cleanPage(MainWindow mainWindow)
         {
             InitializeComponent();
+            this.mainWindow = mainWindow;
             ScanSoftWare();
         }
         private void Button_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
@@ -239,7 +241,7 @@ namespace XyliteeeMainForm.Views
                 CleanImage.Source = new BitmapImage(new Uri("pack://application:,,,/image/icons/scaning.png"));
                 Animations.ImageTurnRound(CleanImage, true);
 
-                Thread thread = new(() =>
+                Task.Run(() =>
                 {
                     DeleteFilesAndUpdateUI("temp");
                     DeleteFilesAndUpdateUI("update");
@@ -253,7 +255,6 @@ namespace XyliteeeMainForm.Views
                         Animations.ImageTurnRound(CleanImage, false);
                     });
                 });
-                thread.Start();
             }
             else 
             {
@@ -261,7 +262,7 @@ namespace XyliteeeMainForm.Views
                 CleanImage.Source = new BitmapImage(new Uri("pack://application:,,,/image/icons/scaning.png"));
                 Animations.ImageTurnRound(CleanImage, true);
 
-                Thread thread = new(() =>
+                Task.Run(() =>
                 {
                     ScanFilesAndUpdateUI("temp");
                     ScanFilesAndUpdateUI("update");
@@ -275,7 +276,6 @@ namespace XyliteeeMainForm.Views
                         Animations.ImageTurnRound(CleanImage, false);
                     });
                 });
-                thread.Start();
             }
         }
         private static string BytesToOthers(long inputBytes)
@@ -408,7 +408,10 @@ namespace XyliteeeMainForm.Views
             SoftWare softWare = (SoftWare)button.Tag;
             string uninstallFileName = string.Empty;
             string uninstallArg = string.Empty;
-            if (softWare.uninstallString.Contains("\""))
+
+            if (File.Exists(softWare.uninstallString)) { uninstallFileName = softWare.uninstallString; }
+
+            else if (softWare.uninstallString.Contains('"'))
             {
                 var match = Regex.Match(softWare.uninstallString, @"^""([^""]+)""\s*(.*)");
                 if (match.Success)
@@ -466,7 +469,7 @@ namespace XyliteeeMainForm.Views
             RefreshButton.IsEnabled = false;
             Animations.ImageTurnRound(RefreshImage, true);
 
-            Thread thread = new(() => 
+            Task.Run(() => 
             {
                 RegistryKey baseKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64);
                 RegistryKey uninstallKey = baseKey.OpenSubKey(@"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall");
@@ -487,7 +490,7 @@ namespace XyliteeeMainForm.Views
                     softWares.Add(softWare);
                 }
                 softWares = [.. softWares.OrderBy(s => s.displayName)];
-                Dispatcher.Invoke(() =>
+                Dispatcher.BeginInvoke(() =>
                 {
                     ScorllCanvas.Children.Clear();
                     for (int index = 0; index < softWares.Count; index++) 
@@ -500,7 +503,6 @@ namespace XyliteeeMainForm.Views
                     Animations.ImageTurnRound(RefreshImage, false);
                 });
             });
-            thread.Start();
         }
         private static string GetValueOrDefault(RegistryKey key, string valueName)
         {

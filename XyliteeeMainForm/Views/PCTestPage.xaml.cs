@@ -9,6 +9,9 @@ using System.Threading;
 using System.Windows.Threading;
 using System.IO;
 using System.Runtime.InteropServices;
+using KotoKaze.Windows;
+using HandyControl.Tools.Extension;
+using SevenZip.Compression.LZ;
 
 namespace XyliteeeMainForm.Views
 {
@@ -17,15 +20,23 @@ namespace XyliteeeMainForm.Views
     /// </summary>
     public partial class PCTestPage : Page
     {
-        private WorkLoadTest.CPU? CPUTest;
-        private WorkLoadTest.RAM? RAMTest;
+        private readonly MainWindow mainWindow;
+        private readonly WorkLoadTest.CPU CPUTest;
+        private readonly WorkLoadTest.RAM RAMTest;
+        private readonly WorkLoadTest.Disk DiskTest;
+        private GPUTestWindow GPUWindow;
         private int CPUScore = 0;
         private int GPUScore = 0;
         private int RamScore = 0;
         private int DiskScore = 0;
-        public PCTestPage()
+#pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
+        public PCTestPage(MainWindow mainWindow)
         {
             InitializeComponent();
+            this.mainWindow = mainWindow;
+            CPUTest = new(this);
+            RAMTest = new(this);
+            DiskTest = new(this);
         }
 
         private void Button_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
@@ -55,36 +66,79 @@ namespace XyliteeeMainForm.Views
             storyboard.Begin();
         }
 
+        private void RunCPUTest() 
+        {
+            Dispatcher.Invoke(() => {CPUScoreLabel.Content = "正在测试";});
+            CPUTest.RunTest();                                                                                          //执行CPU测试
+            Dispatcher.Invoke(() =>
+            {
+                CPUScore = (int)(CPUTest.CPUSingleCoreScore * 0.4 + CPUTest.CPUMultiCoreScore * 0.6);                   //获取测试结果，单核和多核权重为0.4与0.6
+                CPUScoreLabel.Content = CPUScore;
+                CPUDialogScoreLabel.Content = $"{CPUTest.CPUSingleCoreScore}S-{CPUTest.CPUMultiCoreScore}M";
+            });
+            GC.Collect();
+            Thread.Sleep(1000);
+        }
+        private void RunGPUTest() 
+        {
+            Dispatcher.Invoke(() => 
+            {
+                GPUWindow = new();
+                GPUScoreLabel.Content = "正在测试";
+                mainWindow.Hide();
+                GPUWindow.Show();
+                GPUWindow.Test();
+            });
+            Thread.Sleep(20000);
+            Dispatcher.Invoke(() => 
+            {
+                double FPS = Math.Round(1000 / GPUWindow.frameTimes.Average(),2);
+                GPUWindow.Close();
+                mainWindow.Show();
+                GPUScore = (int)(FPS*930);
+                GPUScoreLabel.Content = GPUScore;
+                GPUDialogScoreLabel.Content = $"平均帧率-{FPS}";
+            });
+        }
+        private void RunRamTest() 
+        {
+            Dispatcher.Invoke(() => { RAMScoreLabel.Content = "正在测试"; });
+            RAMTest.RunTest();
+            Dispatcher.Invoke(() =>
+            {
+                RamScore = (int)(RAMTest.readScore * 0.5 + RAMTest.writeScore * 0.5);
+                RAMScoreLabel.Content = RamScore;
+                RAMDialogScoreLabel.Content = $"{RAMTest.writeScore}W-{RAMTest.readScore}R";
+            });
+            GC.Collect();
+            Thread.Sleep(1000);
+        }
+        private void RunDiskTest() 
+        {
+            Dispatcher.Invoke(() => { DiskScoreLabel.Content = "正在测试"; });
+            DiskTest.RunTest();
+            Dispatcher.Invoke(() =>
+            {
+                DiskScore = (int)(DiskTest.readScore * 0.5 + DiskTest.writeScore * 0.5);
+                DiskScoreLabel.Content = DiskScore;
+                DiskDialogScoreLabel.Content = $"{DiskTest.writeScore}W-{DiskTest.readScore}R";
+            });
+            GC.Collect();
+        }
+
         private void TestButton_Click(object sender, RoutedEventArgs e)
         {
             Animations.ImageTurnRound(TestImage, true);                                                                 //按下按钮，图标开始转
             TestButton.IsEnabled = false;                                                                               //此时禁用按钮
-            CPUTest = new WorkLoadTest.CPU(this);                                                                       //将此页面作为父类传入测试用于访问此页面的UI控件更新UI
-            RAMTest = new WorkLoadTest.RAM(this);
             ScoreLabel.Content = "正在测试";
-            CPUScoreLabel.Content = "正在测试";
-            CPUDialogScoreLabel.Content = "正在测试";
-            Thread testThread = new(() => 
+            Task.Run(() => 
             {
                 try
                 {
-                    CPUTest.RunCPUTest();                                                                                 //执行CPU测试
-                    Dispatcher.Invoke(() =>
-                    {
-                        CPUScore = (int)(CPUTest.CPUSingleCoreScore * 0.4 + CPUTest.CPUMultiCoreScore * 0.6);               //获取测试结果，单核和多核权重为0.4与0.6
-                        CPUScoreLabel.Content = CPUScore;
-                        CPUDialogScoreLabel.Content = $"{CPUTest.CPUSingleCoreScore}S-{CPUTest.CPUMultiCoreScore}M";
-                        RAMScoreLabel.Content = "正在测试";
-                    });
-                    Thread.Sleep(1000);
-                    RAMTest.RunRamTest();
-                    Dispatcher.Invoke(() => 
-                    {
-                        RamScore = (int)(RAMTest.readScore * 0.25 + RAMTest.writeScore * 0.25);
-                        RAMScoreLabel.Content = RamScore;
-                        RAMDialogScoreLabel.Content = $"{RAMTest.readScore}R-{RAMTest.writeScore}W";
-                    });
-
+                    RunCPUTest();
+                    RunGPUTest();
+                    RunRamTest();
+                    RunDiskTest();
                     Dispatcher.Invoke(() =>                                                                                 //当所有测试完成时
                     {
                         ScoreLabel.Content = CPUScore + GPUScore + RamScore + DiskScore;
@@ -95,7 +149,6 @@ namespace XyliteeeMainForm.Views
                 catch (ThreadAbortException) { }
                 catch (TaskCanceledException) { }
             });
-            testThread.Start();
         }
     }
 
@@ -172,7 +225,7 @@ namespace XyliteeeMainForm.Views
             private void RunMultiTest()                                                                                 //多核测试函数
             {
                 process.ProcessorAffinity = originalAffinity;                                                           //释放核心绑定
-                int theadNumber = coreCount;                                                                            //多核测试的线程数，决定把CPU吃满，功耗墙是你的问题不是我的
+                int theadNumber = (int)(coreCount/2.0);                                                                 //多核测试的线程数，
                 try
                 {
                     ParentClass.Dispatcher.Invoke(() => { ParentClass.CPUDialogScoreLabel.Content = "多核加密算法"; });
@@ -210,13 +263,13 @@ namespace XyliteeeMainForm.Views
                 catch (TaskCanceledException) { }
             }
 
-            public void RunCPUTest()                                                                                    //开始测试
+            public void RunTest()                                                                                    //开始测试
             {
                 Thread.Sleep(1000);
                 RunSingleTest();
                 Thread.Sleep(1000);
                 RunMultiTest();
-                double rate = 1;
+                double rate = 1.28;
                 double[] scoreWeight =
                     [
                         0.085 * rate, 
@@ -228,7 +281,7 @@ namespace XyliteeeMainForm.Views
                         0.05 * rate,
                         0.08 * rate,
                         10 * rate,
-                        1100000 * rate,
+                        440000 * rate,
                     ];
 
 
@@ -278,39 +331,67 @@ namespace XyliteeeMainForm.Views
             }
         }
 
+        
+
         public class RAM 
         {
             private int readSpeed = 0;
             private int writeSpeed = 0;
             public int readScore = 0;
             public int writeScore = 0;
-            private PCTestPage ParentClass;
+            private readonly PCTestPage ParentClass;
             
             public RAM(PCTestPage ParentClass)
             {
                 this.ParentClass = ParentClass;
             }
 
-            public void RunRamTest() 
+            public void RunTest() 
             {
                 int[] readSpeeds = new int[50];
                 int[] writeSpeeds = new int[50];
-                ParentClass.Dispatcher.Invoke(() => {ParentClass.RAMDialogScoreLabel.Content = "内存读取测试"; });
-                for (int i = 0; i < 50; i++)
-                {
-                    readSpeeds[i] = WorkLoad.RAM.ReadSpeed();
-                }
 
                 ParentClass.Dispatcher.Invoke(() => { ParentClass.RAMDialogScoreLabel.Content = "内存写入测试"; });
                 for (int i = 0; i < 50; i++)
                 {
-                    writeSpeeds[i] = WorkLoad.RAM.WriteSpeed();
+                    writeSpeeds[i] = WorkLoad.RAM.RamWriteSpeed();
                 }
+
+                ParentClass.Dispatcher.Invoke(() => {ParentClass.RAMDialogScoreLabel.Content = "内存读取测试"; });
+                for (int i = 0; i < 50; i++)
+                {
+                    readSpeeds[i] = WorkLoad.RAM.RamReadSpeed();
+                }
+
                 readSpeed = (int)readSpeeds.Average();
                 writeSpeed = (int)writeSpeeds.Average();
 
-                readScore = readSpeed;
-                writeScore = writeSpeed;
+                readScore = (int)(readSpeed*0.5);
+                writeScore = (int)(writeSpeed*0.5);
+            }
+        }
+
+        public class Disk 
+        {
+            private int readSpeed = 0;
+            private int writeSpeed = 0;
+            public int readScore = 0;
+            public int writeScore = 0;
+            private readonly PCTestPage ParentClass;
+
+            public Disk(PCTestPage ParentClass)
+            {
+                this.ParentClass = ParentClass;
+            }
+
+            public void RunTest()
+            {
+                ParentClass.Dispatcher.BeginInvoke(() => { ParentClass.DiskDialogScoreLabel.Content = "硬盘写入测试"; });
+                writeSpeed = WorkLoad.Disk.DiskWriteSpeed();
+                ParentClass.Dispatcher.BeginInvoke(() => { ParentClass.DiskDialogScoreLabel.Content = "硬盘读取测试"; });
+                readSpeed = WorkLoad.Disk.DiskReadSpeed();
+                readScore = (int)(readSpeed/100.0);
+                writeScore = (int)(writeSpeed/100.0);
             }
         }
     }

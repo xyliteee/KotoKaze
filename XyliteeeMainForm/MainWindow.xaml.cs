@@ -18,16 +18,21 @@ namespace XyliteeeMainForm
     public partial class MainWindow : Window
     {
 
-        private readonly Page homePage = new homePage();
-        private readonly Page cleanPage = new cleanPage();
-        private readonly Page PCTestPage = new PCTestPage();
-        private readonly Page toolsPage = new toolsPage();
-        private readonly Page settingPage = new settingPage();
+        private readonly homePage homePage;
+        private readonly cleanPage cleanPage;
+        private readonly PCTestPage PCTestPage;
+        private readonly toolsPage toolsPage;
+        private readonly settingPage settingPage;
         private readonly Button[] buttons = new Button[5];
         private readonly SolidColorBrush blueTextColor = new BrushConverter().ConvertFrom("#1F67B3") as SolidColorBrush;
         public MainWindow()
         {
             InitializeComponent();
+            homePage = new(this);
+            cleanPage = new(this);
+            PCTestPage = new(this);
+            toolsPage = new(this);
+            settingPage = new(this);
             actionFrame.Navigate(homePage);
             buttons[0] = homePageButton;
             buttons[1] = cleanPageButton;

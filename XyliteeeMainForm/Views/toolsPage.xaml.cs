@@ -7,9 +7,11 @@ namespace XyliteeeMainForm.Views
     /// </summary>
     public partial class toolsPage : Page
     {
-        public toolsPage()
+        private readonly MainWindow mainWindow;
+        public toolsPage(MainWindow mainWindow)
         {
             InitializeComponent();
+            this.mainWindow = mainWindow;
         }
     }
 }

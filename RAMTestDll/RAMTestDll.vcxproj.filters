@@ -21,7 +21,7 @@
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="RAMTest.h">
+    <ClInclude Include="TestOfCPP.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -32,7 +32,7 @@
     <ClCompile Include="pch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="RAMTest.cpp">
+    <ClCompile Include="TestOfCPP.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

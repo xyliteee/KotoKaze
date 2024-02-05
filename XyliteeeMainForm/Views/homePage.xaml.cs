@@ -1,4 +1,5 @@
 ﻿
+using SevenZip.Compression.LZ;
 using System.Diagnostics;
 using System.IO;
 using System.Management;
@@ -10,10 +11,12 @@ namespace XyliteeeMainForm.Views
 {
     public partial class homePage : Page
     {
+        private readonly MainWindow mainWindow;
         private readonly SystemInfo systemInfo = new();
-        public homePage()
+        public homePage(MainWindow mainWindow)
         {
             InitializeComponent();
+            this.mainWindow = mainWindow;
             systemName.Content = $"系统名称：{systemInfo.SystemName}";
             systemVersion.Content = $"系统版本：{systemInfo.SystemVersion}";
             modelOfCPU.Content = $"CPU型号：{systemInfo.ModelOfCPU}";
