@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 
 namespace KotoKaze.Windows
@@ -42,74 +43,44 @@ namespace KotoKaze.Windows
             stopwatch.Start();
             frameTimes.Add(frameTime);
         }
-        public void CreateImage()
+        public void CreateCube()
         {
-            // 创建Image控件
-            Image TestImage = new()
+            // 创建一个3D立方体
+            var cube = new GeometryModel3D();
+            var mesh = new MeshGeometry3D();
+            // 添加立方体的顶点和三角形到mesh中
+            // ...
+            cube.Geometry = mesh;
+
+            // 添加立方体到3D视图中
+            var modelVisual3D = new ModelVisual3D { Content = cube };
+            v3D.Children.Add(modelVisual3D);
+
+            // 创建一个旋转变换
+            var rotateTransform = new RotateTransform3D();
+            cube.Transform = rotateTransform;
+
+            // 创建一个旋转动画
+            var rotationAnimation = new Rotation3DAnimation
             {
-                // 设置Image的宽度和高度
-                Width = this.ActualWidth * 1.5,
-                Height = this.ActualHeight * 1.5
+                From = new AxisAngleRotation3D(new Vector3D(0, 1, 0), 0),
+                To = new AxisAngleRotation3D(new Vector3D(0, 1, 0), 360),
+                Duration = TimeSpan.FromSeconds(2),
+                RepeatBehavior = RepeatBehavior.Forever
             };
 
-            // 设置Image的位置
-            Canvas.SetLeft(TestImage, this.ActualWidth * -0.25);
-            Canvas.SetTop(TestImage, this.ActualHeight * -0.25);
-
-            // 设置Image的源
-            TestImage.Source = new BitmapImage(new Uri(@"F:\project\VS\Cs\Graduate\Xyliteee\XyliteeeMainForm\image\Header\TestImage.jpg"));
-
-            // 将Image添加到Canvas中
-            Base.Children.Add(TestImage);
-            TestImages.Add(TestImage);
+            // 开始旋转动画
+            rotateTransform.BeginAnimation(RotateTransform3D.RotationProperty, rotationAnimation);
         }
 
 
         public void Test()
         {
-            for (int i = 0; i < 50; i++) 
-            {
-                CreateImage();
-            }
-
+            CreateCube();
             CompositionTarget.Rendering += OnRendering!;
-
-            // 创建一个改变模糊度的动画
-            BlurEffect blur = new() { Radius = 0 };
-            DoubleAnimation blurAnimation = new(0, 20, new Duration(TimeSpan.FromSeconds(10)))
-            {
-                AutoReverse = true,
-                RepeatBehavior = RepeatBehavior.Forever
-            };
-            blur.BeginAnimation(BlurEffect.RadiusProperty, blurAnimation);
-
-            // 创建一个改变位置的动画
-            TranslateTransform transform = new();
-
-            DoubleAnimation translateAnimation = new(-40, 40, new Duration(TimeSpan.FromSeconds(2)))
-            {
-                AutoReverse = true,
-                RepeatBehavior = RepeatBehavior.Forever
-            };
-            transform.BeginAnimation(TranslateTransform.XProperty, translateAnimation);
-            transform.BeginAnimation(TranslateTransform.YProperty, translateAnimation);
-
-            // 创建一个改变透明度的动画
-            DoubleAnimation opacityAnimation = new(1, 0, new Duration(TimeSpan.FromSeconds(10)))
-            {
-                AutoReverse = true,
-                RepeatBehavior = RepeatBehavior.Forever
-            };
-
-            foreach (Image image in TestImages) 
-            {
-                image.Effect = blur;
-                image.RenderTransform = transform;
-                image.BeginAnimation(Image.OpacityProperty, opacityAnimation);
-            }
-
             stopwatch.Start();
         }
+
 
     }
 }

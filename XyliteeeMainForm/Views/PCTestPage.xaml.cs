@@ -66,9 +66,9 @@ namespace XyliteeeMainForm.Views
             storyboard.Begin();
         }
 
-        private void RunCPUTest() 
+        private void RunCPUTest()
         {
-            Dispatcher.Invoke(() => {CPUScoreLabel.Content = "正在测试";});
+            Dispatcher.Invoke(() => { CPUScoreLabel.Content = "正在测试"; });
             CPUTest.RunTest();                                                                                          //执行CPU测试
             Dispatcher.Invoke(() =>
             {
@@ -79,9 +79,9 @@ namespace XyliteeeMainForm.Views
             GC.Collect();
             Thread.Sleep(1000);
         }
-        private void RunGPUTest() 
+        private void RunGPUTest()
         {
-            Dispatcher.Invoke(() => 
+            Dispatcher.Invoke(() =>
             {
                 GPUWindow = new();
                 GPUScoreLabel.Content = "正在测试";
@@ -90,17 +90,17 @@ namespace XyliteeeMainForm.Views
                 GPUWindow.Test();
             });
             Thread.Sleep(20000);
-            Dispatcher.Invoke(() => 
+            Dispatcher.Invoke(() =>
             {
-                double FPS = Math.Round(1000 / GPUWindow.frameTimes.Average(),2);
+                double FPS = Math.Round(1000 / GPUWindow.frameTimes.Average(), 2);
                 GPUWindow.Close();
                 mainWindow.Show();
-                GPUScore = (int)(FPS*930);
+                GPUScore = (int)(FPS * 930);
                 GPUScoreLabel.Content = GPUScore;
                 GPUDialogScoreLabel.Content = $"平均帧率-{FPS}";
             });
         }
-        private void RunRamTest() 
+        private void RunRamTest()
         {
             Dispatcher.Invoke(() => { RAMScoreLabel.Content = "正在测试"; });
             RAMTest.RunTest();
@@ -113,7 +113,7 @@ namespace XyliteeeMainForm.Views
             GC.Collect();
             Thread.Sleep(1000);
         }
-        private void RunDiskTest() 
+        private void RunDiskTest()
         {
             Dispatcher.Invoke(() => { DiskScoreLabel.Content = "正在测试"; });
             DiskTest.RunTest();
@@ -126,10 +126,20 @@ namespace XyliteeeMainForm.Views
             GC.Collect();
         }
 
+        private void GetScore() 
+        {
+            Dispatcher.Invoke(() =>                                                                                 //当所有测试完成时
+            {
+                ScoreLabel.Content = CPUScore + GPUScore + RamScore + DiskScore;
+                Animations.ImageTurnRound(TestImage, false);                                                        //别转了
+                SetAllButtonState(true);                                                                        //恢复按钮
+            });
+        }
+
         private void TestButton_Click(object sender, RoutedEventArgs e)
         {
             Animations.ImageTurnRound(TestImage, true);                                                                 //按下按钮，图标开始转
-            TestButton.IsEnabled = false;                                                                               //此时禁用按钮
+            SetAllButtonState(false);                                                                               //此时禁用按钮
             ScoreLabel.Content = "正在测试";
             Task.Run(() => 
             {
@@ -139,12 +149,83 @@ namespace XyliteeeMainForm.Views
                     RunGPUTest();
                     RunRamTest();
                     RunDiskTest();
-                    Dispatcher.Invoke(() =>                                                                                 //当所有测试完成时
-                    {
-                        ScoreLabel.Content = CPUScore + GPUScore + RamScore + DiskScore;
-                        Animations.ImageTurnRound(TestImage, false);                                                        //别转了
-                        TestButton.IsEnabled = true;                                                                        //恢复按钮
-                    });
+                    GetScore();
+                }
+                catch (ThreadAbortException) { }
+                catch (TaskCanceledException) { }
+            });
+        }
+
+        private void SetAllButtonState(bool flag) 
+        {
+            TestButton.IsEnabled = flag;
+            CPUTestButton.IsEnabled = flag;
+            GPUTestButton.IsEnabled = flag;
+            RAMTestButton.IsEnabled = flag;
+            DiskTestButton.IsEnabled = flag;
+        }
+        private void CPUTestButton_Click(object sender, RoutedEventArgs e)
+        {
+            Animations.ImageTurnRound(TestImage, true);
+            SetAllButtonState(false);
+            ScoreLabel.Content = "正在测试";
+            Task.Run(() => 
+            {
+                try
+                {
+                    RunCPUTest();
+                    GetScore();
+                }
+                catch (ThreadAbortException) { }
+                catch (TaskCanceledException) { }
+            });
+        }
+
+        private void GPUTestButton_Click(object sender, RoutedEventArgs e)
+        {
+            Animations.ImageTurnRound(TestImage, true);
+            SetAllButtonState(false);
+            ScoreLabel.Content = "正在测试";
+            Task.Run(() =>
+            {
+                try
+                {
+                    RunGPUTest();
+                    GetScore();
+                }
+                catch (ThreadAbortException) { }
+                catch (TaskCanceledException) { }
+            });
+        }
+
+        private void RAMTestButton_Click(object sender, RoutedEventArgs e)
+        {
+            Animations.ImageTurnRound(TestImage, true);
+            SetAllButtonState(false);
+            ScoreLabel.Content = "正在测试";
+            Task.Run(() =>
+            {
+                try
+                {
+                    RunRamTest();
+                    GetScore();
+                }
+                catch (ThreadAbortException) { }
+                catch (TaskCanceledException) { }
+            });
+        }
+
+        private void DiskTestButton_Click(object sender, RoutedEventArgs e)
+        {
+            Animations.ImageTurnRound(TestImage, true);
+            SetAllButtonState(false);
+            ScoreLabel.Content = "正在测试";
+            Task.Run(() =>
+            {
+                try
+                {
+                    RunDiskTest();
+                    GetScore();
                 }
                 catch (ThreadAbortException) { }
                 catch (TaskCanceledException) { }

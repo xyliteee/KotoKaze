@@ -14,7 +14,7 @@
             <Canvas x:Name="basicalInfoBar" Width="630" Canvas.Left="20" Height="200" Canvas.Top="20">
                 <Border Width="630" Height="200" CornerRadius="20" Background="White">
                     <Border.Effect>
-                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="5" Opacity="0.5" BlurRadius="20"/>
+                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="20"/>
                     </Border.Effect>
                 </Border>
                 <Image x:Name="systemIcon" Height="160" Width="160" Canvas.Top="15" Canvas.Right="15" Source="\image\icons\windows11.png"/>
@@ -30,7 +30,7 @@
             <Canvas x:Name="diskInfoBar" Width="240" Height="240" Canvas.Left="20" Canvas.Bottom="20">
                 <Border Width="240" Height="240" CornerRadius="20" Background="White">
                     <Border.Effect>
-                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="5" Opacity="0.5" BlurRadius="20"/>
+                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="20"/>
                     </Border.Effect>
                 </Border>
                 <hc:CircleProgressBar x:Name="cpuCircleBar" Width="200" Height="200" Canvas.Left="20" Canvas.Top="20" ArcThickness="10" Text="" Foreground="#1F67B3"/>
@@ -41,7 +41,7 @@
             <Canvas Width="360" Height="110" Canvas.Right="20" Canvas.Bottom ="150" >
                 <Border Width="360" Height="110" CornerRadius="20" Background="White">
                     <Border.Effect>
-                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="5" Opacity="0.5" BlurRadius="20"/>
+                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="20"/>
                     </Border.Effect>
                 </Border>
                 <Image Width="60" Height="60" Canvas.Left="10" Canvas.Top="10" Source="/image/icons/Disk.png"/>
@@ -52,7 +52,7 @@
             <Canvas Width="360" Height="110" Canvas.Bottom="20" Canvas.Right="20">
                 <Border Width="360" Height="110" CornerRadius="20" Background="White">
                     <Border.Effect>
-                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="5" Opacity="0.5" BlurRadius="20"/>
+                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="20"/>
                     </Border.Effect>
                 </Border>
                 

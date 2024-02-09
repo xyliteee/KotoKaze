@@ -13,5 +13,10 @@ namespace XyliteeeMainForm.Views
             InitializeComponent();
             this.mainWindow = mainWindow;
         }
+
+        private void DismButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
     }
 }

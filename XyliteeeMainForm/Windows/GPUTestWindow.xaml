@@ -14,6 +14,7 @@
         <Canvas x:Name="Base" 
         Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Window}}" 
         Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}">
+            <Viewport3D x:Name="v3D" Height="720" Width="1280"/>
         </Canvas>
 
     </Grid>

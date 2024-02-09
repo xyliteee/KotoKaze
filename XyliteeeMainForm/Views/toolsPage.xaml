@@ -9,10 +9,16 @@
       Title="toolsPage">
 
     <Grid>
-        <Canvas Background="#1F67B3">
-            <Label TextBlock.Foreground="White" FontSize="80" FontWeight="Bold" Content=":(" Canvas.Left="100" Canvas.Top="140"/>
-            <Label TextBlock.Foreground="White" FontSize="24" Content="这是工具页面，我还没写他的样式和逻辑" Canvas.Left="100" Canvas.Top="240"/>
-            <Label TextBlock.Foreground="White" FontSize="24" Content="别翻了真没其他东西" Canvas.Left="100" Canvas.Top="270"/>
+        <Canvas x:Name="Base" Background="#F3F8FE">
+            <Canvas x:Name="DismZone" Width="80" Height="80" Canvas.Left="50" Canvas.Top="50">
+                <Border Width="80" Height="80" CornerRadius="10" Background="White">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="10"/>
+                    </Border.Effect>
+                </Border>
+                <Image Width="60" Height="60" Canvas.Left="10" Canvas.Top="10" Source="/image/icons/Setting_b.png"/>
+                <Button x:Name="DismButton" Width="80" Height="80" Opacity="0" Click="DismButton_Click"/>
+            </Canvas>
         </Canvas>
 
     </Grid>
