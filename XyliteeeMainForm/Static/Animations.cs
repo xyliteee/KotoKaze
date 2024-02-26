@@ -19,13 +19,24 @@ namespace KotoKaze.Static
             canvas.BeginAnimation(Canvas.TopProperty, animation);
         }
 
-        static public void ImageTurnRound(Image image, bool flag)
+        static public void ButtonSilderMoveing(FrameworkElement widget, int end)
+        {
+            DoubleAnimation animation = new()
+            {
+                To = end,
+                Duration = new Duration(TimeSpan.FromSeconds(0.3)),
+                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut }
+            };
+            widget.BeginAnimation(Canvas.LeftProperty, animation);
+        }
+
+        static public void ImageTurnRound(Image image, bool flag,double time = 1)
         {
             DoubleAnimation animation = new()
             {
                 From = 0,
                 To = -360,
-                Duration = new Duration(TimeSpan.FromSeconds(1)),
+                Duration = new Duration(TimeSpan.FromSeconds(time)),
             };
             RotateTransform rotateTransform = new(0);
             image.RenderTransform = rotateTransform;

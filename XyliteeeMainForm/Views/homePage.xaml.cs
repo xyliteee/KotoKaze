@@ -12,7 +12,7 @@ namespace XyliteeeMainForm.Views
     public partial class homePage : Page
     {
         private readonly MainWindow mainWindow;
-        private readonly SystemInfo systemInfo = new();
+        private readonly SystemInfos systemInfo = new();
         public homePage(MainWindow mainWindow)
         {
             InitializeComponent();
@@ -86,7 +86,7 @@ namespace XyliteeeMainForm.Views
 
 
 
-    public class SystemInfo
+    public class SystemInfos
     {
         public string SystemName = string.Empty;
         public string SystemVersion = string.Empty;
@@ -95,7 +95,7 @@ namespace XyliteeeMainForm.Views
         public double RamNumber = 0;
         public string UserName = string.Empty;
 
-        public SystemInfo()
+        public SystemInfos()
         {
             ManagementObjectSearcher osSearcher = new("SELECT * FROM Win32_OperatingSystem");
             foreach (ManagementObject osInfo in osSearcher.Get().Cast<ManagementObject>())

@@ -16,6 +16,7 @@
     <None Remove="image\Header\5.jpg" />
     <None Remove="image\Header\50.jpg" />
     <None Remove="image\Header\TestImage.jpg" />
+    <None Remove="image\icons\cha.png" />
     <None Remove="image\icons\Clean.png" />
     <None Remove="image\icons\Clean_b.png" />
     <None Remove="image\icons\CPU.png" />
@@ -29,6 +30,7 @@
     <None Remove="image\icons\scan.png" />
     <None Remove="image\icons\scaning.png" />
     <None Remove="image\icons\Setting.png" />
+    <None Remove="image\icons\Setting_an.png" />
     <None Remove="image\icons\setting_b.png" />
     <None Remove="image\icons\startclean.png" />
     <None Remove="image\icons\Tools.png" />
@@ -52,12 +54,14 @@
     <EmbeddedResource Include="image\Header\TestImage.jpg" />
     <EmbeddedResource Include="otherSource\testmarkdown.MD" />
     <EmbeddedResource Include="otherSource\testsql.sqlite" />
+    <Resource Include="image\icons\cha.png" />
     <Resource Include="image\icons\CPU.png" />
     <Resource Include="image\icons\Disk.png" />
     <Resource Include="image\icons\RAM.png" />
     <Resource Include="image\icons\Recyclebin.png" />
     <Resource Include="image\icons\scan.png" />
     <Resource Include="image\icons\scaning.png" />
+    <Resource Include="image\icons\Setting_an.png" />
     <Resource Include="image\icons\startclean.png" />
     <Resource Include="image\icons\Tools.png" />
   </ItemGroup>

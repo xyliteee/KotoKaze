@@ -322,7 +322,7 @@ namespace XyliteeeMainForm.Views
                     Direction = 270,
                     ShadowDepth = 0,
                     Opacity = 0.5,
-                    BlurRadius = 20
+                    BlurRadius = 5
                 }
             };
             card.Children.Add(border);

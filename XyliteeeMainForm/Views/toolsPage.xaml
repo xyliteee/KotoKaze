@@ -10,14 +10,51 @@
 
     <Grid>
         <Canvas x:Name="Base" Background="#F3F8FE">
-            <Canvas x:Name="DismZone" Width="80" Height="80" Canvas.Left="50" Canvas.Top="50">
-                <Border Width="80" Height="80" CornerRadius="10" Background="White">
-                    <Border.Effect>
-                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="10"/>
-                    </Border.Effect>
-                </Border>
-                <Image Width="60" Height="60" Canvas.Left="10" Canvas.Top="10" Source="/image/icons/Setting_b.png"/>
-                <Button x:Name="DismButton" Width="80" Height="80" Opacity="0" Click="DismButton_Click"/>
+            <Canvas Width="670" Height="100">
+                <Canvas x:Name="WindowsZone" Width="120" Height="60" Canvas.Left="35" Canvas.Top="20">
+                    <Border Width="120" Height="60" CornerRadius="10" Background="White"/>
+                    <Button x:Name="WindowsButton" Width="120" Height="60" Style="{StaticResource NomalButtonStyle}" Click="WindowsButton_Click" IsEnabled="False"/>
+                    <Image Width="40" Height="40" Canvas.Left="10" Canvas.Top="10" Source="/image/icons/windows10black.png" IsHitTestVisible="False"/>
+                    <Label Content="系统相关" FontWeight="Bold" FontSize="14" Padding="0,0,0,0" Width="70" Height="60" Canvas.Left="50"  BorderThickness="0" Background="Transparent" Foreground="Black" IsHitTestVisible="False"/>
+                </Canvas>
+                <Label x:Name="Silder" BorderThickness="0" Height="10" Width="120" Canvas.Left="35" Canvas.Top="85" Background="#A0C5E0"/>
+                <Canvas x:Name="DismZone" Width="120" Height="60" Canvas.Left="195" Canvas.Top="20">
+                    <Border Width="120" Height="60" CornerRadius="10" Background="White">
+
+                    </Border>
+                    <Button x:Name="DismButton" Width="120" Height="60" Style="{StaticResource NomalButtonStyle}" Click="DismButton_Click"/>
+                    <Image Width="40" Height="40" Canvas.Left="10" Canvas.Top="10" Source="/image/icons/windows10black.png" IsHitTestVisible="False"/>
+                    <Label Content="DISM" FontWeight="Bold" FontSize="14" Padding="0,0,0,0" Width="70" Height="60" Canvas.Left="50" BorderThickness="0" Background="Transparent" Foreground="Black" IsHitTestVisible="False"/>
+                </Canvas>
+
+                <Canvas x:Name="BCDZone" Width="120" Height="60" Canvas.Left="355" Canvas.Top="20">
+                    <Border Width="120" Height="60" CornerRadius="10" Background="White">
+                    </Border>
+                    <Button x:Name="BCDButton" Width="120" Height="60" Style="{StaticResource NomalButtonStyle}" Click="BCDButton_Click"/>
+                    <Image Width="40" Height="40" Canvas.Left="10" Canvas.Top="10" Source="/image/icons/windows10black.png" IsHitTestVisible="False"/>
+                    <Label Content="引导相关" FontWeight="Bold" FontSize="14" Padding="0,0,0,0" Width="70" Height="60" Canvas.Left="50" BorderThickness="0" Background="Transparent" Foreground="Black" IsHitTestVisible="False"/>
+                </Canvas>
+
+                <Canvas x:Name="OtherZone" Width="120" Height="60" Canvas.Left="515" Canvas.Top="20">
+                    <Border Width="120" Height="60" CornerRadius="10" Background="White">
+                    </Border>
+                    <Button x:Name="OtherButton" Width="120" Height="60" Style="{StaticResource NomalButtonStyle}" Click="OtherButton_Click"/>
+                    <Image Width="40" Height="40" Canvas.Left="10" Canvas.Top="10" Source="/image/icons/windows10black.png" IsHitTestVisible="False"/>
+                    <Label Content="杂项工具" FontWeight="Bold" FontSize="14" Padding="0,0,0,0" Width="70" Height="60" Canvas.Left="50" BorderThickness="0" Background="Transparent" Foreground="Black" IsHitTestVisible="False"/>
+                </Canvas>
+            </Canvas>
+            <Canvas Width="670" Canvas.Top="100" Height="60">
+                <Canvas x:Name="TipsBar" Height="50" Canvas.Top="5" Width="600" Canvas.Left="35">
+                    <Border Height="50" Width="600" Background="White" CornerRadius="5">
+                        <Border.Effect>
+                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
+                        </Border.Effect>
+                        <Label x:Name="TipsBox" BorderThickness="0" Background="Transparent" FontSize="16" Content="这里用于显示该工具的Tips" Foreground="Black"/>
+                    </Border>
+                </Canvas>
+            </Canvas>
+            <Canvas Width="670" Canvas.Bottom="0" Height="350">
+                <Frame x:Name="ToolsNegate" Width="670" Height="350" NavigationUIVisibility ="Hidden" BorderThickness="0"/>
             </Canvas>
         </Canvas>
 

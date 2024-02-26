@@ -14,6 +14,7 @@ namespace XyliteeeMainForm
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     /// 
+    
 
     public partial class MainWindow : Window
     {
@@ -40,7 +41,7 @@ namespace XyliteeeMainForm
             buttons[3] = toolsPageButton;
             buttons[4] = settingPageButton;
             WindowStyle = WindowStyle.SingleBorderWindow;
-            
+            GlobalData.MainWindowInstance = this;
         }
 
 

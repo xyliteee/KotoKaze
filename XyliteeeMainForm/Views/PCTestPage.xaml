@@ -13,13 +13,13 @@
             <Canvas x:Name="CtrlZone" Width="630" Canvas.Left="20" Canvas.Top="20" Height="130">
                 <Border Width="630" Height="130" CornerRadius="20" Background="White">
                     <Border.Effect>
-                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="20"/>
+                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
                     </Border.Effect>
                 </Border>
                 <Canvas x:Name="TestButtonZone" Background="Transparent" Canvas.Top="15" Canvas.Left="20" Width="100" Height="100">
                     <Border x:Name="TestButtonBorder" Width="100" Height="100" CornerRadius="100" Background="#F3F8FE">
                         <Border.Effect>
-                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="20"/>
+                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
                         </Border.Effect>
                     </Border>
                     <Image x:Name="TestImage" Width="40" Canvas.Left="30" Height="40" Canvas.Top="30" Source="/image/icons/scaning.png"/>
@@ -34,7 +34,7 @@
                 <Canvas x:Name="CPUCanvas" Height="320"  Canvas.Bottom="0" Canvas.Left="20" Width="140">
                     <Border Width="140" Height="320" CornerRadius="20" Background="White">
                         <Border.Effect>
-                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="20"/>
+                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
                         </Border.Effect>
                     </Border>
                     <Label Content="CPU" FontSize="20" FontWeight="Bold" Height="34" BorderThickness="0" Width="120" Canvas.Left="10" Canvas.Top="120" Background="Transparent"/>
@@ -47,7 +47,7 @@
                 <Canvas x:Name="GPUCanvas" Height="320"  Canvas.Bottom="0" Canvas.Left="180" Width="140">
                     <Border Width="140" Height="320" CornerRadius="20" Background="White">
                         <Border.Effect>
-                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="20"/>
+                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
                         </Border.Effect>
                     </Border>
                     <Label Content="GPU" FontSize="20" FontWeight="Bold" Height="34" BorderThickness="0" Width="120" Canvas.Left="10" Canvas.Top="120" Background="Transparent"/>
@@ -61,7 +61,7 @@
                 <Canvas x:Name="RAMCanvas" Height="320"  Canvas.Bottom="0" Canvas.Right="180" Width="140">
                     <Border Width="140" Height="320" CornerRadius="20" Background="White">
                         <Border.Effect>
-                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="20"/>
+                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
                         </Border.Effect>
                     </Border>
                     <Label Content="RAM" FontSize="20" FontWeight="Bold" Height="34" BorderThickness="0" Width="120" Canvas.Left="10" Canvas.Top="120" Background="Transparent"/>
@@ -75,7 +75,7 @@
                 <Canvas x:Name="DiskCanvas" Height="320"  Canvas.Bottom="0" Canvas.Right="20" Width="140">
                     <Border Width="140" Height="320" CornerRadius="20" Background="White">
                         <Border.Effect>
-                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="20"/>
+                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
                         </Border.Effect>
                     </Border>
                     <Label Content="Disk" FontSize="20" FontWeight="Bold" Height="34" BorderThickness="0" Width="120" Canvas.Left="10" Canvas.Top="120" Background="Transparent"/>
