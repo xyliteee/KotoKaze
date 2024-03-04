@@ -41,9 +41,9 @@ namespace XyliteeeMainForm
             buttons[3] = toolsPageButton;
             buttons[4] = settingPageButton;
             WindowStyle = WindowStyle.SingleBorderWindow;
+            WorkDirectory.CreatWorkDirectory();
             GlobalData.MainWindowInstance = this;
         }
-
 
         private void DragWindow(object sender, MouseButtonEventArgs e)
         {
@@ -76,7 +76,6 @@ namespace XyliteeeMainForm
         {
             Close();
         }
-
 
         private void SetCurrentPageColor()                                                                                          //根据当前页面设置对应按钮颜色为蓝色
         {

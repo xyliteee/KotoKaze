@@ -64,8 +64,8 @@
                     <Label x:Name="SystemNX" BorderThickness="0" Background="Transparent" Padding="10,0,0,0" Width="305" Content="数据执行防止：索引中" Foreground="#444444" FontSize="12" Canvas.Top="350" HorizontalContentAlignment="Left"/>
                     <Label x:Name="SystemBootmenupolicy" BorderThickness="0" Background="Transparent" Padding="10,0,0,0" Width="305" Content="引导菜单类型：索引中" Foreground="#444444" FontSize="12" Canvas.Top="370" HorizontalContentAlignment="Left"/>
                     <Label x:Name="SystemHypervisorlaunchtype" BorderThickness="0" Background="Transparent" Padding="10,0,0,0" Width="305" Content="是否加载HyperV：索引中" Foreground="#444444" FontSize="12" Canvas.Top="390" HorizontalContentAlignment="Left"/>
-                    <Button x:Name="DeleteButton" Width="130" Height="30" Canvas.Right="10" Canvas.Bottom="10" Content="删除这个引导" Style="{StaticResource RedNomalButtonStyle}"/>
-                    <Button x:Name="BackUpButton" Width="130" Height="30" Canvas.Left="10" Canvas.Bottom="10" Content="导出这个引导" Style="{StaticResource NomalButtonStyle}"/>
+                    <Button x:Name="DeleteButton" Width="130" Height="30" Canvas.Right="10" Canvas.Bottom="10" Content="删除这个引导" Click="Delete" Style="{StaticResource RedNomalButtonStyle}"/>
+                    <Button x:Name="BackUpButton" Width="130" Height="30" Canvas.Left="10" Canvas.Bottom="10" Content="导出这个引导" Click="BackUP" Style="{StaticResource NomalButtonStyle}"/>
                 </Canvas>
             </Canvas>
         </Canvas>

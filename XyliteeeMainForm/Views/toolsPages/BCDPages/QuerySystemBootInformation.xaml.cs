@@ -8,15 +8,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using static KotoKaze.Static.BCDEDIT;
+using KotoKaze.Windows;
+using static KotoKaze.Dynamic.BCDEDIT;
+using System.IO;
 
 namespace KotoKaze.Views.toolsPages.BCDPages
 {
@@ -26,6 +23,7 @@ namespace KotoKaze.Views.toolsPages.BCDPages
     public partial class QuerySystemBootInformation : Page
     {
         private BCDInfo BCDInfo = new();
+        private readonly List<Canvas> cardLists = [];
         public QuerySystemBootInformation()
         {
             InitializeComponent();
@@ -49,52 +47,106 @@ namespace KotoKaze.Views.toolsPages.BCDPages
 
         private void Delete(object sender,RoutedEventArgs e) 
         {
-            Button button = (Button)sender;
-            SystemInfo systemInfo = (SystemInfo)button.Tag;
-            DeleteBCDInformation(systemInfo);
-            Animations.ImageTurnRound(SettingIcon, true, 4);
-            ShowBCDInformation();
+            var r = KotoMessageBox.ShowDialog("这将会删除这个引导，确定吗？");
+            if (r.IsYes) 
+            {
+                Button button = (Button)sender;
+                SystemInfo systemInfo = (SystemInfo)button.Tag;
+                DeleteBCDInformation(systemInfo);
+                Animations.ImageTurnRound(SettingIcon, true, 4);
+                ShowBCDInformation();
+            }
         }
 
-        private void BackUP(object sender, RoutedEventArgs e) 
+        private async void BackUP(object sender, RoutedEventArgs e)
         {
+            var r = KotoMessageBox.ShowDialog("将会在程序根目录/Backup/保存BBF文件，确定？");
+            if (!r.IsYes) return;
+
             Button button = (Button)sender;
             SystemInfo systemInfoBack = (SystemInfo)button.Tag;
             BCDBackUPFile BBF = new(systemInfoBack);
-            SaveBBF(BBF);
+            string filePath = Path.Combine(WorkDirectory.backupDirectory, $"{BBF.CheckCode}.BBF");
+
+            if (Path.Exists(filePath))
+            {
+                r = KotoMessageBox.ShowDialog("该备份已经存在，是否替换？");
+                if (!r.IsYes) return;
+            }
+
+            await SaveBBF(BBF);
+            KotoMessageBoxSingle.ShowDialog($"保存完成，文件为{BBF.CheckCode}.BBF");
         }
+
+        private void AddNewOne(object sender,RoutedEventArgs e) 
+        {
+            var r = KotoMessageBox.ShowDialog("是否选择导入本地的BBF文件？");
+            if (r.IsYes)
+            {
+                Microsoft.Win32.OpenFileDialog dlg = new()
+                {
+                    DefaultExt = ".bbf",
+                    Filter = "BBF Files (*.bbf)|*.bbf"
+                };
+                Nullable<bool> result = dlg.ShowDialog();
+                if (result == true)
+                {
+                    string selectedFilePath = dlg.FileName;
+                    BCDBackUPFile bbf = ReadBBF(selectedFilePath);
+                    var rr = KotoMessageBoxInput.ShowDialog("输入该引导的描述");
+                    if (rr.IsYes) 
+                    {
+                        Task.Run(() => 
+                        {
+                            ImportSystemBootInfo(rr.Input, bbf);
+                            Dispatcher.Invoke(() => 
+                            {
+                                KotoMessageBoxSingle.ShowDialog("添加完成");
+                                Animations.ImageTurnRound(SettingIcon, true, 4);
+                                ShowBCDInformation();
+                            });
+                        });
+                    }
+                }
+            }
+        }
+
 
         private void ShowDetail(object sender, RoutedEventArgs e) 
         {
             Animations.ImageTurnRound(SettingIcon, false);
+            foreach (Canvas canvas in cardLists) 
+            {
+                canvas.Opacity = 0.6;
+            }
             Button button = (Button)sender;
+            Canvas thisCansvas = (Canvas)button.Parent;thisCansvas.Opacity = 1;
+
             SystemInfo systemInfo = (SystemInfo)button.Tag;
-            SysteDescription.Content = systemInfo.description;
-            SystemFlag.Content = $"{systemInfo.flag}";
-            SystemPath.Content = $"文件目录：{systemInfo.path}";
-            SystemDevice.Content = $"文件设备：{systemInfo.device}";
-            SystemLocal.Content = $"语言环境：{systemInfo.locale}";
-            SystemInherit.Content = $"继承对象：{systemInfo.inherit}";
-            SystemRecoverysequence.Content = $"{systemInfo.recoverysequence}";
-            SystemDisplaymessageoverride.Content = $"显示消息覆盖：{systemInfo.displaymessageoverride}";
-            SystemRecoveryenabled.Content = $"是否启用恢复：{systemInfo.recoveryenabled}";
-            SystemIsolatedcontext.Content = $"是否隔离上下文：{systemInfo.isolatedcontext}";
-            SystemAllowedinmemorysettings.Content = $"允许内存设置：{systemInfo.allowedinmemorysettings}";
-            SystemOSdevice.Content = $"系统目录：{systemInfo.osdevice}";
-            SystemSystemroot.Content = $"系统根目录：{systemInfo.systemroot}";
-            SystemResumeobject.Content = $"{systemInfo.resumeobject}";
-            SystemNX.Content = $"数据执行防止：{systemInfo.nx}";
-            SystemBootmenupolicy.Content = $"引导菜单类型：{systemInfo.bootmenupolicy}";
-            SystemHypervisorlaunchtype.Content = $"是否加载HyperV：{systemInfo.hypervisorlaunchtype}";
+            SysteDescription.Content = systemInfo.Description;
+            SystemFlag.Content = $"{systemInfo.Flag}";
+            SystemPath.Content = $"文件目录：{systemInfo.Path}";
+            SystemDevice.Content = $"文件设备：{systemInfo.Device}";
+            SystemLocal.Content = $"语言环境：{systemInfo.Locale}";
+            SystemInherit.Content = $"继承对象：{systemInfo.Inherit}";
+            SystemRecoverysequence.Content = $"{systemInfo.Recoverysequence}";
+            SystemDisplaymessageoverride.Content = $"显示消息覆盖：{systemInfo.Displaymessageoverride}";
+            SystemRecoveryenabled.Content = $"是否启用恢复：{systemInfo.Recoveryenabled}";
+            SystemIsolatedcontext.Content = $"是否隔离上下文：{systemInfo.Isolatedcontext}";
+            SystemAllowedinmemorysettings.Content = $"允许内存设置：{systemInfo.Allowedinmemorysettings}";
+            SystemOSdevice.Content = $"系统目录：{systemInfo.Osdevice}";
+            SystemSystemroot.Content = $"系统根目录：{systemInfo.Systemroot}";
+            SystemResumeobject.Content = $"{systemInfo.Resumeobject}";
+            SystemNX.Content = $"数据执行防止：{systemInfo.Nx}";
+            SystemBootmenupolicy.Content = $"引导菜单类型：{systemInfo.Bootmenupolicy}";
+            SystemHypervisorlaunchtype.Content = $"是否加载HyperV：{systemInfo.Hypervisorlaunchtype}";
             DetailContent.Visibility = Visibility.Visible;
-            if (systemInfo.flag == "{current}") { DeleteButton.IsEnabled = false; }
+            if (systemInfo.Flag == "{current}") { DeleteButton.IsEnabled = false; }
             else { 
                 DeleteButton.IsEnabled = true;
-                DeleteButton.Click += Delete;
                 DeleteButton.Tag = systemInfo;
             }
             BackUpButton.Tag = systemInfo;
-            BackUpButton.Click += BackUP;
         }
 
         private void UpDateSystemInfo() 
@@ -116,8 +168,10 @@ namespace KotoKaze.Views.toolsPages.BCDPages
             Canvas.SetLeft(canvas, 20);
             canvas.Width = 265;
             canvas.Height = 60;
+            canvas.Opacity = 0.6;
+            cardLists.Add(canvas);
 
-            Border border = new Border
+            Border border = new()
             {
                 Height = 60,
                 Width = 265,
@@ -132,7 +186,7 @@ namespace KotoKaze.Views.toolsPages.BCDPages
                     BlurRadius = 5
                 }
             };
-            Image image = new Image
+            Image image = new()
             {
                 Source = new BitmapImage(new Uri("/image/icons/windows11.png", UriKind.Relative)),
                 Width = 50,
@@ -142,9 +196,9 @@ namespace KotoKaze.Views.toolsPages.BCDPages
             Canvas.SetLeft(image, 5);
 
             string description;
-            if (BCDInfo.SystemInfos[index].flag == "{current}")
-                description = BCDInfo.SystemInfos[index].description+"【当前】";
-            else description = BCDInfo.SystemInfos[index].description;
+            if (BCDInfo.SystemInfos[index].Flag == "{current}")
+                description = BCDInfo.SystemInfos[index].Description+"【当前】";
+            else description = BCDInfo.SystemInfos[index].Description;
 
             Label label = new()
             {
@@ -224,6 +278,7 @@ namespace KotoKaze.Views.toolsPages.BCDPages
                 Height = 60,
                 Opacity = 0,
             };
+            button.Click += AddNewOne;
             canvas.Children.Add(border);
             canvas.Children.Add(image);
             canvas.Children.Add(label);

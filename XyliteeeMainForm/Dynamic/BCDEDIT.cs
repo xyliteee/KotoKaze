@@ -1,19 +1,20 @@
-﻿using System;
+﻿using KotoKaze.Static;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using static KotoKaze.Static.BCDEDIT;
 
-namespace KotoKaze.Static
+namespace KotoKaze.Dynamic
 {
-    
+
     internal class BCDEDIT
     {
-        public class BCDInfo 
+        public class BCDInfo
         {
             public List<BootInfo> BootInfos = [];
             public List<SystemInfo> SystemInfos = [];
@@ -35,30 +36,30 @@ namespace KotoKaze.Static
         }
         public class SystemInfo
         {
-            public string flag = string.Empty;
-            public string device = string.Empty;
-            public string partition = string.Empty;
-            public string path = string.Empty;
-            public string description = string.Empty;
-            public string locale = string.Empty;
-            public string inherit = string.Empty;
-            public string recoverysequence = string.Empty;
-            public string displaymessageoverride = string.Empty;
-            public string recoveryenabled = string.Empty;
-            public string isolatedcontext = string.Empty;
-            public string allowedinmemorysettings = string.Empty;
-            public string osdevice = string.Empty;
-            public string systemroot = string.Empty;
-            public string resumeobject = string.Empty;
-            public string nx = string.Empty;
-            public string bootmenupolicy = string.Empty;
-            public string hypervisorlaunchtype = string.Empty;
+            public string Flag { get; set; } = string.Empty;
+            public string Device { get; set; } = string.Empty;
+            public string Flightsigning { get; set; } = string.Empty;
+            public string Path { get; set; } = string.Empty;
+            public string Description { get; set; } = string.Empty;
+            public string Locale { get; set; } = string.Empty;
+            public string Inherit { get; set; } = string.Empty;
+            public string Recoverysequence { get; set; } = string.Empty;
+            public string Displaymessageoverride { get; set; } = string.Empty;
+            public string Recoveryenabled { get; set; } = string.Empty;
+            public string Isolatedcontext { get; set; } = string.Empty;
+            public string Allowedinmemorysettings { get; set; } = string.Empty;
+            public string Osdevice { get; set; } = string.Empty;
+            public string Systemroot { get; set; } = string.Empty;
+            public string Resumeobject { get; set; } = string.Empty;
+            public string Nx { get; set; } = string.Empty;
+            public string Bootmenupolicy { get; set; } = string.Empty;
+            public string Hypervisorlaunchtype { get; set; } = string.Empty;
         }
 
         internal static readonly string[] separator = ["-------------------"];
         internal static readonly string[] separatorArray = ["\r\n", "\n"];
 
-        static public BCDInfo GetBCDInformation() 
+        static public BCDInfo GetBCDInformation()
         {
             ProcessStartInfo startInfo = new()
             {
@@ -158,41 +159,41 @@ namespace KotoKaze.Static
                         }
 
                         if (key == "标识符")
-                            systemInfo.flag = value;
+                            systemInfo.Flag = value;
                         else if (key == "device")
-                            systemInfo.device = value;
-                        else if (key == "partition")
-                            systemInfo.partition = value;
+                            systemInfo.Device = value;
+                        else if (key == "flightsigning")
+                            systemInfo.Flightsigning = value;
                         else if (key == "path")
-                            systemInfo.path = value;
+                            systemInfo.Path = value;
                         else if (key == "description")
-                            systemInfo.description = value;
+                            systemInfo.Description = value;
                         else if (key == "locale")
-                            systemInfo.locale = value;
+                            systemInfo.Locale = value;
                         else if (key == "inherit")
-                            systemInfo.inherit = value;
+                            systemInfo.Inherit = value;
                         else if (key == "recoverysequence")
-                            systemInfo.recoverysequence = value;
+                            systemInfo.Recoverysequence = value;
                         else if (key == "displaymessageoverride")
-                            systemInfo.displaymessageoverride = value;
+                            systemInfo.Displaymessageoverride = value;
                         else if (key == "recoveryenabled")
-                            systemInfo.recoveryenabled = value;
+                            systemInfo.Recoveryenabled = value;
                         else if (key == "isolatedcontext")
-                            systemInfo.isolatedcontext = value;
+                            systemInfo.Isolatedcontext = value;
                         else if (key == "allowedinmemorysettings")
-                            systemInfo.allowedinmemorysettings = value;
+                            systemInfo.Allowedinmemorysettings = value;
                         else if (key == "osdevice")
-                            systemInfo.osdevice = value;
+                            systemInfo.Osdevice = value;
                         else if (key == "systemroot")
-                            systemInfo.systemroot = value;
+                            systemInfo.Systemroot = value;
                         else if (key == "resumeobject")
-                            systemInfo.resumeobject = value;
+                            systemInfo.Resumeobject = value;
                         else if (key == "nx")
-                            systemInfo.nx = value;
+                            systemInfo.Nx = value;
                         else if (key == "bootmenupolicy")
-                            systemInfo.bootmenupolicy = value;
+                            systemInfo.Bootmenupolicy = value;
                         else if (key == "hypervisorlaunchtype")
-                            systemInfo.hypervisorlaunchtype = value;
+                            systemInfo.Hypervisorlaunchtype = value;
                     }
                     systemInfos.Add(systemInfo);
                 }
@@ -201,7 +202,7 @@ namespace KotoKaze.Static
             return bCDInfo;
         }
 
-        static public void DeleteBCDInformation(SystemInfo systemInfo) 
+        static public void DeleteBCDInformation(SystemInfo systemInfo)
         {
             ProcessStartInfo startInfo = new()
             {
@@ -218,35 +219,34 @@ namespace KotoKaze.Static
             using StreamWriter streamWriter = process.StandardInput;
             if (streamWriter.BaseStream.CanWrite)
             {
-                streamWriter.WriteLine($"bcdedit /delete {systemInfo.flag}");
+                streamWriter.WriteLine($"bcdedit /delete {systemInfo.Flag}");
                 streamWriter.WriteLine("exit");
             }
 
         }
-
-        [Serializable]
         public class BCDBackUPFile
         {
             public string CheckCode { get; set; }
             public SystemInfo SystemInfo { get; set; }
             public BCDBackUPFile(SystemInfo systemInfo)
             {
-                CheckCode = systemInfo.flag.Replace("{","").Replace("}","");
+                CheckCode = systemInfo.Flag.Replace("{", "").Replace("}", "");
                 SystemInfo = systemInfo;
             }
         }
 
-        public static void SaveBBF(BCDBackUPFile BBF)
+        public static async Task SaveBBF(BCDBackUPFile BBF)
         {
             string jsonString = JsonSerializer.Serialize(BBF);
             byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonString);
             string base64String = Convert.ToBase64String(jsonBytes);
-            File.WriteAllText($"/Backup/{BBF.CheckCode}.BBF", base64String);//修改路径和文件名字
+            string filePath = Path.Combine(WorkDirectory.backupDirectory, $"{BBF.CheckCode}.BBF");
+            await File.WriteAllTextAsync(filePath, base64String);
         }
 
         public static BCDBackUPFile ReadBBF(string fullFilePath)
         {
-            BCDBackUPFile cacheFile = new(new SystemInfo());
+            BCDBackUPFile BBFFile = new(new SystemInfo());
             if (Path.Exists(fullFilePath))
             {
                 try
@@ -254,14 +254,79 @@ namespace KotoKaze.Static
                     string base64String = File.ReadAllText(fullFilePath);
                     byte[] jsonBytes = Convert.FromBase64String(base64String);
                     string jsonString = Encoding.UTF8.GetString(jsonBytes);
-                    cacheFile = JsonSerializer.Deserialize<BCDBackUPFile>(jsonString)!;
+                    BBFFile = JsonSerializer.Deserialize<BCDBackUPFile>(jsonString)!;
                 }
                 catch
                 {
                     //被修改
                 }
             }
-            return cacheFile;
+            return BBFFile;
+        }
+
+        public static void ImportSystemBootInfo(string description,BCDBackUPFile BBF) 
+        {
+            ProcessStartInfo startInfo = new()
+            {
+                FileName = "cmd.exe",
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                CreateNoWindow = true,
+                UseShellExecute = false
+            };
+
+            Process process = new() { StartInfo = startInfo };
+            process.Start();
+
+            using (StreamWriter streamWriter = process.StandardInput)
+            {
+                if (streamWriter.BaseStream.CanWrite)
+                {
+                    streamWriter.WriteLine($"bcdedit /create /d {description} /application osloader");
+                    streamWriter.WriteLine("exit");
+                }
+            }
+            string output = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
+
+            Match match = Regex.Match(output, @"\{(.+?)\}");
+            string GUID = string.Empty;
+            if (match.Success)
+            {
+                string id = match.Groups[1].Value;
+                GUID = "{" + id + "}";
+            }
+
+            process.Start();
+            using (StreamWriter streamWriter = process.StandardInput)
+            {
+                if (streamWriter.BaseStream.CanWrite)
+                {
+                    streamWriter.WriteLine($"bcdedit /set {GUID} 标识符 {GUID}");
+                    streamWriter.WriteLine($"bcdedit /set {GUID} device {BBF.SystemInfo.Device}");
+                    streamWriter.WriteLine($"bcdedit /set {GUID} path {BBF.SystemInfo.Path}");
+                    streamWriter.WriteLine($"bcdedit /set {GUID} locale {BBF.SystemInfo.Locale}");
+                    streamWriter.WriteLine($"bcdedit /set {GUID} inherit {BBF.SystemInfo.Inherit}");
+                    streamWriter.WriteLine($"bcdedit /set {GUID} recoverysequence {GUID}");
+                    streamWriter.WriteLine($"bcdedit /set {GUID} displaymessageoverride {BBF.SystemInfo.Displaymessageoverride}");
+                    streamWriter.WriteLine($"bcdedit /set {GUID} recoveryenabled {BBF.SystemInfo.Recoveryenabled}");
+                    streamWriter.WriteLine($"bcdedit /set {GUID} isolatedcontext {BBF.SystemInfo.Isolatedcontext}");
+                    streamWriter.WriteLine($"bcdedit /set {GUID} flightsigning {BBF.SystemInfo.Flightsigning}");
+                    streamWriter.WriteLine($"bcdedit /set {GUID} allowedinmemorysettings {BBF.SystemInfo.Allowedinmemorysettings}");
+                    streamWriter.WriteLine($"bcdedit /set {GUID} osdevice {BBF.SystemInfo.Osdevice}");
+                    streamWriter.WriteLine($"bcdedit /set {GUID} systemroot {BBF.SystemInfo.Systemroot}");
+                    streamWriter.WriteLine($"bcdedit /set {GUID} resumeobject {GUID}");
+                    streamWriter.WriteLine($"bcdedit /set {GUID} nx {BBF.SystemInfo.Nx}");
+                    streamWriter.WriteLine($"bcdedit /set {GUID} bootmenupolicy {BBF.SystemInfo.Bootmenupolicy}");
+                    streamWriter.WriteLine($"bcdedit /set {GUID} hypervisorlaunchtype {BBF.SystemInfo.Hypervisorlaunchtype}");
+                    streamWriter.WriteLine($"bcdedit /displayorder {GUID} /addlast");
+                    streamWriter.WriteLine("exit");
+                }
+            }
+            output = process.StandardOutput.ReadToEnd();
+            Debug.WriteLine(output);
+            process.WaitForExit();
+
         }
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:XyliteeeMainForm"
         mc:Ignorable="d"
-        Title="哼哼哼啊啊啊啊啊啊" WindowStyle="None" Height="540" Width="820" ResizeMode="CanMinimize" >
+        Title="哼哼哼啊啊啊啊啊啊" WindowStyle="None" Height="540" Width="820" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
     <WindowChrome.WindowChrome>
         <WindowChrome
      ResizeBorderThickness="0"

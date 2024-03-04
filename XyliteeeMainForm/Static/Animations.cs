@@ -30,6 +30,17 @@ namespace KotoKaze.Static
             widget.BeginAnimation(Canvas.LeftProperty, animation);
         }
 
+        static public void ChangeOP(FrameworkElement widget, double start,double end,double time) 
+        {
+            DoubleAnimation animation = new()
+            {
+                From = start,
+                To = end,
+                Duration = new Duration(TimeSpan.FromSeconds(time))
+            };
+            widget.BeginAnimation(UIElement.OpacityProperty, animation);
+        }
+
         static public void ImageTurnRound(Image image, bool flag,double time = 1)
         {
             DoubleAnimation animation = new()
