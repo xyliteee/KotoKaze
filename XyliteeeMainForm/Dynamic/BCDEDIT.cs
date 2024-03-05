@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static KotoKaze.Dynamic.BCDEDIT;
 
 namespace KotoKaze.Dynamic
 {
@@ -264,7 +265,7 @@ namespace KotoKaze.Dynamic
             return BBFFile;
         }
 
-        public static void ImportSystemBootInfo(string description,BCDBackUPFile BBF) 
+        public static bool ImportSystemBootInfo(string description,BCDBackUPFile BBF) 
         {
             ProcessStartInfo startInfo = new()
             {
@@ -282,51 +283,74 @@ namespace KotoKaze.Dynamic
             {
                 if (streamWriter.BaseStream.CanWrite)
                 {
-                    streamWriter.WriteLine($"bcdedit /create /d {description} /application osloader");
+                    streamWriter.WriteLine($"bcdedit /create /d \"{description}\" /application osloader");
                     streamWriter.WriteLine("exit");
                 }
             }
             string output = process.StandardOutput.ReadToEnd();
             process.WaitForExit();
+            if (!output.Contains("成功创建")) { return false; }
 
             Match match = Regex.Match(output, @"\{(.+?)\}");
-            string GUID = string.Empty;
-            if (match.Success)
-            {
-                string id = match.Groups[1].Value;
-                GUID = "{" + id + "}";
-            }
+            string id = match.Groups[1].Value;
+            string GUID = "{" + id + "}";
 
             process.Start();
             using (StreamWriter streamWriter = process.StandardInput)
             {
                 if (streamWriter.BaseStream.CanWrite)
                 {
-                    streamWriter.WriteLine($"bcdedit /set {GUID} 标识符 {GUID}");
-                    streamWriter.WriteLine($"bcdedit /set {GUID} device {BBF.SystemInfo.Device}");
-                    streamWriter.WriteLine($"bcdedit /set {GUID} path {BBF.SystemInfo.Path}");
-                    streamWriter.WriteLine($"bcdedit /set {GUID} locale {BBF.SystemInfo.Locale}");
-                    streamWriter.WriteLine($"bcdedit /set {GUID} inherit {BBF.SystemInfo.Inherit}");
-                    streamWriter.WriteLine($"bcdedit /set {GUID} recoverysequence {GUID}");
-                    streamWriter.WriteLine($"bcdedit /set {GUID} displaymessageoverride {BBF.SystemInfo.Displaymessageoverride}");
-                    streamWriter.WriteLine($"bcdedit /set {GUID} recoveryenabled {BBF.SystemInfo.Recoveryenabled}");
-                    streamWriter.WriteLine($"bcdedit /set {GUID} isolatedcontext {BBF.SystemInfo.Isolatedcontext}");
-                    streamWriter.WriteLine($"bcdedit /set {GUID} flightsigning {BBF.SystemInfo.Flightsigning}");
-                    streamWriter.WriteLine($"bcdedit /set {GUID} allowedinmemorysettings {BBF.SystemInfo.Allowedinmemorysettings}");
-                    streamWriter.WriteLine($"bcdedit /set {GUID} osdevice {BBF.SystemInfo.Osdevice}");
-                    streamWriter.WriteLine($"bcdedit /set {GUID} systemroot {BBF.SystemInfo.Systemroot}");
-                    streamWriter.WriteLine($"bcdedit /set {GUID} resumeobject {GUID}");
-                    streamWriter.WriteLine($"bcdedit /set {GUID} nx {BBF.SystemInfo.Nx}");
-                    streamWriter.WriteLine($"bcdedit /set {GUID} bootmenupolicy {BBF.SystemInfo.Bootmenupolicy}");
-                    streamWriter.WriteLine($"bcdedit /set {GUID} hypervisorlaunchtype {BBF.SystemInfo.Hypervisorlaunchtype}");
+                    void WriteLineIfNotEmpty(string parameter, string value)
+                    {
+                        if (!string.IsNullOrEmpty(value)){streamWriter.WriteLine($"bcdedit /set {GUID} {parameter} {value}");}
+                    }
+
+                    WriteLineIfNotEmpty("device", BBF.SystemInfo.Device);
+                    WriteLineIfNotEmpty("path", BBF.SystemInfo.Path);
+                    WriteLineIfNotEmpty("locale", BBF.SystemInfo.Locale);
+                    WriteLineIfNotEmpty("inherit", BBF.SystemInfo.Inherit);
+                    WriteLineIfNotEmpty("recoverysequence", GUID);
+                    WriteLineIfNotEmpty("displaymessageoverride", BBF.SystemInfo.Displaymessageoverride);
+                    WriteLineIfNotEmpty("recoveryenabled", BBF.SystemInfo.Recoveryenabled);
+                    WriteLineIfNotEmpty("isolatedcontext", BBF.SystemInfo.Isolatedcontext);
+                    WriteLineIfNotEmpty("flightsigning", BBF.SystemInfo.Flightsigning);
+                    WriteLineIfNotEmpty("allowedinmemorysettings", BBF.SystemInfo.Allowedinmemorysettings);
+                    WriteLineIfNotEmpty("osdevice", BBF.SystemInfo.Osdevice);
+                    WriteLineIfNotEmpty("systemroot", BBF.SystemInfo.Systemroot);
+                    WriteLineIfNotEmpty("resumeobject", GUID);
+                    WriteLineIfNotEmpty("nx", BBF.SystemInfo.Nx);
+                    WriteLineIfNotEmpty("bootmenupolicy", BBF.SystemInfo.Bootmenupolicy);
+                    WriteLineIfNotEmpty("hypervisorlaunchtype", BBF.SystemInfo.Hypervisorlaunchtype);
                     streamWriter.WriteLine($"bcdedit /displayorder {GUID} /addlast");
                     streamWriter.WriteLine("exit");
                 }
             }
-            output = process.StandardOutput.ReadToEnd();
-            Debug.WriteLine(output);
+            //output = process.StandardOutput.ReadToEnd();
+            //Debug.WriteLine(output);
             process.WaitForExit();
+            return true;
+        }
 
+        public static void SetDefault(SystemInfo systemInfo) 
+        {
+            ProcessStartInfo startInfo = new()
+            {
+                FileName = "cmd.exe",
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                CreateNoWindow = true,
+                UseShellExecute = false
+            };
+
+            Process process = new() { StartInfo = startInfo };
+            process.Start();
+
+            using StreamWriter streamWriter = process.StandardInput;
+            if (streamWriter.BaseStream.CanWrite)
+            {
+                streamWriter.WriteLine($"bcdedit /default {systemInfo.Flag}");
+                streamWriter.WriteLine("exit");
+            }
         }
     }
 }

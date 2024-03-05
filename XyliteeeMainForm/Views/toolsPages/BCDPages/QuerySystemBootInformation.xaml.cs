@@ -55,6 +55,7 @@ namespace KotoKaze.Views.toolsPages.BCDPages
                 DeleteBCDInformation(systemInfo);
                 Animations.ImageTurnRound(SettingIcon, true, 4);
                 ShowBCDInformation();
+                KotoMessageBoxSingle.ShowDialog("已删除该引导。");
             }
         }
 
@@ -78,8 +79,23 @@ namespace KotoKaze.Views.toolsPages.BCDPages
             KotoMessageBoxSingle.ShowDialog($"保存完成，文件为{BBF.CheckCode}.BBF");
         }
 
-        private void AddNewOne(object sender,RoutedEventArgs e) 
+        private void AddNewOne(object sender,RoutedEventArgs e) //叫我嵌套仙人
         {
+            void UITask(KotoMessageBoxInput.MessageResult rr,BCDBackUPFile bbf) 
+            {
+                Task.Run(() =>
+                {
+                    bool isSuccessful = ImportSystemBootInfo(rr.Input, bbf);
+                    Dispatcher.Invoke(() =>
+                    {
+                        string message;
+                        if (isSuccessful) { message = "添加完成"; } else { message = "出现错误"; }
+                        KotoMessageBoxSingle.ShowDialog(message);
+                        Animations.ImageTurnRound(SettingIcon, true, 4);
+                        ShowBCDInformation();
+                    });
+                });
+            }
             var r = KotoMessageBox.ShowDialog("是否选择导入本地的BBF文件？");
             if (r.IsYes)
             {
@@ -88,29 +104,50 @@ namespace KotoKaze.Views.toolsPages.BCDPages
                     DefaultExt = ".bbf",
                     Filter = "BBF Files (*.bbf)|*.bbf"
                 };
-                Nullable<bool> result = dlg.ShowDialog();
+                bool? result = dlg.ShowDialog();
                 if (result == true)
                 {
                     string selectedFilePath = dlg.FileName;
                     BCDBackUPFile bbf = ReadBBF(selectedFilePath);
                     var rr = KotoMessageBoxInput.ShowDialog("输入该引导的描述");
+                    if (rr.IsYes)
+                    {
+                        UITask(rr, bbf);
+                    }
+                }
+            }
+            else 
+            {
+                var rr = KotoMessageBoxInput.ShowDialog("输入该引导的描述");
+                BCDBackUPFile bbf = new(new SystemInfo());
+                if (rr.IsYes)
+                {
+                    var rrr = KotoMessageBoxInput.ShowDialog("请输入系统所在盘符，仅输入单个字母即可，例如\"C\"");
                     if (rr.IsYes) 
                     {
-                        Task.Run(() => 
-                        {
-                            ImportSystemBootInfo(rr.Input, bbf);
-                            Dispatcher.Invoke(() => 
-                            {
-                                KotoMessageBoxSingle.ShowDialog("添加完成");
-                                Animations.ImageTurnRound(SettingIcon, true, 4);
-                                ShowBCDInformation();
-                            });
-                        });
+                        bbf.SystemInfo.Device = $"partition={rrr.Input}:";
+                        bbf.SystemInfo.Path = "\\Windows\\system32\\winload.efi";
+                        bbf.SystemInfo.Osdevice = $"partition={rrr.Input}:";
+                        bbf.SystemInfo.Systemroot = "\\Windows";
+                        UITask(rr, bbf);
                     }
                 }
             }
         }
 
+        private void Default(object sender, RoutedEventArgs e) 
+        {
+            var r = KotoMessageBox.ShowDialog("将这个引导设置为默认，确定吗？");
+            if (r.IsYes)
+            {
+                Button button = (Button)sender;
+                SystemInfo systemInfo = (SystemInfo)button.Tag;
+                SetDefault(systemInfo);
+                Animations.ImageTurnRound(SettingIcon, true, 4);
+                ShowBCDInformation();
+                KotoMessageBoxSingle.ShowDialog("已设置为默认。");
+            }
+        }
 
         private void ShowDetail(object sender, RoutedEventArgs e) 
         {
@@ -129,7 +166,6 @@ namespace KotoKaze.Views.toolsPages.BCDPages
             SystemDevice.Content = $"文件设备：{systemInfo.Device}";
             SystemLocal.Content = $"语言环境：{systemInfo.Locale}";
             SystemInherit.Content = $"继承对象：{systemInfo.Inherit}";
-            SystemRecoverysequence.Content = $"{systemInfo.Recoverysequence}";
             SystemDisplaymessageoverride.Content = $"显示消息覆盖：{systemInfo.Displaymessageoverride}";
             SystemRecoveryenabled.Content = $"是否启用恢复：{systemInfo.Recoveryenabled}";
             SystemIsolatedcontext.Content = $"是否隔离上下文：{systemInfo.Isolatedcontext}";
@@ -147,6 +183,7 @@ namespace KotoKaze.Views.toolsPages.BCDPages
                 DeleteButton.Tag = systemInfo;
             }
             BackUpButton.Tag = systemInfo;
+            DefaultButton.Tag = systemInfo;
         }
 
         private void UpDateSystemInfo() 
@@ -197,7 +234,9 @@ namespace KotoKaze.Views.toolsPages.BCDPages
 
             string description;
             if (BCDInfo.SystemInfos[index].Flag == "{current}")
-                description = BCDInfo.SystemInfos[index].Description+"【当前】";
+                description = BCDInfo.SystemInfos[index].Description + "【当前】";
+            else if (BCDInfo.SystemInfos[index].Flag == "{default}")
+                description = BCDInfo.SystemInfos[index].Description + "【默认】";
             else description = BCDInfo.SystemInfos[index].Description;
 
             Label label = new()
