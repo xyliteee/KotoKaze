@@ -11,13 +11,12 @@ namespace XyliteeeMainForm.Views
     /// </summary>
     public partial class toolsPage : Page
     {
-        private readonly MainWindow mainWindow;
         private readonly SolidColorBrush blueColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A0C5E0"));
-        public toolsPage(MainWindow mainWindow)
+        public toolsPage()
         {
             InitializeComponent();
-            this.mainWindow = mainWindow;
             TipsBox.Content = "这里包含了一些系统功能相关的工具";
+            GlobalData.ToolsPageInstance = this;
         }
 
         private void SetButtonState(Button button) 
@@ -49,7 +48,7 @@ namespace XyliteeeMainForm.Views
             SetButtonState((Button)sender);
             Animations.ButtonSilderMoveing(Silder, 355);
             TipsBox.Content = "这里包含了一些基于BCD的引导工具，可能具有不可恢复的危险性";
-            ToolsNegate.Navigate(new BDCPage());
+            ToolsNegate.Navigate(new BCDPage());
         }
 
         private void OtherButton_Click(object sender, System.Windows.RoutedEventArgs e)

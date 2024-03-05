@@ -64,5 +64,17 @@ namespace KotoKaze.Static
 
             rotateTransform.BeginAnimation(RotateTransform.AngleProperty, animation);
         }
+
+        static public void FrameMoving(FrameworkElement widget, double from) 
+        {
+            DoubleAnimation animation = new()
+            {
+                From = from,
+                To = 0,
+                Duration = new Duration(TimeSpan.FromSeconds(0.3)),
+                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
+            };
+            widget.BeginAnimation(Canvas.TopProperty, animation);
+        }
     }
 }

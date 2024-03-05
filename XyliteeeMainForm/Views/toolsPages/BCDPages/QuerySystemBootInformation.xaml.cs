@@ -27,7 +27,6 @@ namespace KotoKaze.Views.toolsPages.BCDPages
         public QuerySystemBootInformation()
         {
             InitializeComponent();
-            Animations.ImageTurnRound(SettingIcon, true,4);
             ShowBCDInformation();
         }
 
@@ -53,7 +52,6 @@ namespace KotoKaze.Views.toolsPages.BCDPages
                 Button button = (Button)sender;
                 SystemInfo systemInfo = (SystemInfo)button.Tag;
                 DeleteBCDInformation(systemInfo);
-                Animations.ImageTurnRound(SettingIcon, true, 4);
                 ShowBCDInformation();
                 KotoMessageBoxSingle.ShowDialog("已删除该引导。");
             }
@@ -91,7 +89,6 @@ namespace KotoKaze.Views.toolsPages.BCDPages
                         string message;
                         if (isSuccessful) { message = "添加完成"; } else { message = "出现错误"; }
                         KotoMessageBoxSingle.ShowDialog(message);
-                        Animations.ImageTurnRound(SettingIcon, true, 4);
                         ShowBCDInformation();
                     });
                 });
@@ -143,7 +140,6 @@ namespace KotoKaze.Views.toolsPages.BCDPages
                 Button button = (Button)sender;
                 SystemInfo systemInfo = (SystemInfo)button.Tag;
                 SetDefault(systemInfo);
-                Animations.ImageTurnRound(SettingIcon, true, 4);
                 ShowBCDInformation();
                 KotoMessageBoxSingle.ShowDialog("已设置为默认。");
             }

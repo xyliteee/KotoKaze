@@ -24,7 +24,6 @@ namespace XyliteeeMainForm.Views
 {
     public partial class cleanPage : Page
     {
-        private readonly MainWindow mainWindow;
         private bool isScanned = false;
         private readonly List<string> trashTempFiles = [];
         private readonly List<string> trashUpdateFiles = [];
@@ -35,11 +34,9 @@ namespace XyliteeeMainForm.Views
         private readonly List<Button> uninstallerButtons = [];
         private List<SoftWare> softWares = [];
         private readonly BitmapImage defaultIcon = new(new Uri("pack://application:,,,/image/icons/windows11.png"));
-        public cleanPage(MainWindow mainWindow)
+        public cleanPage()
         {
             InitializeComponent();
-            this.mainWindow = mainWindow;
-            ScanSoftWare();
         }
         private void Button_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
@@ -458,18 +455,16 @@ namespace XyliteeeMainForm.Views
             }
         }
 
-
-
-        
-        private void ScanSoftWare()
+        private async void ScanSoftWare()
         {
             uninstallerButtons.Clear();
             softWares.Clear();
             ScorllCanvas.Opacity = 0.4;
             RefreshButton.IsEnabled = false;
+            ScorllCanvas.Children.Clear();
             Animations.ImageTurnRound(RefreshImage, true);
 
-            Task.Run(() => 
+            await Task.Run(() =>
             {
                 RegistryKey baseKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64);
                 RegistryKey uninstallKey = baseKey.OpenSubKey(@"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall");
@@ -490,20 +485,19 @@ namespace XyliteeeMainForm.Views
                     softWares.Add(softWare);
                 }
                 softWares = [.. softWares.OrderBy(s => s.displayName)];
-                Dispatcher.BeginInvoke(() =>
-                {
-                    ScorllCanvas.Children.Clear();
-                    for (int index = 0; index < softWares.Count; index++) 
-                    {
-                        CreatSingleCard(index, softWares[index]);
-                    }
-                    ScorllCanvas.Height = 20 + 80 * softWares.Count;
-                    ScorllCanvas.Opacity = 1;
-                    RefreshButton.IsEnabled = true;
-                    Animations.ImageTurnRound(RefreshImage, false);
-                });
             });
+
+            ScorllCanvas.Height = 20 + 80 * softWares.Count;
+            for (int index = 0; index < softWares.Count; index++)
+            {
+                CreatSingleCard(index, softWares[index]);
+                await Task.Delay(10);
+            }
+            ScorllCanvas.Opacity = 1;
+            RefreshButton.IsEnabled = true;
+            Animations.ImageTurnRound(RefreshImage, false);
         }
+
         private static string GetValueOrDefault(RegistryKey key, string valueName)
         {
             return key.GetValue(valueName) as string ?? "未提供";

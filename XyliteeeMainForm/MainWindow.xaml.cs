@@ -1,4 +1,6 @@
 ﻿using KotoKaze.Static;
+using KotoKaze.Widgets;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -6,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using XyliteeeMainForm.Views;
 
 namespace XyliteeeMainForm
@@ -24,17 +27,20 @@ namespace XyliteeeMainForm
         private readonly PCTestPage PCTestPage;
         private readonly toolsPage toolsPage;
         private readonly settingPage settingPage;
+        private Page currentPage;
         private readonly Button[] buttons = new Button[5];
         private readonly SolidColorBrush blueTextColor = new BrushConverter().ConvertFrom("#1F67B3") as SolidColorBrush;
         public MainWindow()
         {
             InitializeComponent();
-            homePage = new(this);
-            cleanPage = new(this);
-            PCTestPage = new(this);
-            toolsPage = new(this);
-            settingPage = new(this);
+            homePage = new();
+            cleanPage = new();
+            PCTestPage = new();
+            toolsPage = new();
+            settingPage = new();
             actionFrame.Navigate(homePage);
+            currentPage = (Page)actionFrame.Content;
+            actionFrame.Navigated += PageChanged;
             buttons[0] = homePageButton;
             buttons[1] = cleanPageButton;
             buttons[2] = PCTestPageButton;
@@ -43,6 +49,19 @@ namespace XyliteeeMainForm
             WindowStyle = WindowStyle.SingleBorderWindow;
             WorkDirectory.CreatWorkDirectory();
             GlobalData.MainWindowInstance = this;
+        }
+
+        private void PageChanged(object sender, NavigationEventArgs e) 
+        {
+            Animations.ChangeOP(actionFrame, 0, 1, 0.3);
+            Animations.FrameMoving(actionFrame, 50);
+            currentPage = (Page)actionFrame.Content;
+
+            if (currentPage is toolsPage && toolsPage.secondActionFrame.Visibility == Visibility.Visible) //如果当前页面是工具页面且二级页面处于开启状态
+            {
+                backButton.Visibility = Visibility.Visible;//将返回按钮显示
+            }
+            else { backButton.Visibility = Visibility.Collapsed; }
         }
 
         private void DragWindow(object sender, MouseButtonEventArgs e)
@@ -77,6 +96,15 @@ namespace XyliteeeMainForm
             Close();
         }
 
+        private void BackButton_Click(object sender, RoutedEventArgs e) 
+        {
+            if (currentPage is toolsPage && toolsPage.secondActionFrame.Visibility == Visibility.Visible)//如果当前页面是工具页面且二级页面处于开启状态
+            {
+                toolsPage.secondActionFrame.Visibility = Visibility.Collapsed;//按钮可以将二级页面关闭
+            }
+            backButton.Visibility = Visibility.Collapsed;//然后按钮关闭
+        }
+
         private void SetCurrentPageColor()                                                                                          //根据当前页面设置对应按钮颜色为蓝色
         {
 
@@ -89,7 +117,7 @@ namespace XyliteeeMainForm
                 { settingPage, (settingPageButton,settingImage ,blueTextColor, BitMapImages.settingBlue) },
             };
 
-            if (mappings.TryGetValue(actionFrame.Content, out var mapping))
+            if (mappings.TryGetValue(currentPage, out var mapping))
             {
                 mapping.Item1.Foreground = mapping.Item3;
                 mapping.Item2.Source = mapping.Item4;
@@ -170,28 +198,29 @@ namespace XyliteeeMainForm
                     homeImage.Source = BitMapImages.homeBlue;
                     break;
                 case "cleanPageButton":
-                    Animations.PageSilderMoveing(PageSilder, 90);
+                    Animations.PageSilderMoveing(PageSilder, 70);
                     actionFrame.Navigate(cleanPage);
                     cleanImage.Source = BitMapImages.cleanBlue;
                     break;
                 case "PCTestPageButton":
-                    Animations.PageSilderMoveing(PageSilder, 150);
+                    Animations.PageSilderMoveing(PageSilder, 110);
                     actionFrame.Navigate(PCTestPage);
                     testImage.Source = BitMapImages.testBlue;
                     break;
                 case "toolsPageButton":
-                    Animations.PageSilderMoveing(PageSilder, 210);
+                    Animations.PageSilderMoveing(PageSilder, 150);
                     actionFrame.Navigate(toolsPage);
                     toolsImage.Source = BitMapImages.toolsBlue;
                     break;
                 case "settingPageButton":
-                    Animations.PageSilderMoveing(PageSilder, 270);
+                    Animations.PageSilderMoveing(PageSilder, 420);
                     actionFrame.Navigate(settingPage);
                     settingImage.Source = BitMapImages.settingBlue;
                     break;
 
             }
         }
+
     }
     public class BitMapImages 
     {

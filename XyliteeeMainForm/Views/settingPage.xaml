@@ -10,9 +10,7 @@
 
     <Grid>
         <Canvas Background="#1F67B3">
-            <Label TextBlock.Foreground="White" FontSize="80" FontWeight="Bold" Content="XD" Canvas.Left="100" Canvas.Top="140"/>
-            <Label TextBlock.Foreground="White" FontSize="24" Content="这是设置页面，我还没写他的样式和逻辑" Canvas.Left="100" Canvas.Top="240"/>
-            <Label TextBlock.Foreground="White" FontSize="24" Content="算了不管你了" Canvas.Left="100" Canvas.Top="270"/>
+            <Label Background="Transparent" BorderThickness="0" Foreground="White" FontSize="80" Content="T__T,写不动了" Canvas.Left="100" Canvas.Top="140" Height="202" VerticalAlignment="Top"/>
         </Canvas>
 
     </Grid>

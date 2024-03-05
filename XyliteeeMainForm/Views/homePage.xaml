@@ -23,7 +23,7 @@
                     <Label x:Name="systemVersion" Background="Transparent" Content="系统版本：" BorderThickness="0" Canvas.Left="0" Canvas.Top="38" FontSize="16"/>
                     <Label x:Name="modelOfCPU" Background="Transparent" Content="CPU型号：" BorderThickness="0" Canvas.Left="0" Canvas.Top="66" FontSize="16"/>
                     <Label x:Name="sizeOfRAM" Background="Transparent" Content="内存大小：" BorderThickness="0" Canvas.Left="0" Canvas.Top="94" FontSize="16"/>
-                    <Label x:Name="userName" Background="Transparent" Content="账户名称：" BorderThickness="0" Canvas.Left="0" Canvas.Top="122" FontSize="16"/>
+                    <Label x:Name="userName" Background="Transparent" Content="账户名称：" Height="30" BorderThickness="0" Canvas.Left="0" Canvas.Top="122" FontSize="16"/>
                 </Canvas>
             </Canvas>
 

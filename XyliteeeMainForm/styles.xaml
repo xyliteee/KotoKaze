@@ -83,12 +83,13 @@
                                         <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#F3F8FE" Duration="0:0:0.15"/>
                                     </Storyboard>
                                 </VisualState>
-                                
-                                <VisualState x:Name="Pressed">
+
+                                <VisualState x:Name="Disabled">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#F3F8FE" Duration="0:0:0.15"/>
+                                        <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#F3F8FE" Duration="0:0:0"/>
                                     </Storyboard>
                                 </VisualState>
+
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                         <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" />

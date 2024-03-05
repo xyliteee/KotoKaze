@@ -11,12 +11,10 @@ namespace XyliteeeMainForm.Views
 {
     public partial class homePage : Page
     {
-        private readonly MainWindow mainWindow;
         private readonly SystemInfos systemInfo = new();
-        public homePage(MainWindow mainWindow)
+        public homePage()
         {
             InitializeComponent();
-            this.mainWindow = mainWindow;
             systemName.Content = $"系统名称：{systemInfo.SystemName}";
             systemVersion.Content = $"系统版本：{systemInfo.SystemVersion}";
             modelOfCPU.Content = $"CPU型号：{systemInfo.ModelOfCPU}";

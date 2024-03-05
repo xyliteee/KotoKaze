@@ -21,16 +21,18 @@ namespace KotoKaze.Views.toolsPages
     /// <summary>
     /// BDCPage.xaml 的交互逻辑
     /// </summary>
-    public partial class BDCPage : Page
+    public partial class BCDPage : Page
     {
-        public BDCPage()
+        public BCDPage()
         {
             InitializeComponent();
         }
 
         private void QuerySystemBootInformationButton_Click(object sender, RoutedEventArgs e)
         {
-            GlobalData.MainWindowInstance.actionFrame.Navigate(new QuerySystemBootInformation());
+            GlobalData.ToolsPageInstance.secondActionFrame.Navigate(new QuerySystemBootInformation());
+            GlobalData.ToolsPageInstance.secondActionFrame.Visibility = Visibility.Visible;
+            GlobalData.MainWindowInstance.backButton.Visibility = Visibility.Visible;
         }
     }
 }

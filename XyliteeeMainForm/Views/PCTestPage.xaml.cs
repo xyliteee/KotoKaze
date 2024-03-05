@@ -20,7 +20,6 @@ namespace XyliteeeMainForm.Views
     /// </summary>
     public partial class PCTestPage : Page
     {
-        private readonly MainWindow mainWindow;
         private readonly WorkLoadTest.CPU CPUTest;
         private readonly WorkLoadTest.RAM RAMTest;
         private readonly WorkLoadTest.Disk DiskTest;
@@ -29,11 +28,10 @@ namespace XyliteeeMainForm.Views
         private int GPUScore = 0;
         private int RamScore = 0;
         private int DiskScore = 0;
-#pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
-        public PCTestPage(MainWindow mainWindow)
+#pragma warning disable CS8618
+        public PCTestPage()
         {
             InitializeComponent();
-            this.mainWindow = mainWindow;
             CPUTest = new(this);
             RAMTest = new(this);
             DiskTest = new(this);
@@ -85,7 +83,7 @@ namespace XyliteeeMainForm.Views
             {
                 GPUWindow = new();
                 GPUScoreLabel.Content = "正在测试";
-                mainWindow.Hide();
+                GlobalData.MainWindowInstance.Hide();
                 GPUWindow.Show();
                 GPUWindow.Test();
             });
@@ -94,7 +92,7 @@ namespace XyliteeeMainForm.Views
             {
                 double FPS = Math.Round(1000 / GPUWindow.frameTimes.Average(), 2);
                 GPUWindow.Close();
-                mainWindow.Show();
+                GlobalData.MainWindowInstance.Show();
                 GPUScore = (int)(FPS * 930);
                 GPUScoreLabel.Content = GPUScore;
                 GPUDialogScoreLabel.Content = $"平均帧率-{FPS}";

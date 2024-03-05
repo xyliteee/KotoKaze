@@ -12,7 +12,7 @@
     <Grid>
         <Canvas Background="#F3F8FE">
             <Canvas x:Name="BootInformation" Canvas.Top="20" Canvas.Left="20" Height="120" Width="305">
-                <Border Height="120" Width="305" Background="#0096DC" CornerRadius="10">
+                <Border Height="120" Width="305" Background="#1F67B3" CornerRadius="10">
                     <Border.Effect>
                         <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
                     </Border.Effect>
@@ -65,6 +65,7 @@
                     <Button x:Name="DeleteButton" Width="130" Height="30" Canvas.Right="10" Canvas.Bottom="10" Content="删除这个引导" Click="Delete" Style="{StaticResource RedNomalButtonStyle}"/>
                     <Button x:Name="BackUpButton" Width="130" Height="30" Canvas.Left="10" Canvas.Bottom="10" Content="导出这个引导" Click="BackUP" Style="{StaticResource NomalButtonStyle}"/>
                     <Button x:Name="DefaultButton" Width="130" Height="30" Canvas.Left="10" Canvas.Bottom="50" Content="设置为默认" Click="Default" Style="{StaticResource NomalButtonStyle}"/>
+                    
                 </Canvas>
             </Canvas>
         </Canvas>
