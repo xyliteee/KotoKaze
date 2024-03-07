@@ -59,22 +59,28 @@ namespace KotoKaze.Views.toolsPages.BCDPages
 
         private async void BackUP(object sender, RoutedEventArgs e)
         {
-            var r = KotoMessageBox.ShowDialog("将会在程序根目录/Backup/保存BBF文件，确定？");
-            if (!r.IsYes) return;
+            var saveMessageboxRes = KotoMessageBox.ShowDialog("将会在程序根目录/Backup/保存BBF文件，确定？");
+            if (!saveMessageboxRes.IsYes) return;
 
             Button button = (Button)sender;
             SystemInfo systemInfoBack = (SystemInfo)button.Tag;
             BCDBackUPFile BBF = new(systemInfoBack);
-            string filePath = Path.Combine(WorkDirectory.backupDirectory, $"{BBF.CheckCode}.BBF");
-
-            if (Path.Exists(filePath))
+            while (true) 
             {
-                r = KotoMessageBox.ShowDialog("该备份已经存在，是否替换？");
-                if (!r.IsYes) return;
-            }
+                var saveNameMessageboxRes = KotoMessageBoxInput.ShowDialog("输入要保存的文件名称");
+                if (!saveNameMessageboxRes.IsYes) return;
+                string filePath = Path.Combine(FileManager.WorkDirectory.backupDirectory, $"{saveNameMessageboxRes.Input}.BBF");
 
-            await SaveBBF(BBF);
-            KotoMessageBoxSingle.ShowDialog($"保存完成，文件为{BBF.CheckCode}.BBF");
+                if (Path.Exists(filePath))
+                {
+                    var alreadyExitMessageboxRes = KotoMessageBox.ShowDialog("该备份已经存在，是否替换？");
+                    if (!alreadyExitMessageboxRes.IsYes) continue;
+                }
+
+                await SaveBBF(BBF,saveNameMessageboxRes.Input);
+                KotoMessageBoxSingle.ShowDialog($"保存完成，文件为{saveNameMessageboxRes.Input}.BBF");
+                return;
+            }
         }
 
         private void AddNewOne(object sender,RoutedEventArgs e) //叫我嵌套仙人
@@ -99,6 +105,7 @@ namespace KotoKaze.Views.toolsPages.BCDPages
                 Microsoft.Win32.OpenFileDialog dlg = new()
                 {
                     DefaultExt = ".bbf",
+                    DefaultDirectory = FileManager.WorkDirectory.backupDirectory,
                     Filter = "BBF Files (*.bbf)|*.bbf"
                 };
                 bool? result = dlg.ShowDialog();
@@ -106,6 +113,7 @@ namespace KotoKaze.Views.toolsPages.BCDPages
                 {
                     string selectedFilePath = dlg.FileName;
                     BCDBackUPFile bbf = ReadBBF(selectedFilePath);
+                    if (bbf.CheckCode == string.Empty) { KotoMessageBoxSingle.ShowDialog("错误的文件!"); return; }
                     var rr = KotoMessageBoxInput.ShowDialog("输入该引导的描述");
                     if (rr.IsYes)
                     {
@@ -145,6 +153,32 @@ namespace KotoKaze.Views.toolsPages.BCDPages
             }
         }
 
+        private async void ExportOriginal(object sender, RoutedEventArgs e) 
+        {
+            var saveMessageboxRes = KotoMessageBox.ShowDialog("将会在程序根目录/Backup/保存txt文件，确定？");
+            if (!saveMessageboxRes.IsYes) return;
+
+            Button button = (Button)sender;
+            SystemInfo systemInfoBack = (SystemInfo)button.Tag;
+            BCDBackUPFile BBF = new(systemInfoBack);
+            while (true)
+            {
+                var saveNameMessageboxRes = KotoMessageBoxInput.ShowDialog("输入要保存的文件名称");
+                if (!saveNameMessageboxRes.IsYes) return;
+                string filePath = Path.Combine(FileManager.WorkDirectory.backupDirectory, $"{saveNameMessageboxRes.Input}.txt");
+
+                if (Path.Exists(filePath))
+                {
+                    var alreadyExitMessageboxRes = KotoMessageBox.ShowDialog("该文件已经存在，是否替换？");
+                    if (!alreadyExitMessageboxRes.IsYes) continue;
+                }
+
+                await SaveOriginal(BBF.SystemInfo.OriginalInfomation, saveNameMessageboxRes.Input);
+                KotoMessageBoxSingle.ShowDialog($"保存完成，文件为{saveNameMessageboxRes.Input}.txt");
+                return;
+            }
+        }
+
         private void ShowDetail(object sender, RoutedEventArgs e) 
         {
             Animations.ImageTurnRound(SettingIcon, false);
@@ -180,6 +214,7 @@ namespace KotoKaze.Views.toolsPages.BCDPages
             }
             BackUpButton.Tag = systemInfo;
             DefaultButton.Tag = systemInfo;
+            OriginalButton.Tag = systemInfo;
         }
 
         private void UpDateSystemInfo() 
@@ -228,12 +263,14 @@ namespace KotoKaze.Views.toolsPages.BCDPages
             Canvas.SetTop(image, 5);
             Canvas.SetLeft(image, 5);
 
-            string description;
+            string description = BCDInfo.SystemInfos[index].Description;
+
             if (BCDInfo.SystemInfos[index].Flag == "{current}")
-                description = BCDInfo.SystemInfos[index].Description + "【当前】";
-            else if (BCDInfo.SystemInfos[index].Flag == "{default}")
-                description = BCDInfo.SystemInfos[index].Description + "【默认】";
-            else description = BCDInfo.SystemInfos[index].Description;
+                description += "【当前】";
+            if (BCDInfo.SystemInfos[index].Flag == "{default}")
+                description += "【默认】";
+            if (BCDInfo.SystemInfos[index].Winpe == "Yes")
+                description += "【PE】";
 
             Label label = new()
             {

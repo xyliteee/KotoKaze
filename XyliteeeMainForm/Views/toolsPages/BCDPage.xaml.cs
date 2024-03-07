@@ -31,7 +31,7 @@ namespace KotoKaze.Views.toolsPages
         private void QuerySystemBootInformationButton_Click(object sender, RoutedEventArgs e)
         {
             GlobalData.ToolsPageInstance.secondActionFrame.Navigate(new QuerySystemBootInformation());
-            GlobalData.ToolsPageInstance.secondActionFrame.Visibility = Visibility.Visible;
+            GlobalData.ToolsPageInstance.ShowSecondPage(true);
             GlobalData.MainWindowInstance.backButton.Visibility = Visibility.Visible;
         }
     }

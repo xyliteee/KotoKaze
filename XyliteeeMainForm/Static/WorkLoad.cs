@@ -410,10 +410,9 @@ namespace KotoKaze.Static
         }
         public static class RAM 
         {
-
-            [DllImport(@"F:\project\VS\Cs\Graduate\Xyliteee\x64\Release\TestOfCPP.dll", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport("TestOfCPP.dll", CallingConvention = CallingConvention.Cdecl)]
             public extern static int RamWriteSpeed();
-            [DllImport(@"F:\project\VS\Cs\Graduate\Xyliteee\x64\Release\TestOfCPP.dll", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport("TestOfCPP.dll", CallingConvention = CallingConvention.Cdecl)]
             public extern static int RamReadSpeed();
             
         }
@@ -421,9 +420,9 @@ namespace KotoKaze.Static
         public static class Disk 
         {
 
-            [DllImport(@"F:\project\VS\Cs\Graduate\Xyliteee\x64\Release\TestOfCPP.dll", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport("TestOfCPP.dll", CallingConvention = CallingConvention.Cdecl)]
             public extern static int DiskWriteSpeed();
-            [DllImport(@"F:\project\VS\Cs\Graduate\Xyliteee\x64\Release\TestOfCPP.dll", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport("TestOfCPP.dll", CallingConvention = CallingConvention.Cdecl)]
             public extern static int DiskReadSpeed();
         }
     }

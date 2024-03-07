@@ -1,4 +1,5 @@
 ﻿using KotoKaze.Static;
+using static KotoKaze.Static.FileManager.IniManager;
 using KotoKaze.Widgets;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -10,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using XyliteeeMainForm.Views;
+using KotoKaze.Windows;
 
 namespace XyliteeeMainForm
 {
@@ -47,8 +49,20 @@ namespace XyliteeeMainForm
             buttons[3] = toolsPageButton;
             buttons[4] = settingPageButton;
             WindowStyle = WindowStyle.SingleBorderWindow;
-            WorkDirectory.CreatWorkDirectory();
+            FileManager.WorkDirectory.CreatWorkDirectory();
             GlobalData.MainWindowInstance = this;
+            Loaded += (s, e) => CheckFirstUse();
+        }
+
+        private void CheckFirstUse() 
+        {
+            string value = IniFileRead("Application.ini","SETTING","ISFIRST_USE").ToUpper();
+            Debug.WriteLine(value);
+            if (value != "FALSE") 
+            {
+                KotoMessageBoxSingle.ShowDialog("这或许是您第一次使用本软件，但我实际上没什么想说的");
+                IniFileWrite("Application.ini", "SETTING", "ISFIRST_USE","FALSE");
+            }   
         }
 
         private void PageChanged(object sender, NavigationEventArgs e) 
@@ -57,7 +71,7 @@ namespace XyliteeeMainForm
             Animations.FrameMoving(actionFrame, 50);
             currentPage = (Page)actionFrame.Content;
 
-            if (currentPage is toolsPage && toolsPage.secondActionFrame.Visibility == Visibility.Visible) //如果当前页面是工具页面且二级页面处于开启状态
+            if (currentPage is toolsPage && toolsPage.isSecondPage) //如果当前页面是工具页面且二级页面处于开启状态
             {
                 backButton.Visibility = Visibility.Visible;//将返回按钮显示
             }
@@ -98,7 +112,7 @@ namespace XyliteeeMainForm
 
         private void BackButton_Click(object sender, RoutedEventArgs e) 
         {
-            if (currentPage is toolsPage && toolsPage.secondActionFrame.Visibility == Visibility.Visible)//如果当前页面是工具页面且二级页面处于开启状态
+            if (currentPage is toolsPage && toolsPage.isSecondPage)//如果当前页面是工具页面且二级页面处于开启状态
             {
                 toolsPage.secondActionFrame.Visibility = Visibility.Collapsed;//按钮可以将二级页面关闭
             }

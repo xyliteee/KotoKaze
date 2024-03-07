@@ -1,4 +1,5 @@
 #include "pch.h"
+#define TEST_EXPORTS
 #include "TestOfCPP.h"
 #include <chrono>
 #include <numeric>

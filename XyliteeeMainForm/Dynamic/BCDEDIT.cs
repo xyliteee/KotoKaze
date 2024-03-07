@@ -55,6 +55,8 @@ namespace KotoKaze.Dynamic
             public string Nx { get; set; } = string.Empty;
             public string Bootmenupolicy { get; set; } = string.Empty;
             public string Hypervisorlaunchtype { get; set; } = string.Empty;
+            public string Winpe { get; set; } = string.Empty;
+            public string OriginalInfomation { get; set; } = string.Empty;
         }
 
         internal static readonly string[] separator = ["-------------------"];
@@ -147,7 +149,10 @@ namespace KotoKaze.Dynamic
                 }
                 else
                 {
-                    SystemInfo systemInfo = new();
+                    SystemInfo systemInfo = new()
+                    {
+                        OriginalInfomation = section
+                    };
                     foreach (string line in lines)
                     {
                         string key = "缺省";
@@ -195,6 +200,8 @@ namespace KotoKaze.Dynamic
                             systemInfo.Bootmenupolicy = value;
                         else if (key == "hypervisorlaunchtype")
                             systemInfo.Hypervisorlaunchtype = value;
+                        else if (key == "winpe")
+                            systemInfo.Winpe = value;
                     }
                     systemInfos.Add(systemInfo);
                 }
@@ -236,13 +243,19 @@ namespace KotoKaze.Dynamic
             }
         }
 
-        public static async Task SaveBBF(BCDBackUPFile BBF)
+        public static async Task SaveBBF(BCDBackUPFile BBF,string fileName)
         {
             string jsonString = JsonSerializer.Serialize(BBF);
             byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonString);
             string base64String = Convert.ToBase64String(jsonBytes);
-            string filePath = Path.Combine(WorkDirectory.backupDirectory, $"{BBF.CheckCode}.BBF");
+            string filePath = Path.Combine(FileManager.WorkDirectory.backupDirectory, $"{fileName}.BBF");
             await File.WriteAllTextAsync(filePath, base64String);
+        }
+
+        public static async Task SaveOriginal(string originalString, string fileName)
+        {
+            string filePath = Path.Combine(FileManager.WorkDirectory.backupDirectory, $"{fileName}.txt");
+            await File.WriteAllTextAsync(filePath, originalString);
         }
 
         public static BCDBackUPFile ReadBBF(string fullFilePath)

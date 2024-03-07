@@ -13,7 +13,7 @@
             <Canvas Width="670" Height="100">
                 <Canvas x:Name="WindowsZone" Width="120" Height="60" Canvas.Left="35" Canvas.Top="20">
                     <Border Width="120" Height="60" CornerRadius="10" Background="White"/>
-                    <Button x:Name="WindowsButton" Width="120" Height="60" Style="{StaticResource NomalButtonStyle}" Click="WindowsButton_Click" IsEnabled="False"/>
+                    <Button x:Name="WindowsButton" Width="120" Height="60" Style="{StaticResource FunctionButtonStyle}" Click="WindowsButton_Click" IsEnabled="False"/>
                     <Image Width="40" Height="40" Canvas.Left="10" Canvas.Top="10" Source="/image/icons/windows10black.png" IsHitTestVisible="False"/>
                     <Label Content="系统相关" FontWeight="Bold" FontSize="14" Padding="0,0,0,0" Width="70" Height="60" Canvas.Left="50"  BorderThickness="0" Background="Transparent" Foreground="Black" IsHitTestVisible="False"/>
                 </Canvas>
@@ -22,7 +22,7 @@
                     <Border Width="120" Height="60" CornerRadius="10" Background="White">
 
                     </Border>
-                    <Button x:Name="DismButton" Width="120" Height="60" Style="{StaticResource NomalButtonStyle}" Click="DismButton_Click"/>
+                    <Button x:Name="DismButton" Width="120" Height="60" Style="{StaticResource FunctionButtonStyle}" Click="DismButton_Click"/>
                     <Image Width="40" Height="40" Canvas.Left="10" Canvas.Top="10" Source="/image/icons/windows10black.png" IsHitTestVisible="False"/>
                     <Label Content="DISM" FontWeight="Bold" FontSize="14" Padding="0,0,0,0" Width="70" Height="60" Canvas.Left="50" BorderThickness="0" Background="Transparent" Foreground="Black" IsHitTestVisible="False"/>
                 </Canvas>
@@ -30,7 +30,7 @@
                 <Canvas x:Name="BCDZone" Width="120" Height="60" Canvas.Left="355" Canvas.Top="20">
                     <Border Width="120" Height="60" CornerRadius="10" Background="White">
                     </Border>
-                    <Button x:Name="BCDButton" Width="120" Height="60" Style="{StaticResource NomalButtonStyle}" Click="BCDButton_Click"/>
+                    <Button x:Name="BCDButton" Width="120" Height="60" Style="{StaticResource FunctionButtonStyle}" Click="BCDButton_Click"/>
                     <Image Width="40" Height="40" Canvas.Left="10" Canvas.Top="10" Source="/image/icons/windows10black.png" IsHitTestVisible="False"/>
                     <Label Content="引导相关" FontWeight="Bold" FontSize="14" Padding="0,0,0,0" Width="70" Height="60" Canvas.Left="50" BorderThickness="0" Background="Transparent" Foreground="Black" IsHitTestVisible="False"/>
                 </Canvas>
@@ -38,7 +38,7 @@
                 <Canvas x:Name="OtherZone" Width="120" Height="60" Canvas.Left="515" Canvas.Top="20">
                     <Border Width="120" Height="60" CornerRadius="10" Background="White">
                     </Border>
-                    <Button x:Name="OtherButton" Width="120" Height="60" Style="{StaticResource NomalButtonStyle}" Click="OtherButton_Click"/>
+                    <Button x:Name="OtherButton" Width="120" Height="60" Style="{StaticResource FunctionButtonStyle}" Click="OtherButton_Click"/>
                     <Image Width="40" Height="40" Canvas.Left="10" Canvas.Top="10" Source="/image/icons/windows10black.png" IsHitTestVisible="False"/>
                     <Label Content="杂项工具" FontWeight="Bold" FontSize="14" Padding="0,0,0,0" Width="70" Height="60" Canvas.Left="50" BorderThickness="0" Background="Transparent" Foreground="Black" IsHitTestVisible="False"/>
                 </Canvas>
@@ -56,7 +56,7 @@
             <Canvas Width="670" Canvas.Bottom="0" Height="350">
                 <Frame x:Name="ToolsNegate" Width="670" Height="350" NavigationUIVisibility ="Hidden" BorderThickness="0"/>
             </Canvas>
-            <Frame CacheMode="BitmapCache" x:Name="secondActionFrame" BorderThickness="0" Background="Transparent" Visibility="Collapsed"  NavigationUIVisibility="Hidden" Height="510" Width="670"/>
+            <Frame CacheMode="BitmapCache" x:Name="secondActionFrame"  BorderThickness="0" Background="Transparent" Visibility="Collapsed"  NavigationUIVisibility="Hidden" Height="510" Width="670"/>
         </Canvas>
 
     </Grid>

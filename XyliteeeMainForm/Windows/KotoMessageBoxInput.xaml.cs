@@ -20,6 +20,7 @@ namespace KotoKaze.Windows
     /// </summary>
     public partial class KotoMessageBoxInput : Window
     {
+
         public class MessageResult
         {
             public bool IsYes { get; set; } = true;
@@ -88,6 +89,18 @@ namespace KotoKaze.Windows
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = !_isLegal;
+        }
+
+        private void inputBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (inputBox.Text.Length == 0)
+            {
+                yesButton.IsEnabled = false;
+            }
+            else 
+            {
+                yesButton.IsEnabled = true;
+            }
         }
     }
 }
