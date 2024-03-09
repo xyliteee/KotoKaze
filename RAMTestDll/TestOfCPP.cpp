@@ -7,6 +7,7 @@
 #include <thread>
 #include <fstream>
 
+#pragma optimize("", off)
 Test_API int RamWriteSpeed()
 {
     std::vector<int> speeds(100);
@@ -42,7 +43,7 @@ Test_API int RamReadSpeed()
 
     for (int index = 0; index < 100; index++)
     {
-        char temp = 0;
+        volatile char temp = 0;
         auto start = std::chrono::high_resolution_clock::now();
         for (size_t i = 0; i < buffer.size(); i += stride)
         {
@@ -60,7 +61,7 @@ Test_API int RamReadSpeed()
 }
 
 
-
+#pragma optimize("", on)
 Test_API int DiskWriteSpeed()
 {
     std::vector<char> buffer(1000 * 1024 * 1024, 0);
