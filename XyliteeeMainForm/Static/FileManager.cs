@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,10 +23,43 @@ namespace KotoKaze.Static
                 Directory.CreateDirectory(backupDirectory);
                 Directory.CreateDirectory(localDataDirectory);
             }
+
+            public static void CreatWorkFile() 
+            {
+                if (!Path.Exists(Path.Combine(localDataDirectory, "Performance.ini"))) 
+                {
+                    IniManager.IniFileSetDefault("Performance.ini");
+                }
+                if (!Path.Exists(Path.Combine(localDataDirectory, "Application.ini")))
+                {
+                    IniManager.IniFileSetDefault("Application.ini");
+                }
+            }
         }
 
         public static class IniManager
         {
+            
+
+            public static void IniFileSetDefault(string fileName) 
+            {
+                switch (fileName) 
+                {
+                    case "Performance.ini":
+                        IniFileWrite("Performance.ini", "VALUE", "CPU_MULTI_SCORE", "");
+                        IniFileWrite("Performance.ini", "VALUE", "CPU_SINGLE_SCORE", "");
+                        IniFileWrite("Performance.ini", "VALUE", "GPU_FPS", "");
+                        IniFileWrite("Performance.ini", "VALUE", "RAM_READ_SCORE", "");
+                        IniFileWrite("Performance.ini", "VALUE", "RAM_WRITE_SCORE", "");
+                        IniFileWrite("Performance.ini", "VALUE", "DISK_READ_SCORE", "");
+                        IniFileWrite("Performance.ini", "VALUE", "DISK_WRITE_SCORE", "");
+                        break;
+                    case "Application.ini":
+                        IniFileWrite("Application.ini", "SETTING", "ISFIRST_USE", "TRUE");
+                        IniFileWrite("Application.ini", "VALUE", "VERSION", "114.514");
+                        break;
+                }
+            }
 
             public static void IniFileWrite(string fileName, string section, string key, string value)
             {
@@ -83,7 +117,6 @@ namespace KotoKaze.Static
                 // 如果文件存在，读取数据
                 if (File.Exists(filePath))
                 {
-                    
                     using StreamReader sr = new(filePath, Encoding.Default);
                     string currentSection = "";
                     string line;
@@ -109,7 +142,8 @@ namespace KotoKaze.Static
                 // 如果找到了section和key
                 if (data.ContainsKey(section) && data[section].ContainsKey(key))
                 {
-                    return Encryption.Decrypt(data[section][key]);
+                    string result = data[section][key];
+                    return Encryption.Decrypt(result);
                 }
                 // 如果没有找到，返回空
                 return string.Empty;
@@ -137,16 +171,27 @@ namespace KotoKaze.Static
 
             public static string Decrypt(string encryptedString)
             {
-                var numbers = encryptedString.Split(' ');
-                var result = new StringBuilder();
-                for (int i = 0; i < numbers.Length; i++)
+                try
                 {
-                    int encryptedChar = Convert.ToInt32(numbers[i], 16);
-                    char keyChar = Key[i % Key.Length];
-                    char decryptedChar = (char)(encryptedChar ^ keyChar);
-                    result.Append(decryptedChar);
+                    var numbers = encryptedString.Split(' ');
+                    var result = new StringBuilder();
+                    for (int i = 0; i < numbers.Length; i++)
+                    {
+                        int encryptedChar = Convert.ToInt32(numbers[i], 16);
+                        char keyChar = Key[i % Key.Length];
+                        char decryptedChar = (char)(encryptedChar ^ keyChar);
+                        result.Append(decryptedChar);
+                    }
+                    return result.ToString();
                 }
-                return result.ToString();
+                catch 
+                {
+                    if (encryptedString != string.Empty) 
+                    {
+                        encryptedString = "ERROR";
+                    }
+                    return encryptedString;
+                }
             }
         }
     }

@@ -50,19 +50,28 @@ namespace XyliteeeMainForm
             buttons[4] = settingPageButton;
             WindowStyle = WindowStyle.SingleBorderWindow;
             FileManager.WorkDirectory.CreatWorkDirectory();
+            FileManager.WorkDirectory.CreatWorkFile();
             GlobalData.MainWindowInstance = this;
-            Loaded += (s, e) => CheckFirstUse();
+            CheckFirstUse();
         }
 
-        private void CheckFirstUse() 
+        private async void CheckFirstUse() 
         {
-            string value = IniFileRead("Application.ini","SETTING","ISFIRST_USE").ToUpper();
-            Debug.WriteLine(value);
-            if (value != "FALSE") 
+            string value = IniFileRead("Application.ini", "SETTING", "ISFIRST_USE");
+
+            if (value == "FALSE") return;
+            if (value == "TRUE")
             {
-                KotoMessageBoxSingle.ShowDialog("这或许是您第一次使用本软件，但我实际上没什么想说的");
-                IniFileWrite("Application.ini", "SETTING", "ISFIRST_USE","FALSE");
-            }   
+                await Task.Delay(500);
+                KotoMessageBoxSingle.ShowDialog("看起来您是第一次使用本软件，但我实际上也没什么好说的");
+                IniFileWrite("Application.ini", "SETTING", "ISFIRST_USE", "FALSE");
+            }
+            else 
+            {
+                await Task.Delay(500);
+                KotoMessageBoxSingle.ShowDialog("BYD别改文件");
+                IniFileSetDefault("Application.ini");
+            }
         }
 
         private void PageChanged(object sender, NavigationEventArgs e) 
@@ -249,5 +258,7 @@ namespace XyliteeeMainForm
         public readonly static BitmapImage testBlue = new(new Uri("pack://application:,,,/image/icons/PCTest_b.png"));
         public readonly static BitmapImage toolsBlue = new(new Uri("pack://application:,,,/image/icons/Tools_b.png"));
         public readonly static BitmapImage settingBlue = new(new Uri("pack://application:,,,/image/icons/Setting_b.png"));
+
+        public readonly static BitmapImage TestImage = new(new Uri("pack://application:,,,/image/Header/Test2.png"));
     }
 }

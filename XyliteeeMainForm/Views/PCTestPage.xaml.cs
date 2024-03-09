@@ -42,39 +42,72 @@ namespace XyliteeeMainForm.Views
 
         private void CheckScore() 
         {
-            string CPUSINGLESCORE = IniFileRead("Performance.ini", "SETTING", "CPU_SINGLE_SCORE");
-            string CPUMILTISCORE = IniFileRead("Performance.ini", "SETTING", "CPU_MULTI_SCORE");
-            if (double.TryParse(CPUSINGLESCORE, out double cpuSingleScore) && double.TryParse(CPUMILTISCORE, out double cpuMultiScore))
+            string CPUSINGLESCORE = IniFileRead("Performance.ini", "VALUE", "CPU_SINGLE_SCORE");
+            string CPUMULTISCORE = IniFileRead("Performance.ini", "VALUE", "CPU_MULTI_SCORE");
+            string GPUFPS = IniFileRead("Performance.ini", "VALUE", "GPU_FPS");
+            string RAMREADSCORE = IniFileRead("Performance.ini", "VALUE", "RAM_READ_SCORE");
+            string RAMWRITESCORE = IniFileRead("Performance.ini", "VALUE", "RAM_WRITE_SCORE");
+            string DISKREADSCORE = IniFileRead("Performance.ini", "VALUE", "DISK_READ_SCORE");
+            string DISKWRITESCORE = IniFileRead("Performance.ini", "VALUE", "DISK_WRITE_SCORE");
+
+            if (CPUSINGLESCORE != string.Empty && CPUMULTISCORE != string.Empty) 
             {
-                CPUScore = (int)(cpuSingleScore * 0.4 + cpuMultiScore * 0.6);
-                CPUScoreLabel.Content = CPUScore;
-                CPUDialogScoreLabel.Content = $"{cpuSingleScore}S-{cpuMultiScore}M";
+                if (double.TryParse(CPUSINGLESCORE, out double cpuSingleScore) && double.TryParse(CPUMULTISCORE, out double cpuMultiScore))
+                {
+                    CPUScore = (int)(cpuSingleScore * 0.4 + cpuMultiScore * 0.6);
+                    CPUScoreLabel.Content = CPUScore;
+                    CPUDialogScoreLabel.Content = $"{cpuSingleScore}S-{cpuMultiScore}M";
+                }
+                else 
+                {
+                    //文件被修改，不需要再往下读取了
+                    IniFileSetDefault("Performance.ini");
+                    return;
+                }
             }
 
-            string GPUFPS = IniFileRead("Performance.ini", "SETTING", "GPU_FPS");
-            if (double.TryParse(GPUFPS, out double gpuFPS)) 
+            if (GPUFPS != string.Empty)
             {
-                GPUScore = (int)(gpuFPS * 930);
-                GPUScoreLabel.Content = GPUScore;
-                GPUDialogScoreLabel.Content = $"平均帧率-{gpuFPS}";
+                if (double.TryParse(GPUFPS, out double gpuFPS))
+                {
+                    GPUScore = (int)(gpuFPS * 930);
+                    GPUScoreLabel.Content = GPUScore;
+                    GPUDialogScoreLabel.Content = $"平均帧率-{gpuFPS}";
+                }
+                else 
+                {
+                    IniFileSetDefault("Performance.ini");
+                    return;
+                }
             }
 
-            string RAMREADSCORE = IniFileRead("Performance.ini", "SETTING", "RAM_READ_SCORE");
-            string RAMWRITESCORE = IniFileRead("Performance.ini", "SETTING", "RAM_WRITE_SCORE");
-            if (double.TryParse(RAMWRITESCORE, out double ramWriteScore) && double.TryParse(RAMREADSCORE, out double ramReadScore)) 
+            if(RAMWRITESCORE != string.Empty && RAMREADSCORE != string.Empty) 
             {
-                RamScore = (int)(ramReadScore * 0.5 + ramWriteScore * 0.5);
-                RAMScoreLabel.Content = RamScore;
-                RAMDialogScoreLabel.Content = $"{ramWriteScore}W-{ramReadScore}R";
+                if (double.TryParse(RAMWRITESCORE, out double ramWriteScore) && double.TryParse(RAMREADSCORE, out double ramReadScore))
+                {
+                    RamScore = (int)(ramReadScore * 0.5 + ramWriteScore * 0.5);
+                    RAMScoreLabel.Content = RamScore;
+                    RAMDialogScoreLabel.Content = $"{ramWriteScore}W-{ramReadScore}R";
+                }
+                else 
+                {
+                    IniFileSetDefault("Performance.ini");
+                    return;
+                }
             }
 
-            string DISKREADSCORE = IniFileRead("Performance.ini", "SETTING", "DISK_READ_SCORE");
-            string DISKWRITESCORE = IniFileRead("Performance.ini", "SETTING", "DISK_WRITE_SCORE");
-            if (double.TryParse(DISKREADSCORE, out double diskReadScore) && double.TryParse(DISKWRITESCORE, out double diskWriteScore)) 
+            if (DISKREADSCORE != string.Empty && DISKWRITESCORE != string.Empty) 
             {
-                DiskScore = (int)(diskReadScore * 0.5 + diskWriteScore * 0.5);
-                DiskScoreLabel.Content = DiskScore;
-                DiskDialogScoreLabel.Content = $"{diskWriteScore}W-{diskReadScore}R";
+                if (double.TryParse(DISKREADSCORE, out double diskReadScore) && double.TryParse(DISKWRITESCORE, out double diskWriteScore))
+                {
+                    DiskScore = (int)(diskReadScore * 0.5 + diskWriteScore * 0.5);
+                    DiskScoreLabel.Content = DiskScore;
+                    DiskDialogScoreLabel.Content = $"{diskWriteScore}W-{diskReadScore}R";
+                }
+                else 
+                {
+                    IniFileSetDefault("Performance.ini");
+                }
             }
         }
 
@@ -115,8 +148,8 @@ namespace XyliteeeMainForm.Views
                 CPUScoreLabel.Content = CPUScore;
                 CPUDialogScoreLabel.Content = $"{CPUTest.CPUSingleCoreScore}S-{CPUTest.CPUMultiCoreScore}M";
             });
-            IniFileWrite("Performance.ini", "SETTING", "CPU_SINGLE_SCORE", CPUTest.CPUSingleCoreScore.ToString());
-            IniFileWrite("Performance.ini", "SETTING", "CPU_MULTI_SCORE", CPUTest.CPUMultiCoreScore.ToString());
+            IniFileWrite("Performance.ini", "VALUE", "CPU_SINGLE_SCORE", CPUTest.CPUSingleCoreScore.ToString());
+            IniFileWrite("Performance.ini", "VALUE", "CPU_MULTI_SCORE", CPUTest.CPUMultiCoreScore.ToString());
             GC.Collect();
             Thread.Sleep(1000);
         }
@@ -130,7 +163,7 @@ namespace XyliteeeMainForm.Views
                 GPUWindow.Show();
                 GPUWindow.Test();
             });
-            Thread.Sleep(20000);
+            Thread.Sleep(16000);
             double FPS = Math.Round(1000 / GPUWindow.frameTimes.Average(), 2);
             Dispatcher.Invoke(() =>
             {
@@ -140,7 +173,7 @@ namespace XyliteeeMainForm.Views
                 GPUScoreLabel.Content = GPUScore;
                 GPUDialogScoreLabel.Content = $"平均帧率-{FPS}";
             });
-            IniFileWrite("Performance.ini", "SETTING", "GPU_FPS",FPS.ToString());
+            IniFileWrite("Performance.ini", "VALUE", "GPU_FPS",FPS.ToString());
         }
         private void RunRamTest()
         {
@@ -152,8 +185,8 @@ namespace XyliteeeMainForm.Views
                 RAMScoreLabel.Content = RamScore;
                 RAMDialogScoreLabel.Content = $"{RAMTest.writeScore}W-{RAMTest.readScore}R";
             });
-            IniFileWrite("Performance.ini", "SETTING", "RAM_WRITE_SCORE",RAMTest.writeScore.ToString());
-            IniFileWrite("Performance.ini", "SETTING", "RAM_READ_SCORE", RAMTest.readScore.ToString());
+            IniFileWrite("Performance.ini", "VALUE", "RAM_WRITE_SCORE",RAMTest.writeScore.ToString());
+            IniFileWrite("Performance.ini", "VALUE", "RAM_READ_SCORE", RAMTest.readScore.ToString());
             GC.Collect();
             Thread.Sleep(1000);
         }
@@ -167,8 +200,8 @@ namespace XyliteeeMainForm.Views
                 DiskScoreLabel.Content = DiskScore;
                 DiskDialogScoreLabel.Content = $"{DiskTest.writeScore}W-{DiskTest.readScore}R";
             });
-            IniFileWrite("Performance.ini", "SETTING", "DISK_WRITE_SCORE", DiskTest.writeScore.ToString());
-            IniFileWrite("Performance.ini", "SETTING", "DISK_READ_SCORE", DiskTest.readScore.ToString());
+            IniFileWrite("Performance.ini", "VALUE", "DISK_WRITE_SCORE", DiskTest.writeScore.ToString());
+            IniFileWrite("Performance.ini", "VALUE", "DISK_READ_SCORE", DiskTest.readScore.ToString());
             GC.Collect();
         }
 
@@ -475,24 +508,13 @@ namespace XyliteeeMainForm.Views
 
             public void RunTest() 
             {
-                int[] readSpeeds = new int[5];
-                int[] writeSpeeds = new int[5];
+
 
                 ParentClass.Dispatcher.Invoke(() => { ParentClass.RAMDialogScoreLabel.Content = "内存写入测试"; });
-                for (int i = 0; i < 5; i++)
-                {
-                    Debug.WriteLine("正在进行第"+i+"次测试");
-                    writeSpeeds[i] = WorkLoad.RAM.RamWriteSpeed();
-                }
+                writeSpeed = WorkLoad.RAM.RamWriteSpeed();
 
                 ParentClass.Dispatcher.Invoke(() => {ParentClass.RAMDialogScoreLabel.Content = "内存读取测试"; });
-                for (int i = 0; i < 5; i++)
-                {
-                    readSpeeds[i] = WorkLoad.RAM.RamReadSpeed();
-                }
-
-                readSpeed = (int)readSpeeds.Average();
-                writeSpeed = (int)writeSpeeds.Average();
+                readSpeed = WorkLoad.RAM.RamReadSpeed();
 
                 readScore = (int)(readSpeed*0.5);
                 writeScore = (int)(writeSpeed*0.5);

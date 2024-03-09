@@ -4,47 +4,62 @@
 #include <chrono>
 #include <numeric>
 #include <vector>
+#include <thread>
 #include <fstream>
 
 Test_API int RamWriteSpeed()
 {
-    std::vector<int> speeds(5);
+    std::vector<int> speeds(100);
     std::vector<char> buffer(64 * 1024 * 1024);
-    for (int index = 0; index < 5; index++)
+    size_t stride = 1024;
+    for (int index = 0; index < 100; index++)
     {
         auto start = std::chrono::high_resolution_clock::now();
-        for (size_t i = 0; i < buffer.size(); i++)
+        for (size_t i = 0; i < buffer.size(); i += stride)
         {
             buffer[i] = 0;
         }
         auto stop = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed = stop - start;
-        speeds[index] = static_cast<int>(64.0 / elapsed.count());
+        speeds[index] = static_cast<int>((64.0 * 1024 / stride) / elapsed.count());
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
     double average = std::accumulate(speeds.begin(), speeds.end(), 0.0) / speeds.size();
     return static_cast<int>(average);
 }
 
+
 Test_API int RamReadSpeed()
 {
-    std::vector<int> speeds(5);
-    std::vector<char> buffer(64 * 1024 * 1024);
-    std::vector<char> read_buffer(buffer.size());
-    for (auto& byte : buffer)
+    const int size = 64 * 1024 * 1024;
+    const size_t stride = 1024;
+    std::vector<int> speeds(100);
+    std::vector<char> buffer(size);
+    for (size_t i = 0; i < buffer.size(); i += stride)
     {
-        byte = 0;
+        buffer[i] = 0;
     }
-    for (int index = 0; index < 5; index++)
+
+    for (int index = 0; index < 100; index++)
     {
+        char temp = 0;
         auto start = std::chrono::high_resolution_clock::now();
-        std::memcpy(read_buffer.data(), buffer.data(), buffer.size());
+        for (size_t i = 0; i < buffer.size(); i += stride)
+        {
+            temp += buffer[i];
+        }
         auto stop = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed = stop - start;
-        speeds[index] = static_cast<int>(64 / elapsed.count());
+        speeds[index] = static_cast<int>((64.0 * 1024 / stride) / elapsed.count());
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
+
     double average = std::accumulate(speeds.begin(), speeds.end(), 0.0) / speeds.size();
     return static_cast<int>(average);
 }
+
+
 
 Test_API int DiskWriteSpeed()
 {

@@ -74,7 +74,7 @@
                                 
                                 <VisualState x:Name="Normal">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#A0C5E0" Duration="0:0:0.15"/>
+                                        <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="Transparent" Duration="0:0:0.15"/>
                                     </Storyboard>
                                 </VisualState>
                                 

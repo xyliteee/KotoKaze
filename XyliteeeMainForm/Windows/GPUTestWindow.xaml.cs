@@ -15,6 +15,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
+using XyliteeeMainForm;
 
 namespace KotoKaze.Windows
 {
@@ -32,6 +33,7 @@ namespace KotoKaze.Windows
             InitializeComponent();
             stopwatch = new Stopwatch();
             WindowState = WindowState.Maximized;
+            WindowStyle = WindowStyle.None;
         }
 
         private void OnRendering(object sender, EventArgs e)
@@ -43,44 +45,40 @@ namespace KotoKaze.Windows
             stopwatch.Start();
             frameTimes.Add(frameTime);
         }
-        public void CreateCube()
+
+        private void TestAction() 
         {
-            // 创建一个3D立方体
-            var cube = new GeometryModel3D();
-            var mesh = new MeshGeometry3D();
-            // 添加立方体的顶点和三角形到mesh中
-            // ...
-            cube.Geometry = mesh;
-
-            // 添加立方体到3D视图中
-            var modelVisual3D = new ModelVisual3D { Content = cube };
-            v3D.Children.Add(modelVisual3D);
-
-            // 创建一个旋转变换
-            var rotateTransform = new RotateTransform3D();
-            cube.Transform = rotateTransform;
-
-            // 创建一个旋转动画
-            var rotationAnimation = new Rotation3DAnimation
+            for (int i = 0; i < 10; i++) 
             {
-                From = new AxisAngleRotation3D(new Vector3D(0, 1, 0), 0),
-                To = new AxisAngleRotation3D(new Vector3D(0, 1, 0), 360),
-                Duration = TimeSpan.FromSeconds(2),
-                RepeatBehavior = RepeatBehavior.Forever
-            };
-
-            // 开始旋转动画
-            rotateTransform.BeginAnimation(RotateTransform3D.RotationProperty, rotationAnimation);
+                Image image = new()
+                {
+                    Source = BitMapImages.TestImage
+                };
+                Base.Children.Add(image);
+                BlurEffect blur = new();
+                DoubleAnimation blurAnimation = new DoubleAnimation(0, 10, TimeSpan.FromSeconds(2))
+                {
+                    AutoReverse = true,
+                    RepeatBehavior = new RepeatBehavior(4)
+                };
+                blur.BeginAnimation(BlurEffect.RadiusProperty, blurAnimation);
+                image.Effect = blur;
+                ScaleTransform scale = new ScaleTransform(1.5, 1.5);
+                DoubleAnimation scaleAnimation = new DoubleAnimation(1.5, 1, TimeSpan.FromSeconds(2));
+                scaleAnimation.AutoReverse = true;
+                scaleAnimation.RepeatBehavior = new RepeatBehavior(4);
+                scale.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation);
+                scale.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnimation);
+                image.RenderTransform = scale;
+                image.RenderTransformOrigin = new Point(0.5, 0.5); // 设置变换原点为中心
+            }
         }
-
 
         public void Test()
         {
-            CreateCube();
+            TestAction();
             CompositionTarget.Rendering += OnRendering!;
             stopwatch.Start();
         }
-
-
     }
 }
