@@ -73,7 +73,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <TargetName>TestModule</TargetName>
-    <OutDir>$(MSBuildStartupDirectory)\KotoKazeMain\bin\x64\release\net8.0-windows\</OutDir>
+    <OutDir>..\KotoKazeMain\bin\x64\Release\net8.0-windows</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <TargetName>TestModule</TargetName>

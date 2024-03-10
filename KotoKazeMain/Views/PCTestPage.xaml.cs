@@ -169,7 +169,7 @@ namespace XyliteeeMainForm.Views
             {
                 GPUWindow.Close();
                 GlobalData.MainWindowInstance.Show();
-                GPUScore = (int)(FPS * 930);
+                GPUScore = (int)(FPS * 280.5);
                 GPUScoreLabel.Content = GPUScore;
                 GPUDialogScoreLabel.Content = $"平均帧率-{FPS}";
             });
@@ -521,8 +521,8 @@ namespace XyliteeeMainForm.Views
                 ParentClass.Dispatcher.Invoke(() => {ParentClass.RAMDialogScoreLabel.Content = "内存读取测试"; });
                 readSpeed = WorkLoad.RAM.RamReadSpeed();
 
-                readScore = (int)(readSpeed*0.5);
-                writeScore = (int)(writeSpeed*0.5);
+                readScore = (int)(readSpeed*0.5/4.2);
+                writeScore = (int)(writeSpeed*0.5/4.2);
             }
         }
 
