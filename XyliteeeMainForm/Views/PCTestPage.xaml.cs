@@ -177,6 +177,11 @@ namespace XyliteeeMainForm.Views
         }
         private void RunRamTest()
         {
+            if (!Path.Exists(Path.Combine(FileManager.WorkDirectory.rootDirectory,"TestModule.dll"))) 
+            {
+                KotoMessageBoxSingle.ShowDialog("测试模块TestModule.dll丢失!");
+                return;
+            }
             Dispatcher.Invoke(() => { RAMScoreLabel.Content = "正在测试"; });
             RAMTest.RunTest();
             Dispatcher.Invoke(() =>

@@ -152,7 +152,7 @@ namespace KotoKaze.Static
 
         public static class Encryption
         {
-            private static readonly string Key = "BVVDNMSL";
+            private static readonly string Key = "TestKey";
 
             public static string Encrypt(string originalString)
             {
@@ -163,30 +163,29 @@ namespace KotoKaze.Static
                     char keyChar = Key[i % Key.Length];
                     char encryptedChar = (char)(character ^ keyChar);
                     result.Append(((int)encryptedChar).ToString("X2"));
-                    result.Append(' ');
                 }
 
-                return result.ToString().Trim();
+                return result.ToString();
             }
 
             public static string Decrypt(string encryptedString)
             {
                 try
                 {
-                    var numbers = encryptedString.Split(' ');
                     var result = new StringBuilder();
-                    for (int i = 0; i < numbers.Length; i++)
+                    for (int i = 0; i < encryptedString.Length; i += 2)
                     {
-                        int encryptedChar = Convert.ToInt32(numbers[i], 16);
-                        char keyChar = Key[i % Key.Length];
+                        string hexNumber = encryptedString.Substring(i, 2);
+                        int encryptedChar = Convert.ToInt32(hexNumber, 16);
+                        char keyChar = Key[(i / 2) % Key.Length];
                         char decryptedChar = (char)(encryptedChar ^ keyChar);
                         result.Append(decryptedChar);
                     }
                     return result.ToString();
                 }
-                catch 
+                catch
                 {
-                    if (encryptedString != string.Empty) 
+                    if (encryptedString != string.Empty)
                     {
                         encryptedString = "ERROR";
                     }

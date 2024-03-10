@@ -18,7 +18,6 @@ namespace KotoKaze.Static
     public static class WorkLoad
     {
         public delegate void VoidFunction();
-
         public static class CPU
         {
             private static readonly int time = 5;
@@ -410,9 +409,9 @@ namespace KotoKaze.Static
         }
         public static class RAM 
         {
-            [DllImport("TestOfCPP.dll", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport("TestModule.dll", CallingConvention = CallingConvention.Cdecl)]
             public extern static int RamWriteSpeed();
-            [DllImport("TestOfCPP.dll", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport("TestModule.dll", CallingConvention = CallingConvention.Cdecl)]
             public extern static int RamReadSpeed();
             
         }
@@ -420,9 +419,9 @@ namespace KotoKaze.Static
         public static class Disk 
         {
 
-            [DllImport("TestOfCPP.dll", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport("TestModule.dll", CallingConvention = CallingConvention.Cdecl)]
             public extern static int DiskWriteSpeed();
-            [DllImport("TestOfCPP.dll", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport("TestModule.dll", CallingConvention = CallingConvention.Cdecl)]
             public extern static int DiskReadSpeed();
         }
     }

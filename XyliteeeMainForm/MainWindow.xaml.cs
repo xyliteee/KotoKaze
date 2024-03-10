@@ -58,17 +58,16 @@ namespace XyliteeeMainForm
         private async void CheckFirstUse() 
         {
             string value = IniFileRead("Application.ini", "SETTING", "ISFIRST_USE");
-
             if (value == "FALSE") return;
             if (value == "TRUE")
             {
-                await Task.Delay(500);
+                await Task.Delay(1000);
                 KotoMessageBoxSingle.ShowDialog("看起来您是第一次使用本软件，但我实际上也没什么好说的");
                 IniFileWrite("Application.ini", "SETTING", "ISFIRST_USE", "FALSE");
             }
             else 
             {
-                await Task.Delay(500);
+                await Task.Delay(1000);
                 KotoMessageBoxSingle.ShowDialog("BYD别改文件");
                 IniFileSetDefault("Application.ini");
             }
