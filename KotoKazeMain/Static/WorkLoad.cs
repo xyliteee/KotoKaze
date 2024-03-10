@@ -411,6 +411,7 @@ namespace KotoKaze.Static
         {
             [DllImport("TestModule.dll", CallingConvention = CallingConvention.Cdecl)]
             public extern static int RamWriteSpeed();
+
             [DllImport("TestModule.dll", CallingConvention = CallingConvention.Cdecl)]
             public extern static int RamReadSpeed();
             

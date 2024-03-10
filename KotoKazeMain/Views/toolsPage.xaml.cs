@@ -12,7 +12,6 @@ namespace XyliteeeMainForm.Views
     public partial class toolsPage : Page
     {
         private readonly SolidColorBrush blueColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A0C5E0"));
-        public bool isSecondPage = false;
         public toolsPage()
         {
             InitializeComponent();
@@ -65,12 +64,10 @@ namespace XyliteeeMainForm.Views
             if (show)
             {
                 secondActionFrame.Visibility = Visibility.Visible;
-                isSecondPage = true;
             }
             else 
             {
                 secondActionFrame.Visibility = Visibility.Collapsed;
-                isSecondPage = false;
             }
         }
     }

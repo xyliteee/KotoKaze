@@ -47,6 +47,7 @@ namespace KotoKaze.Views.toolsPages.BCDPages
         private void Delete(object sender,RoutedEventArgs e) 
         {
             var r = KotoMessageBox.ShowDialog("这将会删除这个引导，确定吗？");
+            if (r.IsClose) { return; }
             if (r.IsYes) 
             {
                 Button button = (Button)sender;
@@ -60,7 +61,7 @@ namespace KotoKaze.Views.toolsPages.BCDPages
         private async void BackUP(object sender, RoutedEventArgs e)
         {
             var saveMessageboxRes = KotoMessageBox.ShowDialog("将会在程序根目录/Backup/保存BBF文件，确定？");
-            if (!saveMessageboxRes.IsYes) return;
+            if (!saveMessageboxRes.IsYes || saveMessageboxRes.IsClose) { return; }
 
             Button button = (Button)sender;
             SystemInfo systemInfoBack = (SystemInfo)button.Tag;
@@ -68,13 +69,14 @@ namespace KotoKaze.Views.toolsPages.BCDPages
             while (true) 
             {
                 var saveNameMessageboxRes = KotoMessageBoxInput.ShowDialog("输入要保存的文件名称");
-                if (!saveNameMessageboxRes.IsYes) return;
+                if (saveNameMessageboxRes.IsClose || !saveNameMessageboxRes.IsYes) { return; }
                 string filePath = Path.Combine(FileManager.WorkDirectory.backupDirectory, $"{saveNameMessageboxRes.Input}.BBF");
 
                 if (Path.Exists(filePath))
                 {
                     var alreadyExitMessageboxRes = KotoMessageBox.ShowDialog("该备份已经存在，是否替换？");
-                    if (!alreadyExitMessageboxRes.IsYes) continue;
+                    if (alreadyExitMessageboxRes.IsClose) { return; }
+                    if (!alreadyExitMessageboxRes.IsYes) { continue; }
                 }
 
                 await SaveBBF(BBF,saveNameMessageboxRes.Input);
@@ -100,6 +102,7 @@ namespace KotoKaze.Views.toolsPages.BCDPages
                 });
             }
             var r = KotoMessageBox.ShowDialog("是否选择导入本地的BBF文件？");
+            if (r.IsClose) { return; }
             if (r.IsYes)
             {
                 Microsoft.Win32.OpenFileDialog dlg = new()
@@ -115,6 +118,7 @@ namespace KotoKaze.Views.toolsPages.BCDPages
                     BCDBackUPFile bbf = ReadBBF(selectedFilePath);
                     if (bbf.CheckCode == string.Empty) { KotoMessageBoxSingle.ShowDialog("错误的文件!"); return; }
                     var rr = KotoMessageBoxInput.ShowDialog("输入该引导的描述");
+                    if (rr.IsClose) { return; }
                     if (rr.IsYes)
                     {
                         UITask(rr, bbf);
@@ -124,11 +128,13 @@ namespace KotoKaze.Views.toolsPages.BCDPages
             else 
             {
                 var rr = KotoMessageBoxInput.ShowDialog("输入该引导的描述");
+                if (rr.IsClose) { return; }
                 BCDBackUPFile bbf = new(new SystemInfo());
                 if (rr.IsYes)
                 {
                     var rrr = KotoMessageBoxInput.ShowDialog("请输入系统所在盘符，仅输入单个字母即可，例如\"C\"");
-                    if (rr.IsYes) 
+                    if (rrr.IsClose) { return; }
+                    if (rrr.IsYes) 
                     {
                         bbf.SystemInfo.Device = $"partition={rrr.Input}:";
                         bbf.SystemInfo.Path = "\\Windows\\system32\\winload.efi";
@@ -143,6 +149,7 @@ namespace KotoKaze.Views.toolsPages.BCDPages
         private void Default(object sender, RoutedEventArgs e) 
         {
             var r = KotoMessageBox.ShowDialog("将这个引导设置为默认，确定吗？");
+            if (r.IsClose) { return; }
             if (r.IsYes)
             {
                 Button button = (Button)sender;
@@ -156,7 +163,7 @@ namespace KotoKaze.Views.toolsPages.BCDPages
         private async void ExportOriginal(object sender, RoutedEventArgs e) 
         {
             var saveMessageboxRes = KotoMessageBox.ShowDialog("将会在程序根目录/Backup/保存txt文件，确定？");
-            if (!saveMessageboxRes.IsYes) return;
+            if (!saveMessageboxRes.IsYes || saveMessageboxRes.IsClose) { return; }
 
             Button button = (Button)sender;
             SystemInfo systemInfoBack = (SystemInfo)button.Tag;
@@ -164,12 +171,13 @@ namespace KotoKaze.Views.toolsPages.BCDPages
             while (true)
             {
                 var saveNameMessageboxRes = KotoMessageBoxInput.ShowDialog("输入要保存的文件名称");
-                if (!saveNameMessageboxRes.IsYes) return;
+                if (!saveNameMessageboxRes.IsYes || saveNameMessageboxRes.IsClose) { return; }
                 string filePath = Path.Combine(FileManager.WorkDirectory.backupDirectory, $"{saveNameMessageboxRes.Input}.txt");
 
                 if (Path.Exists(filePath))
                 {
                     var alreadyExitMessageboxRes = KotoMessageBox.ShowDialog("该文件已经存在，是否替换？");
+                    if (alreadyExitMessageboxRes.IsClose) { return; }
                     if (!alreadyExitMessageboxRes.IsYes) continue;
                 }
 

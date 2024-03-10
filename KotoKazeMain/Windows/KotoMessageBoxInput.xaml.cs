@@ -1,6 +1,7 @@
 ﻿using KotoKaze.Static;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,8 +24,10 @@ namespace KotoKaze.Windows
 
         public class MessageResult
         {
+            public bool IsClose { get; set; } = false;
             public bool IsYes { get; set; } = true;
             public string Input { get; set; } = string.Empty;
+
         }
         public class MessageBoxEventArgs : EventArgs
         {
@@ -44,6 +47,7 @@ namespace KotoKaze.Windows
         {
             InitializeComponent();
         }
+
         public static void Show(string context, EventHandler<MessageBoxEventArgs> result)
         {
             KotoMessageBoxInput mb = new()
@@ -101,6 +105,19 @@ namespace KotoKaze.Windows
             {
                 yesButton.IsEnabled = true;
             }
+        }
+
+        private void ShutdownButton_Click(object sender, RoutedEventArgs e)
+        {
+            _isLegal = true;
+            Close();
+            Result?.Invoke(this, new MessageBoxEventArgs()
+            {
+                Result = new MessageResult()
+                {
+                    IsClose = true,
+                }
+            });
         }
     }
 }

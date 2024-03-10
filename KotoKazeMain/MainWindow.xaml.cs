@@ -59,13 +59,13 @@ namespace XyliteeeMainForm
         {
             string value = IniFileRead("Application.ini", "SETTING", "ISFIRST_USE");
             if (value == "FALSE") return;
-            if (value == "TRUE")
+            else if (value == "TRUE")
             {
                 await Task.Delay(1000);
                 KotoMessageBoxSingle.ShowDialog("看起来您是第一次使用本软件，但我实际上也没什么好说的");
                 IniFileWrite("Application.ini", "SETTING", "ISFIRST_USE", "FALSE");
             }
-            else 
+            else if (value == "ERROR")
             {
                 await Task.Delay(1000);
                 KotoMessageBoxSingle.ShowDialog("BYD别改文件");
@@ -79,7 +79,7 @@ namespace XyliteeeMainForm
             Animations.FrameMoving(actionFrame, 50);
             currentPage = (Page)actionFrame.Content;
 
-            if (currentPage is toolsPage && toolsPage.isSecondPage) //如果当前页面是工具页面且二级页面处于开启状态
+            if (currentPage is toolsPage && toolsPage.secondActionFrame.Visibility == Visibility.Visible) //如果当前页面是工具页面且二级页面处于开启状态
             {
                 backButton.Visibility = Visibility.Visible;//将返回按钮显示
             }
@@ -120,7 +120,7 @@ namespace XyliteeeMainForm
 
         private void BackButton_Click(object sender, RoutedEventArgs e) 
         {
-            if (currentPage is toolsPage && toolsPage.isSecondPage)//如果当前页面是工具页面且二级页面处于开启状态
+            if (currentPage is toolsPage && toolsPage.secondActionFrame.Visibility == Visibility.Visible)//如果当前页面是工具页面且二级页面处于开启状态
             {
                 toolsPage.secondActionFrame.Visibility = Visibility.Collapsed;//按钮可以将二级页面关闭
             }

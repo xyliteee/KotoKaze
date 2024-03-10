@@ -23,6 +23,7 @@ namespace KotoKaze.Windows
         public class MessageResult
         {
             public bool IsYes { get; set; } = true;
+            public bool IsClose { get; set; } = false;
         }
         public class MessageBoxEventArgs : EventArgs
         {
@@ -83,6 +84,19 @@ namespace KotoKaze.Windows
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = !_isLegal;
+        }
+
+        private void ShutdownButton_Click(object sender, RoutedEventArgs e)
+        {
+            _isLegal = true;
+            Close();
+            Result?.Invoke(this, new MessageBoxEventArgs()
+            {
+                Result = new MessageResult()
+                {
+                    IsClose = true,
+                }
+            });
         }
     }
 }

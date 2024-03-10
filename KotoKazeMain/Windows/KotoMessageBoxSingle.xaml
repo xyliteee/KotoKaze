@@ -18,14 +18,18 @@
         >
     <Grid>
         <Grid  Width="820" Height="540">
-            <Canvas x:Name="BackCanvas" Background="Transparent">
+            <Canvas CacheMode="BitmapCache" x:Name="BackCanvas" Background="Transparent">
                 <Border x:Name="BackBorder" Width="820" Height="540" Background="Black" Opacity="0.6"/>
                 <Canvas Width="400" Height="200" Canvas.Left="210" Canvas.Top="170" Background="Transparent">
-                    <Border Width="400" Height="200" Background="#F3F8FE" CornerRadius="5">
+                    <Border Width="400" Height="200" Background="White" CornerRadius="5">
                         <Border.Effect>
                             <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
                         </Border.Effect>
                     </Border>
+                    <Border Width="400" Height="30" Background="#F3F8FE" CornerRadius="10">
+                        <Button x:Name="ShutdownButton" Canvas.Right="0" Height="30" Width="40" Background="Transparent" Click="ShutdownButton_Click" FontSize="20" Padding="0,0,0,0" Content="×" Foreground="Black" BorderThickness="0" Margin="360,0,0,0"/>
+                    </Border>
+                    <Border Width="400" Height="5" Canvas.Top="25" Background="#F3F8FE"/>
                     <TextBlock x:Name="TB_Context" Width="360" Height="80" Canvas.Left="20" Canvas.Top="40" TextAlignment="Center" FontSize="16" Text="66666666" TextWrapping="Wrap"/>
                     <Button Style="{StaticResource NomalButtonStyle}" Width="360" Height="40" Canvas.Bottom="20" Canvas.Left="20" Content="Yes" Tag="Yes" Click="Yes_Button_Click" HorizontalAlignment="Left" Canvas.Top="140" VerticalAlignment="Center"/>
                 </Canvas>

@@ -19,10 +19,18 @@
     <Grid>
         
         <Canvas>
-            <Canvas x:Name="topBar"  Background="#F3F8FE" Width="820" Height="30">
-                <Button x:Name="backButton" WindowChrome.IsHitTestVisibleInChrome="True" Click="BackButton_Click" FontSize="12" Content="←" Visibility="Collapsed" Height="30" Width="40" Canvas.Left="0" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource minButtonStyle}"/>
-                <Button x:Name="minButton" WindowChrome.IsHitTestVisibleInChrome="True" Click="MinButton_Click" FontSize="12" Content="—" Height="30" Width="40" Canvas.Left="740" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource minButtonStyle}"/>
-                <Button x:Name="shutDownButton" WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource ShutdownButtonStyle}" FontSize="20" Content="×" Click="ShutdownButton_Click" Height="30" Width="40" Canvas.Left="780" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Canvas x:Name="topBarleft" Width="150" Height="30" Background="#A0C5E0">
+                <Button x:Name="backButton" WindowChrome.IsHitTestVisibleInChrome="True" Click="BackButton_Click" FontSize="14" FontWeight ="Bold" Content="←" Visibility="Collapsed" Height="30" Width="40" Canvas.Left="0" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource minButtonStyle}"/>
+            </Canvas>
+            <Canvas x:Name="topBar"   Canvas.Left="150" Width="670" Height="30">
+                <Canvas.Background>
+                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                        <GradientStop Color="#A0C5E0" Offset="0.2" />
+                        <GradientStop Color="#1F67B3" Offset="1" />
+                    </LinearGradientBrush>
+                </Canvas.Background>
+                <Button x:Name="minButton" WindowChrome.IsHitTestVisibleInChrome="True" Click="MinButton_Click" FontSize="12" Content="—" Height="30" Width="40" Canvas.Right="40" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource minButtonStyle}"/>
+                <Button x:Name="shutDownButton" WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource ShutdownButtonStyle}" FontSize="20" Content="×" Click="ShutdownButton_Click" Height="30" Width="40" Canvas.Right="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Canvas>
             
             <Canvas x:Name="leftDock"  Height="510" Canvas.Top="30" Width="150">

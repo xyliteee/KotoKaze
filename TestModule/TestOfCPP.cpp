@@ -8,16 +8,14 @@
 #include <fstream>
 
 #pragma optimize("", off)
-
-Test_API std::string testModuleVersion = "1.0";
-
 Test_API int RamWriteSpeed()
 {
     std::vector<int> speeds(100);
-    std::vector<char> buffer(64 * 1024 * 1024);
-    size_t stride = 1024;
+    std::vector<char> buffer(256 * 1024 * 1024);
+    size_t stride = 256;
     for (int index = 0; index < 100; index++)
     {
+
         auto start = std::chrono::high_resolution_clock::now();
         for (size_t i = 0; i < buffer.size(); i += stride)
         {
@@ -25,7 +23,7 @@ Test_API int RamWriteSpeed()
         }
         auto stop = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed = stop - start;
-        speeds[index] = static_cast<int>((64.0 * 1024 / stride) / elapsed.count());
+        speeds[index] = static_cast<int>((256 * 1024 / stride) / elapsed.count());
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
     double average = std::accumulate(speeds.begin(), speeds.end(), 0.0) / speeds.size();
@@ -35,8 +33,8 @@ Test_API int RamWriteSpeed()
 
 Test_API int RamReadSpeed()
 {
-    const int size = 64 * 1024 * 1024;
-    const size_t stride = 1024;
+    const int size = 256 * 1024 * 1024;
+    const size_t stride = 256;
     std::vector<int> speeds(100);
     std::vector<char> buffer(size);
     for (size_t i = 0; i < buffer.size(); i += stride)
@@ -46,7 +44,7 @@ Test_API int RamReadSpeed()
 
     for (int index = 0; index < 100; index++)
     {
-        char temp = 0;
+        volatile char temp = 0;
         auto start = std::chrono::high_resolution_clock::now();
         for (size_t i = 0; i < buffer.size(); i += stride)
         {
@@ -54,7 +52,7 @@ Test_API int RamReadSpeed()
         }
         auto stop = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed = stop - start;
-        speeds[index] = static_cast<int>((64.0 * 1024 / stride) / elapsed.count());
+        speeds[index] = static_cast<int>((256 * 1024 / stride) / elapsed.count());
 
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
