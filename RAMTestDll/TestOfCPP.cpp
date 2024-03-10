@@ -8,6 +8,9 @@
 #include <fstream>
 
 #pragma optimize("", off)
+
+Test_API std::string testModuleVersion = "1.0";
+
 Test_API int RamWriteSpeed()
 {
     std::vector<int> speeds(100);
@@ -43,7 +46,7 @@ Test_API int RamReadSpeed()
 
     for (int index = 0; index < 100; index++)
     {
-        volatile char temp = 0;
+        char temp = 0;
         auto start = std::chrono::high_resolution_clock::now();
         for (size_t i = 0; i < buffer.size(); i += stride)
         {
