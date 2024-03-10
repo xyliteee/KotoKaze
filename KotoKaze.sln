@@ -3,14 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KotoKaze", "XyliteeeMainForm\KotoKaze.csproj", "{A29AA832-38B4-4922-8E47-C605D4D2C10E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9F3AC391-C7E4-4268-A67E-00218052DA62}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestOfCPP", "RAMTestDll\RAMTestDll.vcxproj", "{02CEEE7C-F691-4161-BCD0-4E78295F5308}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KotoKaze", "KotoKazeMain\KotoKaze.csproj", "{ECCFB4C7-67D6-4554-BFC8-125C7C8618EB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestModule", "TestModule\RAMTestDll.vcxproj", "{02CEEE7C-F691-4161-BCD0-4E78295F5308}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,18 +22,18 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A29AA832-38B4-4922-8E47-C605D4D2C10E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A29AA832-38B4-4922-8E47-C605D4D2C10E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A29AA832-38B4-4922-8E47-C605D4D2C10E}.Debug|x64.ActiveCfg = Debug|x64
-		{A29AA832-38B4-4922-8E47-C605D4D2C10E}.Debug|x64.Build.0 = Debug|x64
-		{A29AA832-38B4-4922-8E47-C605D4D2C10E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{A29AA832-38B4-4922-8E47-C605D4D2C10E}.Debug|x86.Build.0 = Debug|Any CPU
-		{A29AA832-38B4-4922-8E47-C605D4D2C10E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A29AA832-38B4-4922-8E47-C605D4D2C10E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A29AA832-38B4-4922-8E47-C605D4D2C10E}.Release|x64.ActiveCfg = Release|x64
-		{A29AA832-38B4-4922-8E47-C605D4D2C10E}.Release|x64.Build.0 = Release|x64
-		{A29AA832-38B4-4922-8E47-C605D4D2C10E}.Release|x86.ActiveCfg = Release|Any CPU
-		{A29AA832-38B4-4922-8E47-C605D4D2C10E}.Release|x86.Build.0 = Release|Any CPU
+		{ECCFB4C7-67D6-4554-BFC8-125C7C8618EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECCFB4C7-67D6-4554-BFC8-125C7C8618EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECCFB4C7-67D6-4554-BFC8-125C7C8618EB}.Debug|x64.ActiveCfg = Debug|x64
+		{ECCFB4C7-67D6-4554-BFC8-125C7C8618EB}.Debug|x64.Build.0 = Debug|x64
+		{ECCFB4C7-67D6-4554-BFC8-125C7C8618EB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{ECCFB4C7-67D6-4554-BFC8-125C7C8618EB}.Debug|x86.Build.0 = Debug|Any CPU
+		{ECCFB4C7-67D6-4554-BFC8-125C7C8618EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECCFB4C7-67D6-4554-BFC8-125C7C8618EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECCFB4C7-67D6-4554-BFC8-125C7C8618EB}.Release|x64.ActiveCfg = Release|x64
+		{ECCFB4C7-67D6-4554-BFC8-125C7C8618EB}.Release|x64.Build.0 = Release|x64
+		{ECCFB4C7-67D6-4554-BFC8-125C7C8618EB}.Release|x86.ActiveCfg = Release|Any CPU
+		{ECCFB4C7-67D6-4554-BFC8-125C7C8618EB}.Release|x86.Build.0 = Release|Any CPU
 		{02CEEE7C-F691-4161-BCD0-4E78295F5308}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{02CEEE7C-F691-4161-BCD0-4E78295F5308}.Debug|Any CPU.Build.0 = Debug|x64
 		{02CEEE7C-F691-4161-BCD0-4E78295F5308}.Debug|x64.ActiveCfg = Debug|x64
