@@ -10,11 +10,7 @@
 
     <Grid>
         <Canvas x:Name="Base" Background="#F3F8FE" Height="350" Width="670">
-            <Canvas x:Name="QuerySystemBootInformationZone" Width="120" Height="40" Canvas.Left="35" Canvas.Top="20">
-                <Border Width="120" Height="40" CornerRadius="10" Background="White"/>
-                <Button x:Name="QuerySystemBootInformationButton" Width="120" Height="40" Style="{StaticResource FunctionButtonStyle}" Click="QuerySystemBootInformationButton_Click"/>
-                <Label Content="查看引导信息" FontWeight="Bold" FontSize="14" Padding="0,0,0,0" Width="120" Height="40" Canvas.Left="0"  BorderThickness="0" Background="Transparent" Foreground="Black" IsHitTestVisible="False"/>
-            </Canvas>
+            <Button x:Name="QuerySystemBootInformationButton" Width="120" Height="40" Style="{StaticResource FunctionButtonStyle}" Canvas.Left="35" Canvas.Top="20" Content="引导管理" FontSize="14" FontWeight="Bold" Click="QuerySystemBootInformationButton_Click"/>
         </Canvas>
     </Grid>
 </Page>

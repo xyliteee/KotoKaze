@@ -9,9 +9,8 @@
       Title="settingPage">
 
     <Grid>
-        <Canvas Background="#1F67B3">
-            <Label Background="Transparent" BorderThickness="0" Foreground="White" FontSize="80" Content="T__T,写不动了" Canvas.Left="100" Canvas.Top="140" Height="202" VerticalAlignment="Top"/>
+        <Canvas x:Name="Base" Background="#F3F8FE">
+            <Button x:Name="importCleanRulesButton" Style="{StaticResource NomalButtonStyle}" Height="30" Width="100" Canvas.Left="20" Canvas.Top="20" Content="导入规则"/>
         </Canvas>
-
     </Grid>
 </Page>

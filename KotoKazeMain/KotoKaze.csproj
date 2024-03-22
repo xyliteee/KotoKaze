@@ -105,4 +105,8 @@
     <EmbeddedResource Include="otherSource\TestHtml.html" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\toolsPages\SystemToolsPages\" />
+  </ItemGroup>
+
 </Project>

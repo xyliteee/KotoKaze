@@ -17,7 +17,8 @@ namespace XyliteeeMainForm.Views
             InitializeComponent();
             TipsBox.Content = "这里包含了一些系统功能相关的工具";
             GlobalData.ToolsPageInstance = this;
-
+            ToolsNegate.Navigate(new SystemToolsPage());
+            WindowsButton.IsEnabled = false;
         }
 
         private void SetButtonState(Button button) 
@@ -42,6 +43,7 @@ namespace XyliteeeMainForm.Views
             SetButtonState((Button)sender);
             Animations.ButtonSilderMoveing(Silder,35);
             TipsBox.Content = "这里包含了一些系统功能相关的工具";
+            ToolsNegate.Navigate(new SystemToolsPage());
         }
 
         private void BCDButton_Click(object sender, RoutedEventArgs e)

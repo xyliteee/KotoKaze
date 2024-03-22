@@ -73,6 +73,9 @@
                 <Canvas x:Name="PageSilder" Width="5" Height="20" Background="Transparent" Canvas.Left="5" Canvas.Top="30">
                     <Border Background="#1F67B3" Width="5" Height="20" CornerRadius="2"/>
                 </Canvas>
+
+                <Label x:Name="TaskListMessage" WindowChrome.IsHitTestVisibleInChrome="True" Background="Transparent" BorderThickness="0" FontSize="12" Foreground="White" Content="无任务" Height="30" Width="150" Canvas.Left="0" Canvas.Bottom="0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
             </Canvas>
             <Canvas x:Name="actionZone" Background="#F1F9FE" Canvas.Right="0" Canvas.Top="30" Height="510" Width="670">
                 <Frame CacheMode="BitmapCache" x:Name="actionFrame" BorderThickness="0" Background="Transparent" NavigationUIVisibility="Hidden" Height="510" Width="670"/>

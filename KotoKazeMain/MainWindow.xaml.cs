@@ -15,12 +15,6 @@ using KotoKaze.Windows;
 
 namespace XyliteeeMainForm
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    /// 
-    
-
     public partial class MainWindow : Window
     {
 
@@ -52,7 +46,29 @@ namespace XyliteeeMainForm
             FileManager.WorkDirectory.CreatWorkDirectory();
             FileManager.WorkDirectory.CreatWorkFile();
             GlobalData.MainWindowInstance = this;
+            GlobalData.TasksList = [];
             CheckFirstUse();
+            CheckTasksList();
+        }
+
+        private async void CheckTasksList()
+        {
+            while (true) 
+            {
+                if (GlobalData.TasksList.Count == 0)
+                {
+                    TaskListMessage.Content = "无任务";
+                    await Task.Delay(1000);
+                }
+                else 
+                {
+                    foreach (string task in GlobalData.TasksList) 
+                    {
+                        TaskListMessage.Content = $"正在执行{task}";
+                        await Task.Delay(1000);
+                    }
+                }
+            }
         }
 
         private async void CheckFirstUse() 

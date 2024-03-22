@@ -1,0 +1,17 @@
+﻿<Page x:Class="KotoKaze.Views.toolsPages.SystemToolsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:KotoKaze.Views.toolsPages"
+      mc:Ignorable="d" 
+      d:DesignHeight="350" d:DesignWidth="670"
+      Title="SystemToolsPage">
+
+    <Grid>
+        <Canvas x:Name="Base" Background="#F3F8FE" Height="350" Width="670">
+            <Button x:Name="EnableGPEDIT" Canvas.Left="35" Canvas.Top="20" Width="120" Height="40" Style="{StaticResource FunctionButtonStyle}"  Content="开启组策略" FontSize="14" FontWeight="Bold" Click="EnableGPEDIT_Click"/>
+            <Button x:Name="SFCSCNOW" Canvas.Left="175" Canvas.Top="20" Height="40" Width="120" Style="{StaticResource FunctionButtonStyle}" Content="SFC系统修复" FontSize="14" FontWeight="Bold" Click="SFCSCNOW_Click"/>
+        </Canvas>
+    </Grid>
+</Page>
