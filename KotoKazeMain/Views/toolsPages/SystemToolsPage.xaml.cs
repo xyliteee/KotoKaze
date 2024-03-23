@@ -28,7 +28,8 @@ namespace KotoKaze.Views.toolsPages
     /// </summary>
     public partial class SystemToolsPage : Page
     {
-        
+        private readonly BackgroundTask GPEDITTASK = new() {title = "组策略添加" };
+        private readonly BackgroundTask SFCSCANNOW = new() { title = "SFC系统修复" };
         public SystemToolsPage()
         {
             InitializeComponent();
@@ -36,8 +37,8 @@ namespace KotoKaze.Views.toolsPages
 
         private void EnableGPEDIT_Click(object sender, RoutedEventArgs e)
         {
-            BackgroundTask backgroundTask = new() { title = "组策略添加" };
-            if (GlobalData.TasksList.Contains(backgroundTask))
+
+            if (GlobalData.TasksList.Contains(GPEDITTASK)) 
             {
                 KotoMessageBoxSingle.ShowDialog("该任务已存在,检查任务列表");
                 return;
@@ -46,14 +47,14 @@ namespace KotoKaze.Views.toolsPages
             if (r.IsClose) return;
             if (r.IsYes)
             {
-                KotoMessageBoxSingle.ShowDialog("已开启任务，将会在后台自动执行");
-                GlobalData.TasksList.Add(backgroundTask);
+                GlobalData.TasksList.Add(GPEDITTASK);
                 Task.Run(() =>
                 {
                     ProcessStartInfo startInfo = new()
                     {
                         FileName = "cmd.exe",
                         RedirectStandardInput = true,
+                        RedirectStandardOutput = true,
                         CreateNoWindow = true,
                         UseShellExecute = false,
                     };
@@ -69,12 +70,17 @@ namespace KotoKaze.Views.toolsPages
                             streamWriter.WriteLine("FOR %F IN (\"%SystemRoot%\\servicing\\Packages\\Microsoft-Windows-GroupPolicy-ClientExtensions-Package~*.mum\") DO (DISM /Online /NoRestart /Add-Package:\"%F\")");
                         }
                     }
-                    while (GlobalData.IsRunning) 
+
+                    using StreamReader reader = process.StandardOutput;
+                    string result;
+
+                    while (GlobalData.IsRunning && ((result = reader.ReadLine())!=null)) 
                     {
+                        GPEDITTASK.description = result;
                         if (process.HasExited)
                         {
-                            GlobalData.TasksList.Remove(backgroundTask);
-                            Dispatcher.Invoke(() => { KotoMessageBoxSingle.ShowDialog("已成功添加组策略"); });
+                            GlobalData.TasksList.Remove(GPEDITTASK);
+                            Dispatcher.Invoke(() => { KotoMessageBoxSingle.ShowDialog("组策略添加完成"); });
                             break;
                         }
                     }
@@ -86,12 +92,16 @@ namespace KotoKaze.Views.toolsPages
 
         private void SFCSCNOW_Click(object sender, RoutedEventArgs e)
         {
-            BackgroundTask backgroundTask = new() { title = "系统修复" };
+            if (GlobalData.TasksList.Contains(SFCSCANNOW))
+            {
+                KotoMessageBoxSingle.ShowDialog("该任务已存在,检查任务列表");
+                return;
+            }
             var r = KotoMessageBox.ShowDialog("这将会使用系统自带的修复命令，确定？");
             if (r.IsClose) return;
             if (r.IsYes)
             {
-                GlobalData.TasksList.Add(backgroundTask);
+                GlobalData.TasksList.Add(SFCSCANNOW);
                 Task.Run(() =>
                 {
                     ProcessStartInfo startInfo = new()
@@ -99,7 +109,7 @@ namespace KotoKaze.Views.toolsPages
                         FileName = "cmd.exe",
                         RedirectStandardInput = true,
                         RedirectStandardOutput = true,
-                        CreateNoWindow = false,
+                        CreateNoWindow = true,
                         UseShellExecute = false
                     };
 
@@ -110,16 +120,22 @@ namespace KotoKaze.Views.toolsPages
                     {
                         if (streamWriter.BaseStream.CanWrite)
                         {
-                            streamWriter.WriteLine("ping www.baidu.com");
+                            streamWriter.WriteLine("SFC /SCANNOW");
                         }
                     }
 
                     // 读取标准输出
                     using StreamReader reader = process.StandardOutput;
                     string result;
-                    while ((result = reader.ReadLine()) != null)
+                    while (GlobalData.IsRunning && ((result = reader.ReadLine()) != null))
                     {
-                        backgroundTask.description = result;
+                        SFCSCANNOW.description = result;
+                        if (process.HasExited)
+                        {
+                            GlobalData.TasksList.Remove(SFCSCANNOW);
+                            Dispatcher.Invoke(() => { KotoMessageBoxSingle.ShowDialog("已执行修复命令"); });
+                            break;
+                        }
                     }
                 });
             }

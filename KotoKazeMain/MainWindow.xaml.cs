@@ -93,6 +93,44 @@ namespace XyliteeeMainForm
 
         private async void CheckTasksList()
         {
+            void CreatSingleCard(BackgroundTask backgroundTask,int index) 
+            {
+                // 创建一个Canvas
+                Canvas myCanvas = new()
+                {
+                    Width = 390,
+                    Height = 40
+                };
+                Canvas.SetTop(myCanvas,index * 40);
+                // 创建第一个Label
+                Label title = new()
+                {
+                    BorderThickness = new Thickness(0),
+                    Background = Brushes.Transparent,
+                    Width = 390,
+                    Height = 30,
+                    Content = backgroundTask.title,
+                    HorizontalContentAlignment = HorizontalAlignment.Left,
+                    FontSize = 16,
+                    FontWeight = FontWeights.Bold
+                };
+
+                myCanvas.Children.Add(title);
+                Label description = new()
+                {
+                    BorderThickness = new Thickness(0),
+                    Background = Brushes.Transparent,
+                    Width = 390,
+                    Height = 20,
+                    Content = backgroundTask.description,
+                    Padding = new Thickness(10, 0, 10, 0),
+                    HorizontalContentAlignment = HorizontalAlignment.Left,
+                    Foreground = Brushes.Gray
+                };
+                Canvas.SetTop(description, 20);
+                myCanvas.Children.Add(description);
+                ScorllCanvas.Children.Add(myCanvas);
+            }
             List<BackgroundTask> lastTasksList = [];
 
             while (GlobalData.IsRunning)
@@ -108,7 +146,7 @@ namespace XyliteeeMainForm
                             Content = "没有任何任务存在",
                             Background = Brushes.Transparent,
                             BorderThickness = new Thickness(0),
-                            Width = 260,
+                            Width = 390,
                             Height = 30
                         };
                         ScorllCanvas.Children.Add(label);
@@ -119,17 +157,9 @@ namespace XyliteeeMainForm
                         TaskListMessage.Content = $"{GlobalData.TasksList.Count}个任务正在执行";
                         for (int index = 0; index < GlobalData.TasksList.Count; index++)
                         {
-                            Label label = new()
-                            {
-                                Content = GlobalData.TasksList[index].description,
-                                Background = Brushes.Transparent,
-                                BorderThickness = new Thickness(0),
-                                Width = 260,
-                                Height = 30
-                            };
-                            ScorllCanvas.Children.Add(label);
-                            Canvas.SetTop(label, 30 * index);
+                            CreatSingleCard(GlobalData.TasksList[index], index);
                         }
+                        ScorllCanvas.Height = GlobalData.TasksList.Count * 40;
                     }
                     lastTasksList = [.. GlobalData.TasksList];
                 }

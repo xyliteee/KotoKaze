@@ -84,15 +84,15 @@
 
             <Canvas x:Name="TasksListShowZone" Width="820" Height="510" Canvas.Top="30" Visibility="Collapsed">
                 <Button x:Name="OtherZoneButton" Width="820" Height="540" Opacity="0" Click="OtherZoneButton_Click"/>
-                <Canvas Width="260" Height="130" Canvas.Left="10" Canvas.Bottom="40" Background="Transparent">
-                    <Border Width="260" Height="130" Background="#F1F9FE" CornerRadius="5">
+                <Canvas Width="390" Height="130" Canvas.Left="10" Canvas.Bottom="40" Background="Transparent">
+                    <Border Width="390" Height="130" Background="#F1F9FE" CornerRadius="5">
                         <Border.Effect>
                             <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="1" BlurRadius="5"/>
                         </Border.Effect>
                     </Border>
-                    <hc:ScrollViewer  x:Name="ScorllZone" CanContentScroll="False"  Height="130" Width="260" VerticalScrollBarVisibility="Visible">
-                        <Canvas x:Name="ScorllCanvas" VerticalAlignment="Top" Width="260"  Height="0">
-                            <Label Height="30" Width="260" Background="Transparent" BorderThickness="0" Content="没有任何任务存在" Canvas.Top="50"/>
+                    <hc:ScrollViewer  x:Name="ScorllZone" CanContentScroll="False"  Height="130" Width="390" VerticalScrollBarVisibility="Visible">
+                        <Canvas x:Name="ScorllCanvas" VerticalAlignment="Top" Width="390"  Height="0">
+                            
                         </Canvas>
                     </hc:ScrollViewer>
                 </Canvas>
