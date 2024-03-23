@@ -34,6 +34,7 @@
     <None Remove="image\icons\Setting_an.png" />
     <None Remove="image\icons\setting_b.png" />
     <None Remove="image\icons\startclean.png" />
+    <None Remove="image\icons\Task.png" />
     <None Remove="image\icons\Tools.png" />
     <None Remove="image\icons\Tools_b.png" />
     <None Remove="image\icons\windows10.png" />
@@ -53,6 +54,7 @@
     <EmbeddedResource Include="image\Header\5.jpg" />
     <EmbeddedResource Include="image\Header\50.jpg" />
     <EmbeddedResource Include="image\Header\TestImage.jpg" />
+    <Resource Include="image\icons\Task.png" />
     <EmbeddedResource Include="otherSource\testmarkdown.MD" />
     <EmbeddedResource Include="otherSource\testsql.sqlite" />
     <Resource Include="image\Header\Test2.png" />
@@ -107,6 +109,7 @@
 
   <ItemGroup>
     <Folder Include="Views\toolsPages\SystemToolsPages\" />
+    <Folder Include="Widgets\" />
   </ItemGroup>
 
 </Project>

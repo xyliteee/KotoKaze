@@ -19,6 +19,7 @@ namespace KotoKaze.Static
             canvas.BeginAnimation(Canvas.TopProperty, animation);
         }
 
+
         static public void ButtonSilderMoveing(FrameworkElement widget, int end)
         {
             DoubleAnimation animation = new()

@@ -1,0 +1,27 @@
+﻿<Window x:Class="KotoKaze.Windows.StartLoadingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KotoKaze.Windows"
+        mc:Ignorable="d"
+        Title="StartLoadingWindow" Height="300" Width="820" WindowStartupLocation="CenterScreen" WindowStyle="None" Background="Transparent">
+    <WindowChrome.WindowChrome>
+        <WindowChrome
+             ResizeBorderThickness="0"
+             CaptionHeight="30"
+             CornerRadius="0"
+             UseAeroCaptionButtons="False"
+             GlassFrameThickness="2"/>
+    </WindowChrome.WindowChrome>
+
+    <Grid>
+        <Canvas x:Name="Base" >
+            <Border Background="#F1F9FE" Width="820" Height="300"/>
+            <Label x:Name="Title" Content="KotoKaze" BorderThickness="0" Background="Transparent" Foreground="#A0C5E0" FontSize="72" Width="400" Height="100" FontWeight="Bold" Canvas.Top="40" Canvas.Left="80"/>
+            <Border  Background="Gray" Width="720" Canvas.Right="0" Height="10" Canvas.Top="130" Opacity="0.2"/>
+            <Border x:Name="progressBar" Background="#A0C5E0" Width="0" Canvas.Right="0" Height="10" Canvas.Top="130"/>
+            <Label x:Name="LoadinText" Background="Transparent" BorderThickness="0" Content="缺省" Width="820" Height="30" FontSize="16" Foreground="Gray" Canvas.Left="0" Canvas.Top="205" />
+        </Canvas>
+    </Grid>
+</Window>

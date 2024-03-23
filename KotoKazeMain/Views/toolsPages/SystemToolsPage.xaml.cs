@@ -1,4 +1,5 @@
-﻿using KotoKaze.Static;
+﻿using KotoKaze.Dynamic;
+using KotoKaze.Static;
 using KotoKaze.Windows;
 using System;
 using System.Collections.Generic;
@@ -35,12 +36,18 @@ namespace KotoKaze.Views.toolsPages
 
         private void EnableGPEDIT_Click(object sender, RoutedEventArgs e)
         {
+            BackgroundTask backgroundTask = new() { title = "组策略添加" };
+            if (GlobalData.TasksList.Contains(backgroundTask))
+            {
+                KotoMessageBoxSingle.ShowDialog("该任务已存在,检查任务列表");
+                return;
+            }
             var r = KotoMessageBox.ShowDialog("这将会为系统添加组策略(gpedit.msc)管理，确定？");
             if (r.IsClose) return;
             if (r.IsYes)
             {
                 KotoMessageBoxSingle.ShowDialog("已开启任务，将会在后台自动执行");
-                GlobalData.TasksList.Add("组策略添加");
+                GlobalData.TasksList.Add(backgroundTask);
                 Task.Run(() =>
                 {
                     ProcessStartInfo startInfo = new()
@@ -62,12 +69,12 @@ namespace KotoKaze.Views.toolsPages
                             streamWriter.WriteLine("FOR %F IN (\"%SystemRoot%\\servicing\\Packages\\Microsoft-Windows-GroupPolicy-ClientExtensions-Package~*.mum\") DO (DISM /Online /NoRestart /Add-Package:\"%F\")");
                         }
                     }
-                    while (true) 
+                    while (GlobalData.IsRunning) 
                     {
                         if (process.HasExited)
                         {
+                            GlobalData.TasksList.Remove(backgroundTask);
                             Dispatcher.Invoke(() => { KotoMessageBoxSingle.ShowDialog("已成功添加组策略"); });
-                            GlobalData.TasksList.Remove("组策略添加");
                             break;
                         }
                     }
@@ -79,10 +86,12 @@ namespace KotoKaze.Views.toolsPages
 
         private void SFCSCNOW_Click(object sender, RoutedEventArgs e)
         {
+            BackgroundTask backgroundTask = new() { title = "系统修复" };
             var r = KotoMessageBox.ShowDialog("这将会使用系统自带的修复命令，确定？");
             if (r.IsClose) return;
             if (r.IsYes)
             {
+                GlobalData.TasksList.Add(backgroundTask);
                 Task.Run(() =>
                 {
                     ProcessStartInfo startInfo = new()
@@ -94,14 +103,14 @@ namespace KotoKaze.Views.toolsPages
                         UseShellExecute = false
                     };
 
-                    Process process = new Process { StartInfo = startInfo };
+                    Process process = new() { StartInfo = startInfo };
                     process.Start();
 
                     using (StreamWriter streamWriter = process.StandardInput)
                     {
                         if (streamWriter.BaseStream.CanWrite)
                         {
-                            streamWriter.WriteLine("sfc /scannow");
+                            streamWriter.WriteLine("ping www.baidu.com");
                         }
                     }
 
@@ -110,7 +119,7 @@ namespace KotoKaze.Views.toolsPages
                     string result;
                     while ((result = reader.ReadLine()) != null)
                     {
-                        Debug.WriteLine(result);
+                        backgroundTask.description = result;
                     }
                 });
             }

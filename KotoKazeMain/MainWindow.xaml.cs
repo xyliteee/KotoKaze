@@ -1,6 +1,5 @@
 ﻿using KotoKaze.Static;
 using static KotoKaze.Static.FileManager.IniManager;
-using KotoKaze.Widgets;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -12,64 +11,132 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using XyliteeeMainForm.Views;
 using KotoKaze.Windows;
-
+using HandyControl.Interactivity;
+using KotoKaze.Dynamic;
+#pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
 namespace XyliteeeMainForm
 {
     public partial class MainWindow : Window
     {
 
-        private readonly homePage homePage;
-        private readonly cleanPage cleanPage;
-        private readonly PCTestPage PCTestPage;
-        private readonly toolsPage toolsPage;
-        private readonly settingPage settingPage;
+        private homePage homePage;
+        private cleanPage cleanPage;
+        private PCTestPage PCTestPage;
+        private toolsPage toolsPage;
+        private settingPage settingPage;
         private Page currentPage;
         private readonly Button[] buttons = new Button[5];
         private readonly SolidColorBrush blueTextColor = new BrushConverter().ConvertFrom("#1F67B3") as SolidColorBrush;
+
+
         public MainWindow()
         {
-            InitializeComponent();
-            homePage = new();
-            cleanPage = new();
-            PCTestPage = new();
-            toolsPage = new();
-            settingPage = new();
-            actionFrame.Navigate(homePage);
-            currentPage = (Page)actionFrame.Content;
-            actionFrame.Navigated += PageChanged;
-            buttons[0] = homePageButton;
-            buttons[1] = cleanPageButton;
-            buttons[2] = PCTestPageButton;
-            buttons[3] = toolsPageButton;
-            buttons[4] = settingPageButton;
-            WindowStyle = WindowStyle.SingleBorderWindow;
-            FileManager.WorkDirectory.CreatWorkDirectory();
-            FileManager.WorkDirectory.CreatWorkFile();
-            GlobalData.MainWindowInstance = this;
-            GlobalData.TasksList = [];
-            CheckFirstUse();
-            CheckTasksList();
+            StartLoadingWindow s = new();
+            async Task LoadingUI() 
+            {
+                InitializeComponent();
+                Hide();
+
+                s.LoadinText.Content = "正在初始化信息页面";
+                s.progressBar.Width = 120;
+                await Task.Delay(100);
+                homePage = new();
+
+                s.LoadinText.Content = "正在初始化清理页面";
+                s.progressBar.Width = 410;
+                await Task.Delay(100);
+                cleanPage = new();
+
+                s.LoadinText.Content = "正在初始化测试页面";
+                s.progressBar.Width = 460;
+                await Task.Delay(100);
+                PCTestPage = new();
+
+                s.LoadinText.Content = "正在初始化工具页面";
+                s.progressBar.Width = 580;
+                await Task.Delay(100);
+                toolsPage = new();
+
+                s.LoadinText.Content = "正在初始化设置页面";
+                s.progressBar.Width = 610;
+                await Task.Delay(100);
+                settingPage = new();
+
+                s.LoadinText.Content = "正在进行最终设置";
+                s.progressBar.Width = 680;
+                await Task.Delay(100);
+                actionFrame.Navigate(homePage);
+                currentPage = (Page)actionFrame.Content;
+                actionFrame.Navigated += PageChanged;
+                buttons[0] = homePageButton;
+                buttons[1] = cleanPageButton;
+                buttons[2] = PCTestPageButton;
+                buttons[3] = toolsPageButton;
+                buttons[4] = settingPageButton;
+                WindowStyle = WindowStyle.SingleBorderWindow;
+                FileManager.WorkDirectory.CreatWorkDirectory();
+                FileManager.WorkDirectory.CreatWorkFile();
+                GlobalData.MainWindowInstance = this;
+                CheckFirstUse();
+                CheckTasksList();
+            }
+            async void Start() 
+            {
+                s.Show();
+                await LoadingUI();
+                s.progressBar.Width = 720;  
+                s.Close();
+                Show();
+            }
+            Start();
         }
 
         private async void CheckTasksList()
         {
-            while (true) 
+            List<BackgroundTask> lastTasksList = [];
+
+            while (GlobalData.IsRunning)
             {
-                if (GlobalData.TasksList.Count == 0)
+                if (GlobalData.TasksList != lastTasksList)
                 {
-                    TaskListMessage.Content = "无任务";
-                    await Task.Delay(1000);
-                }
-                else 
-                {
-                    foreach (string task in GlobalData.TasksList) 
+                    ScorllCanvas.Children.Clear();
+                    if (GlobalData.TasksList.Count == 0)
                     {
-                        TaskListMessage.Content = $"正在执行{task}";
-                        await Task.Delay(1000);
+                        TaskListMessage.Content = "无任务";
+                        Label label = new()
+                        {
+                            Content = "没有任何任务存在",
+                            Background = Brushes.Transparent,
+                            BorderThickness = new Thickness(0),
+                            Width = 260,
+                            Height = 30
+                        };
+                        ScorllCanvas.Children.Add(label);
+                        Canvas.SetTop(label, 50);
                     }
+                    else
+                    {
+                        TaskListMessage.Content = $"{GlobalData.TasksList.Count}个任务正在执行";
+                        for (int index = 0; index < GlobalData.TasksList.Count; index++)
+                        {
+                            Label label = new()
+                            {
+                                Content = GlobalData.TasksList[index].description,
+                                Background = Brushes.Transparent,
+                                BorderThickness = new Thickness(0),
+                                Width = 260,
+                                Height = 30
+                            };
+                            ScorllCanvas.Children.Add(label);
+                            Canvas.SetTop(label, 30 * index);
+                        }
+                    }
+                    lastTasksList = [.. GlobalData.TasksList];
                 }
+                await Task.Delay(200);
             }
         }
+
 
         private async void CheckFirstUse() 
         {
@@ -131,6 +198,7 @@ namespace XyliteeeMainForm
 
         private void ShutdownButton_Click(object sender, RoutedEventArgs e)
         {
+            GlobalData.IsRunning = false;
             Close();
         }
 
@@ -259,6 +327,15 @@ namespace XyliteeeMainForm
             }
         }
 
+        private void OtherZoneButton_Click(object sender, RoutedEventArgs e)
+        {
+            TasksListShowZone.Visibility = Visibility.Collapsed;
+        }
+
+        private void TaskListButton_Click(object sender, RoutedEventArgs e)
+        {
+            TasksListShowZone.Visibility = Visibility.Visible;
+        }
     }
     public class BitMapImages 
     {

@@ -32,7 +32,7 @@ namespace KotoKaze.Static
                     byte[] iv = aes.IV;
                     using ICryptoTransform encryptor = aes.CreateEncryptor(key, iv);
                     Stopwatch stopwatch = Stopwatch.StartNew();
-                    while (stopwatch.Elapsed.TotalSeconds < time)
+                    while (stopwatch.Elapsed.TotalSeconds < time && GlobalData.IsRunning)
                     {
                         for (int i = 0; i < buffer.Length; i += aes.BlockSize)
                         {
@@ -45,23 +45,26 @@ namespace KotoKaze.Static
             }
             public static class Integer
             {
-                private static int MinimumDistance(int[] distance, bool[] shortestPathTreeSet, int verticesCount)
-                {
-                    int min = int.MaxValue;
-                    int minIndex = 0;
-
-                    for (int v = 0; v < verticesCount; ++v)
-                    {
-                        if (shortestPathTreeSet[v] == false && distance[v] <= min)
-                        {
-                            min = distance[v];
-                            minIndex = v;
-                        }
-                    }
-                    return minIndex;
-                }
+                
                 public static int Navigation()
                 {
+
+                    static int MinimumDistance(int[] distance, bool[] shortestPathTreeSet, int verticesCount)
+                    {
+                        int min = int.MaxValue;
+                        int minIndex = 0;
+
+                        for (int v = 0; v < verticesCount; ++v)
+                        {
+                            if (shortestPathTreeSet[v] == false && distance[v] <= min)
+                            {
+                                min = distance[v];
+                                minIndex = v;
+                            }
+                        }
+                        return minIndex;
+                    }
+
                     int count = 0;
                     int[,] graph = new int[,]
                     {
@@ -80,7 +83,7 @@ namespace KotoKaze.Static
                     int[] distance = new int[verticesCount];
                     bool[] shortestPathTreeSet = new bool[verticesCount];
                     Stopwatch stopwatch = Stopwatch.StartNew();
-                    while (stopwatch.Elapsed.TotalSeconds < time)
+                    while (stopwatch.Elapsed.TotalSeconds < time && GlobalData.IsRunning)
                     {
                         for (int i = 0; i < verticesCount; ++i)
                         {
@@ -115,7 +118,7 @@ namespace KotoKaze.Static
                         coder.WriteCoderProperties(output);
                         output.Write(BitConverter.GetBytes(inputFile.Length), 0, 8);
                         Stopwatch stopwatch = Stopwatch.StartNew();
-                        while (stopwatch.Elapsed.TotalSeconds < time)
+                        while (stopwatch.Elapsed.TotalSeconds < time && GlobalData.IsRunning)
                         {
                             coder.Code(inputFile, output, inputFile.Length, -1, null);
                             output.SetLength(0);
@@ -148,7 +151,7 @@ namespace KotoKaze.Static
 
                     MemoryStream decompressedOutput = new();
                     Stopwatch stopwatch = Stopwatch.StartNew();
-                    while (stopwatch.Elapsed.TotalSeconds < time)
+                    while (stopwatch.Elapsed.TotalSeconds < time && GlobalData.IsRunning)
                     {
                         decoder.Code(output, decompressedOutput, output.Length, fileLength, null);
                         decompressedOutput.SetLength(0);
@@ -162,7 +165,7 @@ namespace KotoKaze.Static
                 {
                     int count = 0;
                     ImageCodecInfo jpgEncoder = ImageCodecInfo.GetImageDecoders().First(codec => codec.FormatID == ImageFormat.Jpeg.Guid);
-                    System.Drawing.Imaging.Encoder myEncoder = System.Drawing.Imaging.Encoder.Quality;
+                    Encoder myEncoder = Encoder.Quality;
                     EncoderParameters myEncoderParameters = new(1);
                     EncoderParameter myEncoderParameter = new(myEncoder, 50L);
                     myEncoderParameters.Param[0] = myEncoderParameter;
@@ -170,7 +173,7 @@ namespace KotoKaze.Static
                     using Image image = Image.FromStream(imageStream);
                     using MemoryStream ms = new();
                     Stopwatch stopwatch = Stopwatch.StartNew();
-                    while (stopwatch.Elapsed.TotalSeconds < time)
+                    while (stopwatch.Elapsed.TotalSeconds < time && GlobalData.IsRunning)
                     {
                         image.Save(ms, jpgEncoder, myEncoderParameters);
                         ms.SetLength(0);
@@ -197,7 +200,7 @@ namespace KotoKaze.Static
                         cmd.CommandText = @"SELECT * FROM MyTable WHERE Name = 'DTC_125_10' AND Penetration = 577 AND Weight = 5.86 AND Velocity = 1000 AND Caliber = 120 AND Manufacturer = 'ManufacturerA' AND ManufactureDate = '2022-01-01' AND Deceleration = 20 AND Warhead = 'Tungsten' AND Price = 100000";
                         using SQLiteDataReader reader = cmd.ExecuteReader();
                         Stopwatch stopwatch = Stopwatch.StartNew();
-                        while (stopwatch.Elapsed.TotalSeconds < time)
+                        while (stopwatch.Elapsed.TotalSeconds < time && GlobalData.IsRunning)
                         {
                             for (int i = 0; i < 1000000; i++) { while (reader.Read()) { } }
                             count++;
@@ -281,7 +284,7 @@ namespace KotoKaze.Static
 
                         using MemoryStream memoryStream = new();
                         Stopwatch stopwatch = Stopwatch.StartNew();
-                        while (stopwatch.Elapsed.TotalSeconds < time)
+                        while (stopwatch.Elapsed.TotalSeconds < time && GlobalData.IsRunning)
                         {
                             var html = Markdown.ToHtml(markdown, pipeline);
                             canvas.DrawText(html, 0, paint.TextSize, paint);
@@ -311,7 +314,7 @@ namespace KotoKaze.Static
                     Universe.Stellar neptune = new(1.02e26, new Double3(4.50e12, 0, 0));
                     Universe.Stellar[] planets = [mercury, venus,earth,mars,jupiter,saturn, uranus, neptune];
                     Stopwatch stopwatch = Stopwatch.StartNew();
-                    while (stopwatch.Elapsed.TotalSeconds < time) 
+                    while (stopwatch.Elapsed.TotalSeconds < time && GlobalData.IsRunning) 
                     {
                         for (int i = 0; i < 365; i++) 
                         {
@@ -351,7 +354,7 @@ namespace KotoKaze.Static
                     }
 
                     Stopwatch stopwatch = Stopwatch.StartNew();
-                    while (stopwatch.Elapsed.TotalSeconds < time)
+                    while (stopwatch.Elapsed.TotalSeconds < time && GlobalData.IsRunning)
                     {
                         for (int x = 0; x < width; x++)
                         {

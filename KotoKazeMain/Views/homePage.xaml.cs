@@ -1,4 +1,5 @@
 ﻿
+using KotoKaze.Static;
 using SevenZip.Compression.LZ;
 using System.Diagnostics;
 using System.IO;
@@ -30,55 +31,53 @@ namespace XyliteeeMainForm.Views
                 systemIcon.Source = new BitmapImage(new Uri("pack://application:,,,/image/icons/windows10.png"));
 
             }
-
-            GetCurrentRam();
+            GetCurrentData();
         }
-        private void GetCurrentRam()
+        private void GetCurrentData()
         {
-            Thread thread = new(() =>
+            Task.Run(() => 
             {
                 double memoryAvailable;
                 double memoryUsed;
                 double diskTotal;
                 double diskAvailable;
                 double diskUsed;
-                int ramUseRate = 0;
-                int diskUseRate = 0;
-                double cpuUsage = 0;
+                int ramUseRate;
+                int diskUseRate;
+                double cpuUsage;
                 PerformanceCounter cpuCounter = new("Processor", "% Processor Time", "_Total");
                 PerformanceCounter ramCounter = new("Memory", "Available MBytes");
-                try
+                while (GlobalData.IsRunning)
                 {
-                    while (true)
+                    memoryAvailable = ramCounter.NextValue();
+                    memoryUsed = Convert.ToDouble(systemInfo.RamNumber) - memoryAvailable;
+                    ramUseRate = (int)(memoryUsed / systemInfo.RamNumber * 100);
+
+                    DriveInfo systemDrive = new("C:\\");
+                    diskTotal = systemDrive.TotalSize;
+                    diskAvailable = systemDrive.TotalFreeSpace;
+                    diskUsed = diskTotal - diskAvailable;
+                    diskUseRate = (int)(diskUsed / diskTotal * 100);
+                    cpuCounter.NextValue();
+                    Thread.Sleep(1000);
+                    cpuUsage = cpuCounter.NextValue();
+                    double memoryUsedToGB = Math.Round(memoryUsed / 1024, 1);
+                    double memoryTotleToGB = Math.Round(systemInfo.RamNumber / 1024, 1);
+                    int diskUsedToGB = (int)(diskUsed / 1024 / 1024 / 1024);
+                    int diskTotletToGB = (int)(diskTotal / 1024 / 1024 / 1024);
+
+                    Dispatcher.Invoke(() => 
                     {
-                        memoryAvailable = ramCounter.NextValue();
-                        memoryUsed = Convert.ToDouble(systemInfo.RamNumber) - memoryAvailable;
-                        ramUseRate = (int)(memoryUsed / systemInfo.RamNumber * 100);
-
-                        DriveInfo systemDrive = new("C:\\");
-                        diskTotal = systemDrive.TotalSize;
-                        diskAvailable = systemDrive.TotalFreeSpace;
-                        diskUsed = diskTotal - diskAvailable;
-                        diskUseRate = (int)(diskUsed / diskTotal * 100);
-                        cpuCounter.NextValue();
-                        Thread.Sleep(1000);
-                        cpuUsage = cpuCounter.NextValue();
-
-                        Dispatcher.Invoke(() =>
-                        {
-                            cpuCircleBar.Value = cpuUsage;
-                            cpuLabel.Content = $"CPU占用{(int)cpuUsage}%";
-                            ramBar.Value = ramUseRate;
-                            ramLabel.Content = $"内存使用情况：{Math.Round(memoryUsed/1024,1)}GB / {Math.Round(systemInfo.RamNumber / 1024, 1)}GB";
-                            DiskBar.Value = diskUseRate;
-                            diskLabel.Content = $"系统分区使用情况：{(int)(diskUsed/1024/1024/1024)}GB / {(int)(diskTotal/1024/1024/1024)}GB";
-                        });
-                    }
+                        cpuCircleBar.Value = cpuUsage;
+                        cpuLabel.Content = $"CPU占用{(int)cpuUsage}%";
+                        ramBar.Value = ramUseRate;
+                        ramLabel.Content = $"内存使用情况：{memoryUsedToGB}GB / {memoryTotleToGB}GB";
+                        DiskBar.Value = diskUseRate;
+                        diskLabel.Content = $"系统分区使用情况：{diskUsedToGB}GB / {diskTotletToGB}GB";
+                    });
                 }
-                catch (ThreadAbortException) { }
-                catch (TaskCanceledException) { }
             });
-            thread.Start();
+            
         }
     }
 
