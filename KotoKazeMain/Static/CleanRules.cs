@@ -5,7 +5,7 @@ namespace KotoKaze.Static
 {
     internal class CleanRules
     {
-        private readonly static string APPDATE = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).Replace("Roaming", "");
+        public readonly static string APPDATE = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).Replace("Roaming", "");
 
         public readonly static List<string> tempFilesRules = 
             [

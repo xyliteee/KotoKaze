@@ -1,12 +1,6 @@
-﻿using OpenCvSharp;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
+﻿using System.IO;
 using System.Text;
-using System.Threading.Tasks;
+using static System.Data.Entity.Infrastructure.Design.Executor;
 
 namespace KotoKaze.Static
 {
@@ -17,11 +11,13 @@ namespace KotoKaze.Static
             public static readonly string rootDirectory = AppDomain.CurrentDomain.BaseDirectory;
             public static readonly string backupDirectory = Path.Combine(rootDirectory, "Backup");
             public static readonly string localDataDirectory = Path.Combine(rootDirectory, "LocalData");
+            public static readonly string softwareTempDirectory = Path.Combine(CleanRules.APPDATE, "Local\\Temp\\KotoKaze");
 
             public static void CreatWorkDirectory()
             {
                 Directory.CreateDirectory(backupDirectory);
                 Directory.CreateDirectory(localDataDirectory);
+                Directory.CreateDirectory(softwareTempDirectory);
             }
 
             public static void CreatWorkFile() 
@@ -93,11 +89,11 @@ namespace KotoKaze.Static
                 }
                 if (!data.ContainsKey(section))
                 {
-                    data[section] = new Dictionary<string, string>();
+                    data[section] = [];
                 }
                 data[section][key] = value;
 
-                using StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default);
+                using StreamWriter sw = new (filePath, false, Encoding.Default);
                 foreach (var sectionPair in data)
                 {
                     sw.WriteLine("[" + sectionPair.Key + "]");

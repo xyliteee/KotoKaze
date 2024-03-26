@@ -6,12 +6,12 @@ using System.IO;
 using System.Data.SQLite;
 using System.Reflection;
 using System.Security.Cryptography;
-using System.Data;
 using Markdig;
 using SkiaSharp;
 using KotoKaze.Dynamic;
-using OpenCvSharp;
 using System.Runtime.InteropServices;
+using XylitolSignal4Csharp;
+using static KotoKaze.Static.GlobalData;
 
 namespace KotoKaze.Static
 {
@@ -83,7 +83,7 @@ namespace KotoKaze.Static
                     int[] distance = new int[verticesCount];
                     bool[] shortestPathTreeSet = new bool[verticesCount];
                     Stopwatch stopwatch = Stopwatch.StartNew();
-                    while (stopwatch.Elapsed.TotalSeconds < time && GlobalData.IsRunning)
+                    while (stopwatch.Elapsed.TotalSeconds < time && IsRunning)
                     {
                         for (int i = 0; i < verticesCount; ++i)
                         {
@@ -105,8 +105,6 @@ namespace KotoKaze.Static
                     
                     return count;
                 }
-
-
                 public static int TextCompress()
                 {
                     int count = 0;
@@ -118,7 +116,7 @@ namespace KotoKaze.Static
                         coder.WriteCoderProperties(output);
                         output.Write(BitConverter.GetBytes(inputFile.Length), 0, 8);
                         Stopwatch stopwatch = Stopwatch.StartNew();
-                        while (stopwatch.Elapsed.TotalSeconds < time && GlobalData.IsRunning)
+                        while (stopwatch.Elapsed.TotalSeconds < time && IsRunning)
                         {
                             coder.Code(inputFile, output, inputFile.Length, -1, null);
                             output.SetLength(0);
@@ -128,7 +126,6 @@ namespace KotoKaze.Static
                     }catch (Exception e) {File.WriteAllText("text.txt",e.ToString()); }
                     return count;
                 }
-
                 public static int TextDeCompress()
                 {
                     int count = 0;
@@ -151,7 +148,7 @@ namespace KotoKaze.Static
 
                     MemoryStream decompressedOutput = new();
                     Stopwatch stopwatch = Stopwatch.StartNew();
-                    while (stopwatch.Elapsed.TotalSeconds < time && GlobalData.IsRunning)
+                    while (stopwatch.Elapsed.TotalSeconds < time && IsRunning)
                     {
                         decoder.Code(output, decompressedOutput, output.Length, fileLength, null);
                         decompressedOutput.SetLength(0);
@@ -160,7 +157,6 @@ namespace KotoKaze.Static
                     
                     return count;
                 }
-
                 public static int ImageCompress()
                 {
                     int count = 0;
@@ -173,7 +169,7 @@ namespace KotoKaze.Static
                     using Image image = Image.FromStream(imageStream);
                     using MemoryStream ms = new();
                     Stopwatch stopwatch = Stopwatch.StartNew();
-                    while (stopwatch.Elapsed.TotalSeconds < time && GlobalData.IsRunning)
+                    while (stopwatch.Elapsed.TotalSeconds < time && IsRunning)
                     {
                         image.Save(ms, jpgEncoder, myEncoderParameters);
                         ms.SetLength(0);
@@ -182,7 +178,6 @@ namespace KotoKaze.Static
                     
                     return count;
                 }
-
                 public static int SQLSearch()
                 {
                     int count = 0;
@@ -200,7 +195,7 @@ namespace KotoKaze.Static
                         cmd.CommandText = @"SELECT * FROM MyTable WHERE Name = 'DTC_125_10' AND Penetration = 577 AND Weight = 5.86 AND Velocity = 1000 AND Caliber = 120 AND Manufacturer = 'ManufacturerA' AND ManufactureDate = '2022-01-01' AND Deceleration = 20 AND Warhead = 'Tungsten' AND Price = 100000";
                         using SQLiteDataReader reader = cmd.ExecuteReader();
                         Stopwatch stopwatch = Stopwatch.StartNew();
-                        while (stopwatch.Elapsed.TotalSeconds < time && GlobalData.IsRunning)
+                        while (stopwatch.Elapsed.TotalSeconds < time && IsRunning)
                         {
                             for (int i = 0; i < 1000000; i++) { while (reader.Read()) { } }
                             count++;
@@ -209,7 +204,6 @@ namespace KotoKaze.Static
                     
                     return count;
                 }
-
                 //public static int SQLSave()
                 //{
                 //    int count = 0;
@@ -266,7 +260,6 @@ namespace KotoKaze.Static
                 //    }
                 //    return count;
                 //}
-
                 public static int MarkDown()
                 {
                     int count = 0;
@@ -284,7 +277,7 @@ namespace KotoKaze.Static
 
                         using MemoryStream memoryStream = new();
                         Stopwatch stopwatch = Stopwatch.StartNew();
-                        while (stopwatch.Elapsed.TotalSeconds < time && GlobalData.IsRunning)
+                        while (stopwatch.Elapsed.TotalSeconds < time && IsRunning)
                         {
                             var html = Markdown.ToHtml(markdown, pipeline);
                             canvas.DrawText(html, 0, paint.TextSize, paint);
@@ -293,7 +286,6 @@ namespace KotoKaze.Static
                             memoryStream.SetLength(0);
                         }
                     }
-                    
                     return count;
                 }
             }
@@ -314,7 +306,7 @@ namespace KotoKaze.Static
                     Universe.Stellar neptune = new(1.02e26, new Double3(4.50e12, 0, 0));
                     Universe.Stellar[] planets = [mercury, venus,earth,mars,jupiter,saturn, uranus, neptune];
                     Stopwatch stopwatch = Stopwatch.StartNew();
-                    while (stopwatch.Elapsed.TotalSeconds < time && GlobalData.IsRunning) 
+                    while (stopwatch.Elapsed.TotalSeconds < time && IsRunning) 
                     {
                         for (int i = 0; i < 365; i++) 
                         {
@@ -354,7 +346,7 @@ namespace KotoKaze.Static
                     }
 
                     Stopwatch stopwatch = Stopwatch.StartNew();
-                    while (stopwatch.Elapsed.TotalSeconds < time && GlobalData.IsRunning)
+                    while (stopwatch.Elapsed.TotalSeconds < time && IsRunning)
                     {
                         for (int x = 0; x < width; x++)
                         {
@@ -379,34 +371,31 @@ namespace KotoKaze.Static
                     return count;
                 }
 
-                public static int HDR()
+                public static int PSK()
                 {
-                    Stopwatch stopwatch = new();
-                    stopwatch.Start();
-                    Mat image1 = Mat.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("KotoKaze.image.Header.3000.jpg")!, ImreadModes.Color);
-                    Mat image2 = Mat.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("KotoKaze.image.Header.50.jpg")!, ImreadModes.Color);
-                    Mat image3 = Mat.FromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("KotoKaze.image.Header.5.jpg")!, ImreadModes.Color);
-                    List<Mat> images = [image1, image2, image3];
-                    float[] times = [1 / 3000.0f, 1 / 50.0f, 1 / 5.0f];
-                    Mat response = new();
-                    CalibrateDebevec calibrate = CalibrateDebevec.Create();
-                    calibrate.Process(images, response, times);
-                    Mat hdr = new();
-                    MergeDebevec mergeDebevec = MergeDebevec.Create();
-                    mergeDebevec.Process(images, hdr, times, response);
-                    Mat ldr = new();
-                    Tonemap tonemap = Tonemap.Create(2.2f);
-                    tonemap.Process(hdr, ldr);
-                    stopwatch.Stop();
-                    int time = (int)stopwatch.Elapsed.TotalMilliseconds;
-                    image1.Dispose();
-                    image2.Dispose();
-                    image3.Dispose();
-                    response.Dispose();
-                    hdr.Dispose();
-                    ldr.Dispose();
-                    
-                    return time;
+                    int count = 0;
+                    Stopwatch stopwatch = Stopwatch.StartNew();
+                    while (stopwatch.Elapsed.TotalSeconds < time && IsRunning)
+                    {
+                        BaseBandSignal baseBandSignal = new(message: "YSU", fs: SingleFunctions.globalFs);
+                        Filter_LowPass lowPassFilter = new(N: 127, f_stop: 200, window: "blackman", fs: SingleFunctions.globalFs);
+                        Filter_BandPass bandPassFilter = new(N: 127, f_stop: 800, f_start: 1200, window: "blackman", fs: SingleFunctions.globalFs);
+                        double[] baseBandWaveAfterLowpassFilter = lowPassFilter.Filte(baseBandSignal.timeFomainWaveForm);
+                        double[] carrier = SingleFunctions.PSKCarrier(baseBandWaveAfterLowpassFilter);
+                        double[] waveWithNoise = NoiseMix.AddNoise(carrier, 5);
+                        double[] afterBandpassFilter = bandPassFilter.Filte(waveWithNoise);
+                        SinWave deCarrier = new(
+                            f0: 1000,
+                            phi: 90,
+                            time: afterBandpassFilter.Length / SingleFunctions.globalFs,
+                            fs: SingleFunctions.globalFs
+                            );
+                        double[] afterCoherentDemodulation = SingleFunctions.CoherentDemodulation(deCarrier.timeFomainWaveForm, afterBandpassFilter);
+                        double[] afterLowpassFilterCoherentDemodulation = lowPassFilter.Filte(afterCoherentDemodulation);
+                        _ = new SingleFunctions.JudgeAndDecoded(afterLowpassFilterCoherentDemodulation);
+                        count++;
+                    }
+                    return count;
                 }
             }
         }

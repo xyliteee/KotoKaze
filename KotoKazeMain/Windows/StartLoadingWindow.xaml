@@ -21,7 +21,7 @@
             <Label x:Name="Title" Content="KotoKaze" BorderThickness="0" Background="Transparent" Foreground="#A0C5E0" FontSize="72" Width="400" Height="100" FontWeight="Bold" Canvas.Top="40" Canvas.Left="80"/>
             <Border  Background="Gray" Width="720" Canvas.Right="0" Height="10" Canvas.Top="130" Opacity="0.2"/>
             <Border x:Name="progressBar" Background="#A0C5E0" Width="0" Canvas.Right="0" Height="10" Canvas.Top="130"/>
-            <Label x:Name="LoadinText" Background="Transparent" BorderThickness="0" Content="缺省" Width="820" Height="30" FontSize="16" Foreground="Gray" Canvas.Left="0" Canvas.Top="205" />
+            <Label x:Name="LoadinText" Background="Transparent" BorderThickness="0" Content="正在启动" Width="820" Height="30" FontSize="16" Foreground="Gray" Canvas.Left="0" Canvas.Top="205" />
         </Canvas>
     </Grid>
 </Window>

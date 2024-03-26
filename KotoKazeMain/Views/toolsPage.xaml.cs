@@ -36,6 +36,7 @@ namespace XyliteeeMainForm.Views
             SetButtonState((Button) sender);
             Animations.ButtonSilderMoveing(Silder, 195);
             TipsBox.Content = "这里包含了一些基于DISM的工具，可能具有不可恢复的危险性";
+            ToolsNegate.Navigate(new DISMPage());
         }
 
         private void WindowsButton_Click(object sender, RoutedEventArgs e) 
@@ -59,6 +60,7 @@ namespace XyliteeeMainForm.Views
             SetButtonState((Button)sender);
             Animations.ButtonSilderMoveing(Silder, 515);
             TipsBox.Content = "这里包含了一些其他未归类的工具";
+            ToolsNegate.Navigate(new otherPage());
         }
 
         public void ShowSecondPage(bool show) 

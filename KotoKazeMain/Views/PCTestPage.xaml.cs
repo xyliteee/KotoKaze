@@ -8,11 +8,7 @@ using KotoKaze.Static;
 using System.Threading;
 using System.Windows.Threading;
 using System.IO;
-using System.Runtime.InteropServices;
 using KotoKaze.Windows;
-using HandyControl.Tools.Extension;
-using SevenZip.Compression.LZ;
-using OpenCvSharp;
 using System;
 
 namespace XyliteeeMainForm.Views
@@ -336,7 +332,7 @@ namespace XyliteeeMainForm.Views
             private readonly int[] markDownCounts = [0, 0];
             private readonly int[] solarSystemCounts = [0, 0];
             private readonly int[] gaussianCounts = [0, 0];
-            private readonly double[] hdrCounts = [0, 0];
+            private readonly int[] pskCounts = [0, 0];
             public CPU(PCTestPage ParentClass)                                                                          
             {
                 this.ParentClass = ParentClass;                                                                         //父类赋值
@@ -376,9 +372,8 @@ namespace XyliteeeMainForm.Views
                         ParentClass.Dispatcher.Invoke(() => { ParentClass.CPUDialogScoreLabel.Content = "单核高斯模糊运算"; });
                         gaussianCounts[0] = WorkLoad.CPU.Floating.GaussianBlur();
 
-                        ParentClass.Dispatcher.Invoke(() => { ParentClass.CPUDialogScoreLabel.Content = "单核HDR合成"; });
-                        double hdrTime = WorkLoad.CPU.Floating.HDR();
-                        hdrCounts[0] = 1.0 / hdrTime;
+                        ParentClass.Dispatcher.Invoke(() => { ParentClass.CPUDialogScoreLabel.Content = "单核PSK处理"; });
+                        pskCounts[0] = WorkLoad.CPU.Floating.PSK();
                     }
                     catch (ThreadAbortException) { }
                     catch (TaskCanceledException) { }
@@ -420,9 +415,8 @@ namespace XyliteeeMainForm.Views
                     ParentClass.Dispatcher.Invoke(() => { ParentClass.CPUDialogScoreLabel.Content = "多核高斯模糊运算"; });
                     gaussianCounts[1] = RunTestsInParallel(WorkLoad.CPU.Floating.GaussianBlur, theadNumber).Sum();
 
-                    ParentClass.Dispatcher.Invoke(() => { ParentClass.CPUDialogScoreLabel.Content = "多核HDR合成"; });
-                    double hdrtime = RunTestsInParallel(WorkLoad.CPU.Floating.HDR, theadNumber).Average() / theadNumber;
-                    hdrCounts[1] = 1.0 / hdrtime;
+                    ParentClass.Dispatcher.Invoke(() => { ParentClass.CPUDialogScoreLabel.Content = "多核PSK处理"; });
+                    pskCounts[1] = RunTestsInParallel(WorkLoad.CPU.Floating.PSK, theadNumber).Sum();
                 }
                 catch (ThreadAbortException) { }
                 catch (TaskCanceledException) { }
@@ -446,7 +440,7 @@ namespace XyliteeeMainForm.Views
                         0.05 * rate,
                         0.08 * rate,
                         10 * rate,
-                        440000 * rate,
+                        0.077 * rate,
                     ];
 
 
@@ -461,7 +455,7 @@ namespace XyliteeeMainForm.Views
                         markDownCounts[0] * scoreWeight[6]+
                         solarSystemCounts[0] * scoreWeight[7]+
                         gaussianCounts[0] * scoreWeight[8]+
-                        hdrCounts[0] * scoreWeight[9]
+                        pskCounts[0] * scoreWeight[9]
                     );
 
                 CPUMultiCoreScore = (int)
@@ -475,7 +469,7 @@ namespace XyliteeeMainForm.Views
                         markDownCounts[1] * scoreWeight[6]+
                         solarSystemCounts[1] * scoreWeight[7]+
                         gaussianCounts[1] * scoreWeight[8]+
-                        hdrCounts[1] * scoreWeight[9]
+                        pskCounts[1] * scoreWeight[9]
                     );
             }
             private static int[] RunTestsInParallel(Func<int> testFunc, int coreCount)

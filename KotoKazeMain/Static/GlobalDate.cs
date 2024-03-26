@@ -15,7 +15,6 @@ namespace KotoKaze.Static
         public static MainWindow MainWindowInstance { get; set; }
         public static toolsPage ToolsPageInstance { get; set; }
         public static List<BackgroundTask> TasksList { get; set; } = [];
-
         public static bool IsRunning { get; set; } = true;
     }
 }

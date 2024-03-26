@@ -1,11 +1,4 @@
 ﻿using KotoKaze.Static;
-using OpenCvSharp.Flann;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -85,7 +78,7 @@ namespace KotoKaze.Views.toolsPages.BCDPages
             }
         }
 
-        private void AddNewOne(object sender,RoutedEventArgs e) //叫我嵌套仙人
+        private void AddNewOne(object sender,RoutedEventArgs e)
         {
             void UITask(KotoMessageBoxInput.MessageResult rr,BCDBackUPFile bbf) 
             {

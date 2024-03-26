@@ -28,7 +28,7 @@ namespace KotoKaze.Views.toolsPages
     /// </summary>
     public partial class SystemToolsPage : Page
     {
-        private readonly BackgroundTask GPEDITTASK = new() {title = "组策略添加" };
+        private readonly BackgroundTask GPEDITTASK = new() { title = "组策略添加" };
         private readonly BackgroundTask SFCSCANNOW = new() { title = "SFC系统修复" };
         public SystemToolsPage()
         {
@@ -88,8 +88,6 @@ namespace KotoKaze.Views.toolsPages
             }
 
         }
-
-
         private void SFCSCNOW_Click(object sender, RoutedEventArgs e)
         {
             if (GlobalData.TasksList.Contains(SFCSCANNOW))
@@ -124,7 +122,6 @@ namespace KotoKaze.Views.toolsPages
                         }
                     }
 
-                    // 读取标准输出
                     using StreamReader reader = process.StandardOutput;
                     string result;
                     while (GlobalData.IsRunning && ((result = reader.ReadLine()) != null))
@@ -140,8 +137,49 @@ namespace KotoKaze.Views.toolsPages
                 });
             }
         }
+        private void BATTERYINFO_Click(object sender, RoutedEventArgs e)
+        {
+            Task.Run(() =>
+            {
+                ProcessStartInfo startInfo = new()
+                {
+                    FileName = "cmd.exe",
+                    RedirectStandardInput = true,
+                    CreateNoWindow = true,
+                    UseShellExecute = false
+                };
 
-        [GeneratedRegex(@"\d+\.\d+")]
-        private static partial Regex MyRegex();
+                Process process = new() { StartInfo = startInfo };
+                process.Start();
+
+                string reportFilePath = System.IO.Path.Combine(FileManager.WorkDirectory.localDataDirectory, "BatteryReport.html");
+                string reportFilePathTemp = System.IO.Path.Combine(FileManager.WorkDirectory.softwareTempDirectory, "BatteryReport.html");
+                File.Delete(reportFilePathTemp);
+                using StreamWriter streamWriter = process.StandardInput;
+                if (streamWriter.BaseStream.CanWrite)
+                {
+                    streamWriter.WriteLine($"powercfg /batteryreport /output \"{reportFilePathTemp}\"");
+                    streamWriter.WriteLine("exit");
+                }
+
+                process.WaitForExit();
+                string reportText = File.ReadAllText(reportFilePathTemp);
+
+                string reportTextToChinese = TranslationRules.Translate(reportText, TranslationRules.batteryReport);
+
+                File.Delete(reportFilePath);
+                File.WriteAllText(reportFilePath, reportTextToChinese);
+
+                Dispatcher.Invoke(() => 
+                {
+                    var r = KotoMessageBox.ShowDialog("报告文件已保存在程序目录的/LocalData文件夹下,是否打开？");
+                    if (r.IsClose) return;
+                    if (r.IsYes) 
+                    {
+                        Process.Start(new ProcessStartInfo("cmd", $"/c start \"\" \"{reportFilePath}\"") { CreateNoWindow = true });
+                    }
+                });
+            });
+        }
     }
 }
