@@ -490,8 +490,6 @@ namespace XyliteeeMainForm.Views
             }
         }
 
-        
-
         public class RAM 
         {
             private int readSpeed = 0;

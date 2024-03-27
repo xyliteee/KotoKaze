@@ -1,4 +1,9 @@
-﻿using System.Windows;
+﻿using KotoKaze.Windows;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Windows;
+using System.Windows.Controls;
+using XyliteeeMainForm.Views;
 
 namespace XyliteeeMainForm
 {
@@ -7,6 +12,7 @@ namespace XyliteeeMainForm
     /// </summary>
     public partial class App : Application
     {
+
     }
 
 }

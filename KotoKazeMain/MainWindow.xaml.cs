@@ -32,7 +32,7 @@ namespace XyliteeeMainForm
         public MainWindow()
         {
             StartLoadingWindow s = new();
-            async Task LoadingUI() 
+            async Task DataInit() 
             {
                 InitializeComponent();
                 Hide();
@@ -41,26 +41,32 @@ namespace XyliteeeMainForm
                 s.progressBar.Width = 120;
                 await Task.Delay(100);
                 homePage = new();
+                GlobalData.HomePageInstance = homePage;
+
 
                 s.LoadinText.Content = "正在初始化清理页面";
                 s.progressBar.Width = 410;
                 await Task.Delay(100);
                 cleanPage = new();
+                GlobalData.CleanPageInstance = cleanPage;
 
                 s.LoadinText.Content = "正在初始化测试页面";
                 s.progressBar.Width = 460;
                 await Task.Delay(100);
                 PCTestPage = new();
+                GlobalData.PCTestPageInstance = PCTestPage;
 
                 s.LoadinText.Content = "正在初始化工具页面";
                 s.progressBar.Width = 580;
                 await Task.Delay(100);
                 toolsPage = new();
+                GlobalData.ToolsPageInstance = toolsPage;
 
                 s.LoadinText.Content = "正在初始化设置页面";
                 s.progressBar.Width = 610;
                 await Task.Delay(100);
                 settingPage = new();
+                GlobalData.SettingPageInstance = settingPage;
 
                 s.LoadinText.Content = "正在进行最终设置";
                 s.progressBar.Width = 680;
@@ -77,16 +83,16 @@ namespace XyliteeeMainForm
                 FileManager.WorkDirectory.CreatWorkDirectory();
                 FileManager.WorkDirectory.CreatWorkFile();
                 GlobalData.MainWindowInstance = this;
-                CheckFirstUse();
-                CheckTasksList();
             }
             async void Start() 
             {
                 s.Show();
-                await LoadingUI();
+                await DataInit();
                 s.progressBar.Width = 720;  
                 s.Close();
                 Show();
+                CheckFirstUse();
+                CheckTasksList();
             }
             Start();
         }
@@ -143,7 +149,7 @@ namespace XyliteeeMainForm
                         TaskListMessage.Content = "无任务";
                         Label label = new()
                         {
-                            Content = "没有任何任务存在",
+                            Content = "没有后台任务正在进行",
                             Background = Brushes.Transparent,
                             BorderThickness = new Thickness(0),
                             Width = 390,
@@ -166,22 +172,20 @@ namespace XyliteeeMainForm
                 await Task.Delay(200);
             }
         }
-
-
-        private async void CheckFirstUse() 
+        private static async void CheckFirstUse() 
         {
             string value = IniFileRead("Application.ini", "SETTING", "ISFIRST_USE");
             if (value == "FALSE") return;
             else if (value == "TRUE")
             {
-                await Task.Delay(1000);
+                //await Task.Delay(1000);
                 KotoMessageBoxSingle.ShowDialog("看起来您是第一次使用本软件，但我实际上也没什么好说的");
                 IniFileWrite("Application.ini", "SETTING", "ISFIRST_USE", "FALSE");
             }
             else if (value == "ERROR")
             {
                 await Task.Delay(1000);
-                KotoMessageBoxSingle.ShowDialog("BYD别改文件");
+                KotoMessageBoxSingle.ShowDialog("检测到文件被修改，已重置");
                 IniFileSetDefault("Application.ini");
             }
         }
@@ -199,7 +203,7 @@ namespace XyliteeeMainForm
             else { backButton.Visibility = Visibility.Collapsed; }
         }
 
-        private void DragWindow(object sender, MouseButtonEventArgs e)
+        private void DragWindow(object sender, MouseButtonEventArgs e)//窗口移动事件
         {
             if (e.ChangedButton == MouseButton.Left)
             {
@@ -220,19 +224,16 @@ namespace XyliteeeMainForm
                 UpdateLayout();
             }
         }
-
-        private void MinButton_Click(object sender, RoutedEventArgs e)
+        private void MinButton_Click(object sender, RoutedEventArgs e)//窗口最小化按钮
         {
             WindowState = WindowState.Minimized;
         }
-
-        private void ShutdownButton_Click(object sender, RoutedEventArgs e)
+        private void ShutdownButton_Click(object sender, RoutedEventArgs e)//关闭按钮
         {
             GlobalData.IsRunning = false;
             Close();
         }
-
-        private void BackButton_Click(object sender, RoutedEventArgs e) 
+        private void BackButton_Click(object sender, RoutedEventArgs e) //返回反扭
         {
             if (currentPage is toolsPage && toolsPage.secondActionFrame.Visibility == Visibility.Visible)//如果当前页面是工具页面且二级页面处于开启状态
             {
@@ -240,8 +241,7 @@ namespace XyliteeeMainForm
             }
             backButton.Visibility = Visibility.Collapsed;//然后按钮关闭
         }
-
-        private void SetCurrentPageColor()                                                                                          //根据当前页面设置对应按钮颜色为蓝色
+        private void SetCurrentPageColor()//设置当前页面的颜色                                                                             //根据当前页面设置对应按钮颜色为蓝色
         {
 
             Dictionary<object, (Button,Image, SolidColorBrush, BitmapImage)> mappings = new()
@@ -253,14 +253,14 @@ namespace XyliteeeMainForm
                 { settingPage, (settingPageButton,settingImage ,blueTextColor, BitMapImages.settingBlue) },
             };
 
-            if (mappings.TryGetValue(currentPage, out var mapping))
+            if (mappings.TryGetValue(currentPage, out var mapping))//通过定义的映射设置对应的文字颜色和图片
             {
                 mapping.Item1.Foreground = mapping.Item3;
                 mapping.Item2.Source = mapping.Item4;
             }
         }
 
-        private void SetAllImageWhite()                                                                                             //把所有图片设白
+        private void SetAllImageWhite()//将所有DOCK栏的图片设置为白色                                                                                             //把所有图片设白
         {
             homeImage.Source = BitMapImages.homeWhite;
             cleanImage.Source = BitMapImages.cleanWhite;
@@ -269,17 +269,17 @@ namespace XyliteeeMainForm
             settingImage.Source = BitMapImages.settingWhite;
         }
 
-        private void DockButtonEnter(object sender, MouseEventArgs e)                                                               //鼠标悬浮时的行为
+        private void DockButtonEnter(object sender, MouseEventArgs e)//鼠标悬浮在DOCK按钮事件                                                               //鼠标悬浮时的行为
         {
             Button button = (Button)sender;
             foreach (Button b in buttons)                                                                                           //所有按钮文字设白
             {
-                b.Foreground = Brushes.White;
+                b.Foreground = Brushes.White;//将所有按钮设置为白色
             }   
-            SetAllImageWhite();                                                                                                     //所有图片设白
-            button.Foreground = blueTextColor;                                                                                      //指针悬浮的按钮文字设蓝
+            SetAllImageWhite();//将所有图片设置为白色                                                                    //所有图片设白
+            button.Foreground = blueTextColor;//将悬浮的按钮设置为蓝色                                                                                      //指针悬浮的按钮文字设蓝
 
-            switch (button.Name)                                                                                                    //指针悬浮的图片设蓝
+            switch (button.Name)//将对应图片设置为蓝色                                                                 //指针悬浮的图片设蓝
             {
                 case "homePageButton":
                     homeImage.Source = BitMapImages.homeBlue;
@@ -297,7 +297,7 @@ namespace XyliteeeMainForm
                     settingImage.Source = BitMapImages.settingBlue;
                     break;
             }
-            SetCurrentPageColor();                                                                                                  //恢复当前页面对应按钮的颜色
+            SetCurrentPageColor(); //把当前页面颜色设置为蓝色                                                                                                 //恢复当前页面对应按钮的颜色
         }
 
         private void DockButtonLeave(object sender, MouseEventArgs e)                                                               //鼠标离开的行为
@@ -367,7 +367,7 @@ namespace XyliteeeMainForm
             TasksListShowZone.Visibility = Visibility.Visible;
         }
     }
-    public class BitMapImages 
+    class BitMapImages 
     {
         public readonly static BitmapImage homeWhite = new(new Uri("pack://application:,,,/image/icons/Home.png"));
         public readonly static BitmapImage cleanWhite = new(new Uri("pack://application:,,,/image/icons/Clean.png"));

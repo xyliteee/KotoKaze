@@ -16,7 +16,6 @@ namespace XyliteeeMainForm.Views
         {
             InitializeComponent();
             TipsBox.Content = "这里包含了一些系统功能相关的工具";
-            GlobalData.ToolsPageInstance = this;
             ToolsNegate.Navigate(new SystemToolsPage());
             WindowsButton.IsEnabled = false;
         }
