@@ -1,17 +1,13 @@
-﻿using System;
+﻿using KotoKaze.Dynamic;
+using KotoKaze.Static;
+using KotoKaze.Views.toolsPages.BCDPages;
+using KotoKaze.Views.toolsPages.otherPages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace KotoKaze.Views.toolsPages
 {
@@ -23,6 +19,13 @@ namespace KotoKaze.Views.toolsPages
         public otherPage()
         {
             InitializeComponent();
+        }
+
+        private void ADBbutton_Click(object sender, RoutedEventArgs e)
+        {
+            GlobalData.ToolsPageInstance.secondActionFrame.Navigate(new ADBPage());
+            GlobalData.ToolsPageInstance.ShowSecondPage(true);
+            GlobalData.MainWindowInstance.backButton.Visibility = Visibility.Visible;
         }
     }
 }

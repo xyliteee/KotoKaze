@@ -35,48 +35,53 @@ namespace XyliteeeMainForm.Views
         }
         private void GetCurrentData()
         {
-            Task.Run(() => 
+            try 
             {
-                double memoryAvailable;
-                double memoryUsed;
-                double diskTotal;
-                double diskAvailable;
-                double diskUsed;
-                int ramUseRate;
-                int diskUseRate;
-                double cpuUsage;
-                PerformanceCounter cpuCounter = new("Processor", "% Processor Time", "_Total");
-                PerformanceCounter ramCounter = new("Memory", "Available MBytes");
-                while (GlobalData.IsRunning)
+                Task.Run(() =>
                 {
-                    memoryAvailable = ramCounter.NextValue();
-                    memoryUsed = Convert.ToDouble(systemInfo.RamNumber) - memoryAvailable;
-                    ramUseRate = (int)(memoryUsed / systemInfo.RamNumber * 100);
-
-                    DriveInfo systemDrive = new("C:\\");
-                    diskTotal = systemDrive.TotalSize;
-                    diskAvailable = systemDrive.TotalFreeSpace;
-                    diskUsed = diskTotal - diskAvailable;
-                    diskUseRate = (int)(diskUsed / diskTotal * 100);
-                    cpuCounter.NextValue();
-                    Thread.Sleep(1000);
-                    cpuUsage = cpuCounter.NextValue();
-                    double memoryUsedToGB = Math.Round(memoryUsed / 1024, 1);
-                    double memoryTotleToGB = Math.Round(systemInfo.RamNumber / 1024, 1);
-                    int diskUsedToGB = (int)(diskUsed / 1024 / 1024 / 1024);
-                    int diskTotletToGB = (int)(diskTotal / 1024 / 1024 / 1024);
-
-                    Dispatcher.Invoke(() => 
+                    double memoryAvailable;
+                    double memoryUsed;
+                    double diskTotal;
+                    double diskAvailable;
+                    double diskUsed;
+                    int ramUseRate;
+                    int diskUseRate;
+                    double cpuUsage;
+                    PerformanceCounter cpuCounter = new("Processor", "% Processor Time", "_Total");
+                    PerformanceCounter ramCounter = new("Memory", "Available MBytes");
+                    while (GlobalData.IsRunning)
                     {
-                        cpuCircleBar.Value = cpuUsage;
-                        cpuLabel.Content = $"CPU占用{(int)cpuUsage}%";
-                        ramBar.Value = ramUseRate;
-                        ramLabel.Content = $"内存使用情况：{memoryUsedToGB}GB / {memoryTotleToGB}GB";
-                        DiskBar.Value = diskUseRate;
-                        diskLabel.Content = $"系统分区使用情况：{diskUsedToGB}GB / {diskTotletToGB}GB";
-                    });
-                }
-            });
+                        memoryAvailable = ramCounter.NextValue();
+                        memoryUsed = Convert.ToDouble(systemInfo.RamNumber) - memoryAvailable;
+                        ramUseRate = (int)(memoryUsed / systemInfo.RamNumber * 100);
+
+                        DriveInfo systemDrive = new("C:\\");
+                        diskTotal = systemDrive.TotalSize;
+                        diskAvailable = systemDrive.TotalFreeSpace;
+                        diskUsed = diskTotal - diskAvailable;
+                        diskUseRate = (int)(diskUsed / diskTotal * 100);
+                        cpuCounter.NextValue();
+                        Thread.Sleep(1000);
+                        cpuUsage = cpuCounter.NextValue();
+                        double memoryUsedToGB = Math.Round(memoryUsed / 1024, 1);
+                        double memoryTotleToGB = Math.Round(systemInfo.RamNumber / 1024, 1);
+                        int diskUsedToGB = (int)(diskUsed / 1024 / 1024 / 1024);
+                        int diskTotletToGB = (int)(diskTotal / 1024 / 1024 / 1024);
+
+                        Dispatcher.Invoke(() =>
+                        {
+                            cpuCircleBar.Value = cpuUsage;
+                            cpuLabel.Content = $"CPU占用{(int)cpuUsage}%";
+                            ramBar.Value = ramUseRate;
+                            ramLabel.Content = $"内存使用情况：{memoryUsedToGB}GB / {memoryTotleToGB}GB";
+                            DiskBar.Value = diskUseRate;
+                            diskLabel.Content = $"系统分区使用情况：{diskUsedToGB}GB / {diskTotletToGB}GB";
+                        });
+                    }
+                });
+            }
+            catch (ThreadAbortException) { }
+            catch (TaskCanceledException) { }
             
         }
     }

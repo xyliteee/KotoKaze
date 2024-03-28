@@ -10,7 +10,7 @@
 
     <Grid>
         <Canvas x:Name="Base" Background="#F3F8FE" Height="350" Width="670">
-            <Button Width="120" Height="40" Style="{StaticResource FunctionButtonStyle}" Canvas.Left="35" Canvas.Top="20" Content="(~_~)" FontSize="14" FontWeight="Bold"/>
+            <Button x:Name="ADBbutton" Width="120" Height="40" Style="{StaticResource FunctionButtonStyle}" Canvas.Left="35" Canvas.Top="20" Content="ADB管理" FontSize="14" FontWeight="Bold" Click="ADBbutton_Click"/>
         </Canvas>
     </Grid>
 </Page>

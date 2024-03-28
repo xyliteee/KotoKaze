@@ -73,7 +73,7 @@ namespace KotoKaze.Dynamic
                 UseShellExecute = false
             };
 
-            Process process = new Process { StartInfo = startInfo };
+            Process process = new() { StartInfo = startInfo };
             process.Start();
 
             using (StreamWriter streamWriter = process.StandardInput)

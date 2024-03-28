@@ -138,16 +138,16 @@ namespace KotoKaze.Views.toolsPages
                 Process process = new() { StartInfo = startInfo };
                 process.Start();
 
-                string reportFilePath = System.IO.Path.Combine(FileManager.WorkDirectory.localDataDirectory, "BatteryReport.html");
-                string reportFilePathTemp = System.IO.Path.Combine(FileManager.WorkDirectory.softwareTempDirectory, "BatteryReport.html");
+                string reportFilePath = Path.Combine(FileManager.WorkDirectory.localDataDirectory, "BatteryReport.html");
+                string reportFilePathTemp = Path.Combine(FileManager.WorkDirectory.softwareTempDirectory, "BatteryReport.html");
                 File.Delete(reportFilePathTemp);
-                using StreamWriter streamWriter = process.StandardInput;
-                if (streamWriter.BaseStream.CanWrite)
+                using (StreamWriter streamWriter = process.StandardInput)
                 {
-                    streamWriter.WriteLine($"powercfg /batteryreport /output \"{reportFilePathTemp}\"");
-                    streamWriter.WriteLine("exit");
-                }
-
+                    if (streamWriter.BaseStream.CanWrite)
+                    {
+                        streamWriter.WriteLine($"powercfg /batteryreport /output \"{reportFilePathTemp}\"");
+                    }
+                };
                 process.WaitForExit();
                 string reportText = File.ReadAllText(reportFilePathTemp);
 
