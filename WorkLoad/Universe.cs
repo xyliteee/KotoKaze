@@ -5,13 +5,9 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KotoKaze.Dynamic
+namespace TestContent
 {
-    
-
-
-
-    public class Universe
+    internal class Universe
     {
         private static readonly double G = 6.67430e-11;
 

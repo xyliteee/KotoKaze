@@ -6,9 +6,9 @@ using System.Linq;
 using System.Numerics;
 using System.Windows.Forms;
 
-namespace XylitolSignal4Csharp
+namespace TestContent
 {
-    public class SingleFunctions                                                    //这是一个一个的单独功能函数或者构造
+    internal class SingleFunctions                                                    //这是一个一个的单独功能函数或者构造
     {
         public static double globalFs = 4000;
         private static double[] SubArray(double[] data, int index, int length, int step)

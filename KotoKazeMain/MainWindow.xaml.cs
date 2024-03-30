@@ -1,17 +1,14 @@
 ﻿using KotoKaze.Static;
 using static KotoKaze.Static.FileManager.IniManager;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
+using TestContent;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using XyliteeeMainForm.Views;
 using KotoKaze.Windows;
-using HandyControl.Interactivity;
 using KotoKaze.Dynamic;
 #pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
 namespace XyliteeeMainForm
@@ -35,41 +32,41 @@ namespace XyliteeeMainForm
             async Task DataInit() 
             {
                 InitializeComponent();
+                GlobalData.MainWindowInstance = this;
                 Hide();
+                s.progressBar.Width = 120;
 
                 s.LoadinText.Content = "正在初始化信息页面";
-                s.progressBar.Width = 120;
                 await Task.Delay(100);
                 homePage = new();
                 GlobalData.HomePageInstance = homePage;
-
+                s.progressBar.Width = 410;
 
                 s.LoadinText.Content = "正在初始化清理页面";
-                s.progressBar.Width = 410;
                 await Task.Delay(100);
                 cleanPage = new();
                 GlobalData.CleanPageInstance = cleanPage;
+                s.progressBar.Width = 460;
 
                 s.LoadinText.Content = "正在初始化测试页面";
-                s.progressBar.Width = 460;
                 await Task.Delay(100);
                 PCTestPage = new();
                 GlobalData.PCTestPageInstance = PCTestPage;
+                s.progressBar.Width = 580;
 
                 s.LoadinText.Content = "正在初始化工具页面";
-                s.progressBar.Width = 580;
                 await Task.Delay(100);
                 toolsPage = new();
                 GlobalData.ToolsPageInstance = toolsPage;
+                s.progressBar.Width = 610;
 
                 s.LoadinText.Content = "正在初始化设置页面";
-                s.progressBar.Width = 610;
                 await Task.Delay(100);
                 settingPage = new();
                 GlobalData.SettingPageInstance = settingPage;
+                s.progressBar.Width = 640;
 
                 s.LoadinText.Content = "正在进行最终设置";
-                s.progressBar.Width = 680;
                 await Task.Delay(100);
                 actionFrame.Navigate(homePage);
                 currentPage = (Page)actionFrame.Content;
@@ -82,95 +79,17 @@ namespace XyliteeeMainForm
                 WindowStyle = WindowStyle.SingleBorderWindow;
                 FileManager.WorkDirectory.CreatWorkDirectory();
                 FileManager.WorkDirectory.CreatWorkFile();
-                GlobalData.MainWindowInstance = this;
+                s.progressBar.Width = 720;
             }
             async void Start() 
             {
                 s.Show();
                 await DataInit();
-                s.progressBar.Width = 720;  
                 s.Close();
                 Show();
                 CheckFirstUse();
-                CheckTasksList();
             }
             Start();
-        }
-
-        private async void CheckTasksList()
-        {
-            void CreatSingleCard(BackgroundTask backgroundTask,int index) 
-            {
-                // 创建一个Canvas
-                Canvas myCanvas = new()
-                {
-                    Width = 390,
-                    Height = 40
-                };
-                Canvas.SetTop(myCanvas,index * 40);
-                // 创建第一个Label
-                Label title = new()
-                {
-                    BorderThickness = new Thickness(0),
-                    Background = Brushes.Transparent,
-                    Width = 390,
-                    Height = 30,
-                    Content = backgroundTask.title,
-                    HorizontalContentAlignment = HorizontalAlignment.Left,
-                    FontSize = 16,
-                    FontWeight = FontWeights.Bold
-                };
-
-                myCanvas.Children.Add(title);
-                Label description = new()
-                {
-                    BorderThickness = new Thickness(0),
-                    Background = Brushes.Transparent,
-                    Width = 390,
-                    Height = 20,
-                    Content = backgroundTask.description,
-                    Padding = new Thickness(10, 0, 10, 0),
-                    HorizontalContentAlignment = HorizontalAlignment.Left,
-                    Foreground = Brushes.Gray
-                };
-                Canvas.SetTop(description, 20);
-                myCanvas.Children.Add(description);
-                ScorllCanvas.Children.Add(myCanvas);
-            }
-            List<BackgroundTask> lastTasksList = [];
-
-            while (GlobalData.IsRunning)
-            {
-                if (GlobalData.TasksList != lastTasksList)
-                {
-                    ScorllCanvas.Children.Clear();
-                    if (GlobalData.TasksList.Count == 0)
-                    {
-                        TaskListMessage.Content = "无任务";
-                        Label label = new()
-                        {
-                            Content = "没有后台任务正在进行",
-                            Background = Brushes.Transparent,
-                            BorderThickness = new Thickness(0),
-                            Width = 390,
-                            Height = 30
-                        };
-                        ScorllCanvas.Children.Add(label);
-                        Canvas.SetTop(label, 50);
-                    }
-                    else
-                    {
-                        TaskListMessage.Content = $"{GlobalData.TasksList.Count}个任务正在执行";
-                        for (int index = 0; index < GlobalData.TasksList.Count; index++)
-                        {
-                            CreatSingleCard(GlobalData.TasksList[index], index);
-                        }
-                        ScorllCanvas.Height = GlobalData.TasksList.Count * 40;
-                    }
-                    lastTasksList = [.. GlobalData.TasksList];
-                }
-                await Task.Delay(200);
-            }
         }
         private static async void CheckFirstUse() 
         {

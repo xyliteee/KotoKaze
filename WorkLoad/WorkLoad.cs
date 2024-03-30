@@ -1,23 +1,20 @@
-﻿
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Data.SQLite;
-using System.Reflection;
-using System.Security.Cryptography;
-using Markdig;
-using SkiaSharp;
-using KotoKaze.Dynamic;
-using System.Runtime.InteropServices;
-using XylitolSignal4Csharp;
-using static KotoKaze.Static.GlobalData;
-
-namespace KotoKaze.Static
+﻿namespace TestContent
 {
+    using System.Diagnostics;
+    using System.Drawing;
+    using System.Drawing.Imaging;
+    using System.IO;
+    using System.Data.SQLite;
+    using System.Reflection;
+    using System.Security.Cryptography;
+    using Markdig;
+    using SkiaSharp;
+    using System.Runtime.InteropServices;
+    using System;
+#pragma warning disable CA1416 // 验证平台兼容性
+
     public static class WorkLoad
     {
-        public delegate void VoidFunction();
         public static class CPU
         {
             private static readonly int time = 5;
@@ -32,7 +29,7 @@ namespace KotoKaze.Static
                     byte[] iv = aes.IV;
                     using ICryptoTransform encryptor = aes.CreateEncryptor(key, iv);
                     Stopwatch stopwatch = Stopwatch.StartNew();
-                    while (stopwatch.Elapsed.TotalSeconds < time && GlobalData.IsRunning)
+                    while (stopwatch.Elapsed.TotalSeconds < time)
                     {
                         for (int i = 0; i < buffer.Length; i += aes.BlockSize)
                         {
@@ -45,7 +42,7 @@ namespace KotoKaze.Static
             }
             public static class Integer
             {
-                
+
                 public static int Navigation()
                 {
 
@@ -68,22 +65,22 @@ namespace KotoKaze.Static
                     int count = 0;
                     int[,] graph = new int[,]
                     {
-                        { 0, 6, 0, 0, 0, 0, 0, 9, 0 },
-                        { 6, 0, 9, 0, 0, 0, 0, 11, 0 },
-                        { 0, 9, 0, 5, 0, 6, 0, 0, 2 },
-                        { 0, 0, 5, 0, 9, 16, 0, 0, 0 },
-                        { 0, 0, 0, 9, 0, 10, 0, 0, 0 },
-                        { 0, 0, 6, 0, 10, 0, 2, 0, 0 },
-                        { 0, 0, 0, 16, 0, 2, 0, 1, 6 },
-                        { 9, 11, 0, 0, 0, 0, 1, 0, 5 },
-                        { 0, 0, 2, 0, 0, 0, 6, 5, 0 }
+                    { 0, 6, 0, 0, 0, 0, 0, 9, 0 },
+                    { 6, 0, 9, 0, 0, 0, 0, 11, 0 },
+                    { 0, 9, 0, 5, 0, 6, 0, 0, 2 },
+                    { 0, 0, 5, 0, 9, 16, 0, 0, 0 },
+                    { 0, 0, 0, 9, 0, 10, 0, 0, 0 },
+                    { 0, 0, 6, 0, 10, 0, 2, 0, 0 },
+                    { 0, 0, 0, 16, 0, 2, 0, 1, 6 },
+                    { 9, 11, 0, 0, 0, 0, 1, 0, 5 },
+                    { 0, 0, 2, 0, 0, 0, 6, 5, 0 }
                     };
                     int verticesCount = 9;
                     int source = 0;
                     int[] distance = new int[verticesCount];
                     bool[] shortestPathTreeSet = new bool[verticesCount];
                     Stopwatch stopwatch = Stopwatch.StartNew();
-                    while (stopwatch.Elapsed.TotalSeconds < time && IsRunning)
+                    while (stopwatch.Elapsed.TotalSeconds < time)
                     {
                         for (int i = 0; i < verticesCount; ++i)
                         {
@@ -102,35 +99,32 @@ namespace KotoKaze.Static
                         }
                         count++;
                     }
-                    
+
                     return count;
                 }
                 public static int TextCompress()
                 {
                     int count = 0;
-                    try 
+                    using Stream inputFile = Assembly.GetExecutingAssembly().GetManifestResourceStream("TestContent.otherSource.TestHtml.html")!;
+                    SevenZip.Compression.LZMA.Encoder coder = new();
+                    MemoryStream output = new();
+                    coder.WriteCoderProperties(output);
+                    output.Write(BitConverter.GetBytes(inputFile.Length), 0, 8);
+                    Stopwatch stopwatch = Stopwatch.StartNew();
+                    while (stopwatch.Elapsed.TotalSeconds < time)
                     {
-                        using Stream inputFile = Assembly.GetExecutingAssembly().GetManifestResourceStream("KotoKaze.otherSource.TestHtml.html")!;
-                        SevenZip.Compression.LZMA.Encoder coder = new();
-                        MemoryStream output = new();
-                        coder.WriteCoderProperties(output);
-                        output.Write(BitConverter.GetBytes(inputFile.Length), 0, 8);
-                        Stopwatch stopwatch = Stopwatch.StartNew();
-                        while (stopwatch.Elapsed.TotalSeconds < time && IsRunning)
-                        {
-                            coder.Code(inputFile, output, inputFile.Length, -1, null);
-                            output.SetLength(0);
-                            count++;
-                        }
-                        inputFile.Close();
-                    }catch (Exception e) {File.WriteAllText("text.txt",e.ToString()); }
+                        coder.Code(inputFile, output, inputFile.Length, -1, null);
+                        output.SetLength(0);
+                        count++;
+                    }
+                    inputFile.Close();
                     return count;
                 }
                 public static int TextDeCompress()
                 {
                     int count = 0;
 
-                    using Stream inputFile = Assembly.GetExecutingAssembly().GetManifestResourceStream("KotoKaze.otherSource.TestHtml.html")!;
+                    using Stream inputFile = Assembly.GetExecutingAssembly().GetManifestResourceStream("TestContent.otherSource.TestHtml.html")!;
                     SevenZip.Compression.LZMA.Encoder coder = new();
                     MemoryStream output = new();
                     coder.WriteCoderProperties(output);
@@ -148,41 +142,43 @@ namespace KotoKaze.Static
 
                     MemoryStream decompressedOutput = new();
                     Stopwatch stopwatch = Stopwatch.StartNew();
-                    while (stopwatch.Elapsed.TotalSeconds < time && IsRunning)
+                    while (stopwatch.Elapsed.TotalSeconds < time)
                     {
                         decoder.Code(output, decompressedOutput, output.Length, fileLength, null);
                         decompressedOutput.SetLength(0);
                         count++;
                     }
-                    
+
                     return count;
                 }
                 public static int ImageCompress()
                 {
                     int count = 0;
+
                     ImageCodecInfo jpgEncoder = ImageCodecInfo.GetImageDecoders().First(codec => codec.FormatID == ImageFormat.Jpeg.Guid);
+
                     Encoder myEncoder = Encoder.Quality;
                     EncoderParameters myEncoderParameters = new(1);
                     EncoderParameter myEncoderParameter = new(myEncoder, 50L);
                     myEncoderParameters.Param[0] = myEncoderParameter;
-                    using Stream imageStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("KotoKaze.image.Header.TestImage.jpg")!;
+                    using Stream imageStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("TestContent.otherSource.TestImage.jpg")!;
                     using Image image = Image.FromStream(imageStream);
                     using MemoryStream ms = new();
                     Stopwatch stopwatch = Stopwatch.StartNew();
-                    while (stopwatch.Elapsed.TotalSeconds < time && IsRunning)
+                    while (stopwatch.Elapsed.TotalSeconds < time)
                     {
                         image.Save(ms, jpgEncoder, myEncoderParameters);
                         ms.SetLength(0);
                         count++;
                     }
-                    
+
                     return count;
                 }
                 public static int SQLSearch()
                 {
                     int count = 0;
                     string tempPath = Path.GetTempFileName();
-                    using (Stream sqlStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("KotoKaze.otherSource.testsql.sqlite")!)
+                    using (Stream sqlStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("TestContent.otherSource.testsql.sqlite")!)
                     using (FileStream fileStream = File.Create(tempPath))
                     {
                         sqlStream.CopyTo(fileStream);
@@ -195,13 +191,13 @@ namespace KotoKaze.Static
                         cmd.CommandText = @"SELECT * FROM MyTable WHERE Name = 'DTC_125_10' AND Penetration = 577 AND Weight = 5.86 AND Velocity = 1000 AND Caliber = 120 AND Manufacturer = 'ManufacturerA' AND ManufactureDate = '2022-01-01' AND Deceleration = 20 AND Warhead = 'Tungsten' AND Price = 100000";
                         using SQLiteDataReader reader = cmd.ExecuteReader();
                         Stopwatch stopwatch = Stopwatch.StartNew();
-                        while (stopwatch.Elapsed.TotalSeconds < time && IsRunning)
+                        while (stopwatch.Elapsed.TotalSeconds < time)
                         {
                             for (int i = 0; i < 1000000; i++) { while (reader.Read()) { } }
                             count++;
                         }
                     }
-                    
+
                     return count;
                 }
                 //public static int SQLSave()
@@ -265,7 +261,7 @@ namespace KotoKaze.Static
                     int count = 0;
 
 
-                    using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("KotoKaze.otherSource.testmarkdown.MD")!)
+                    using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("TestContent.otherSource.testmarkdown.MD")!)
                     using (StreamReader reader = new(stream))
                     {
                         string markdown = reader.ReadToEnd();
@@ -277,7 +273,7 @@ namespace KotoKaze.Static
 
                         using MemoryStream memoryStream = new();
                         Stopwatch stopwatch = Stopwatch.StartNew();
-                        while (stopwatch.Elapsed.TotalSeconds < time && IsRunning)
+                        while (stopwatch.Elapsed.TotalSeconds < time)
                         {
                             var html = Markdown.ToHtml(markdown, pipeline);
                             canvas.DrawText(html, 0, paint.TextSize, paint);
@@ -289,9 +285,9 @@ namespace KotoKaze.Static
                     return count;
                 }
             }
-            public static class Floating 
+            public static class Floating
             {
-                public static int SolarSystem() 
+                public static int SolarSystem()
                 {
                     int count = 0;
                     double dt = 86400;
@@ -304,24 +300,24 @@ namespace KotoKaze.Static
                     Universe.Stellar saturn = new(5.68e26, new Double3(1.43e12, 0, 0));
                     Universe.Stellar uranus = new(8.68e25, new Double3(2.87e12, 0, 0));
                     Universe.Stellar neptune = new(1.02e26, new Double3(4.50e12, 0, 0));
-                    Universe.Stellar[] planets = [mercury, venus,earth,mars,jupiter,saturn, uranus, neptune];
+                    Universe.Stellar[] planets = [mercury, venus, earth, mars, jupiter, saturn, uranus, neptune];
                     Stopwatch stopwatch = Stopwatch.StartNew();
-                    while (stopwatch.Elapsed.TotalSeconds < time && IsRunning) 
+                    while (stopwatch.Elapsed.TotalSeconds < time)
                     {
-                        for (int i = 0; i < 365; i++) 
+                        for (int i = 0; i < 365; i++)
                         {
                             Universe.GetTrackStep(sun, planets, dt);
                         }
-                        count ++;
+                        count++;
                     }
-                    
+
                     return count;
                 }
                 public static int GaussianBlur()
                 {
                     int count = 0;
-                    int width = 256; 
-                    int height = 256; 
+                    int width = 256;
+                    int height = 256;
                     double sigma = 0.3f;
                     int radius = 25 / 2;
                     double pi2 = 2 * Math.PI;
@@ -346,7 +342,7 @@ namespace KotoKaze.Static
                     }
 
                     Stopwatch stopwatch = Stopwatch.StartNew();
-                    while (stopwatch.Elapsed.TotalSeconds < time && IsRunning)
+                    while (stopwatch.Elapsed.TotalSeconds < time)
                     {
                         for (int x = 0; x < width; x++)
                         {
@@ -357,7 +353,7 @@ namespace KotoKaze.Static
                                 {
                                     for (int j = -radius; j <= radius; j++)
                                     {
-                                        Color pixelColor = Color.FromArgb(128, 128, 128); 
+                                        Color pixelColor = Color.FromArgb(128, 128, 128);
                                         r += pixelColor.R * kernel[i + radius, j + radius];
                                         g += pixelColor.G * kernel[i + radius, j + radius];
                                         b += pixelColor.B * kernel[i + radius, j + radius];
@@ -367,7 +363,7 @@ namespace KotoKaze.Static
                         }
                         count++;
                     }
-                    
+
                     return count;
                 }
 
@@ -375,7 +371,7 @@ namespace KotoKaze.Static
                 {
                     int count = 0;
                     Stopwatch stopwatch = Stopwatch.StartNew();
-                    while (stopwatch.Elapsed.TotalSeconds < time && IsRunning)
+                    while (stopwatch.Elapsed.TotalSeconds < time)
                     {
                         BaseBandSignal baseBandSignal = new(message: "YSU", fs: SingleFunctions.globalFs);
                         Filter_LowPass lowPassFilter = new(N: 127, f_stop: 200, window: "blackman", fs: SingleFunctions.globalFs);
@@ -399,17 +395,16 @@ namespace KotoKaze.Static
                 }
             }
         }
-        public static class RAM 
+        public static class RAM
         {
             [DllImport("TestModule.dll", CallingConvention = CallingConvention.Cdecl)]
             public extern static int RamWriteSpeed();
 
             [DllImport("TestModule.dll", CallingConvention = CallingConvention.Cdecl)]
             public extern static int RamReadSpeed();
-            
-        }
 
-        public static class Disk 
+        }
+        public static class Disk
         {
 
             [DllImport("TestModule.dll", CallingConvention = CallingConvention.Cdecl)]

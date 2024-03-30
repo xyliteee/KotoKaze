@@ -1,7 +1,6 @@
-﻿
-namespace XylitolSignal4Csharp                                          //这个文件主要用来定义一些信号类型
+﻿namespace TestContent                                          //这个文件主要用来定义一些信号类型
 {
-    public class BaseBandSignal                                         //定义基带信号类
+    internal class BaseBandSignal                                         //定义基带信号类
     {
         public double[] timeFomainWaveForm;                             //公有声明时域信号
         public double time;                                             //公有声明整个信号时间长度

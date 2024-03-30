@@ -1,5 +1,6 @@
 ﻿using KotoKaze.Dynamic;
 using KotoKaze.Static;
+using Translation;
 using KotoKaze.Windows;
 using System.Diagnostics;
 using System.IO;
@@ -14,8 +15,9 @@ namespace KotoKaze.Views.toolsPages
     /// </summary>
     public partial class SystemToolsPage : Page
     {
-        private readonly BackgroundTask GPEDITTASK = new() { title = "组策略添加" };
-        private readonly BackgroundTask SFCSCANNOW = new() { title = "SFC系统修复" };
+        private readonly BackgroundTask GPEDITTASK = new() { Title = "组策略添加" };
+        private readonly BackgroundTask SFCSCANNOW = new() { Title = "SFC系统修复" };
+        private readonly BackgroundTask GETBATTERYREPORT = new() { Title = "获取电池报告" };
         public SystemToolsPage()
         {
             InitializeComponent();
@@ -46,30 +48,39 @@ namespace KotoKaze.Views.toolsPages
                     };
 
                     Process process = new() { StartInfo = startInfo };
+                    GPEDITTASK.taskProcess = process;
+
                     process.Start();
-
-                    using (StreamWriter streamWriter = process.StandardInput)
+                    try 
                     {
-                        if (streamWriter.BaseStream.CanWrite)
+                        using (StreamWriter streamWriter = process.StandardInput)
                         {
-                            streamWriter.WriteLine("FOR %F IN (\"%SystemRoot%\\servicing\\Packages\\Microsoft-Windows-GroupPolicy-ClientTools-Package~*.mum\") DO (DISM /Online /NoRestart /Add-Package:\"%F\")");
-                            streamWriter.WriteLine("FOR %F IN (\"%SystemRoot%\\servicing\\Packages\\Microsoft-Windows-GroupPolicy-ClientExtensions-Package~*.mum\") DO (DISM /Online /NoRestart /Add-Package:\"%F\")");
+                            if (streamWriter.BaseStream.CanWrite)
+                            {
+                                streamWriter.WriteLine("FOR %F IN (\"%SystemRoot%\\servicing\\Packages\\Microsoft-Windows-GroupPolicy-ClientTools-Package~*.mum\") DO (DISM /Online /NoRestart /Add-Package:\"%F\")");
+                                streamWriter.WriteLine("FOR %F IN (\"%SystemRoot%\\servicing\\Packages\\Microsoft-Windows-GroupPolicy-ClientExtensions-Package~*.mum\") DO (DISM /Online /NoRestart /Add-Package:\"%F\")");
+                            }
+                        }
+
+                        using StreamReader reader = process.StandardOutput;
+                        string? result;
+
+                        while (GlobalData.IsRunning && ((result = reader.ReadLine()) != null))
+                        {
+                            GPEDITTASK.Description = result;
+                            if (process.HasExited)
+                            {
+                                GPEDITTASK.SetFinished();
+                                Dispatcher.Invoke(() => { KotoMessageBoxSingle.ShowDialog("组策略添加完成"); });
+                                break;
+                            }
                         }
                     }
-
-                    using StreamReader reader = process.StandardOutput;
-                    string result;
-
-                    while (GlobalData.IsRunning && ((result = reader.ReadLine())!=null)) 
+                    catch(InvalidOperationException) 
                     {
-                        GPEDITTASK.description = result;
-                        if (process.HasExited)
-                        {
-                            GlobalData.TasksList.Remove(GPEDITTASK);
-                            Dispatcher.Invoke(() => { KotoMessageBoxSingle.ShowDialog("组策略添加完成"); });
-                            break;
-                        }
+                        GPEDITTASK.SetError("用户主动取消");
                     }
+                    
                 });
             }
 
@@ -98,35 +109,49 @@ namespace KotoKaze.Views.toolsPages
                     };
 
                     Process process = new() { StartInfo = startInfo };
+                    SFCSCANNOW.taskProcess = process;
                     process.Start();
 
-                    using (StreamWriter streamWriter = process.StandardInput)
+                    try 
                     {
-                        if (streamWriter.BaseStream.CanWrite)
+                        using (StreamWriter streamWriter = process.StandardInput)
                         {
-                            streamWriter.WriteLine("SFC /SCANNOW");
+                            if (streamWriter.BaseStream.CanWrite)
+                            {
+                                streamWriter.WriteLine("SFC /SCANNOW");
+                            }
+                        }
+
+                        using StreamReader reader = process.StandardOutput;
+                        string? result;
+                        while (GlobalData.IsRunning && ((result = reader.ReadLine()) != null))
+                        {
+                            SFCSCANNOW.Description = result;
+                            if (process.HasExited)
+                            {
+                                SFCSCANNOW.SetFinished();
+                                Dispatcher.Invoke(() => { KotoMessageBoxSingle.ShowDialog("已执行修复命令"); });
+                                break;
+                            }
                         }
                     }
-
-                    using StreamReader reader = process.StandardOutput;
-                    string result;
-                    while (GlobalData.IsRunning && ((result = reader.ReadLine()) != null))
+                    catch(InvalidOperationException) 
                     {
-                        SFCSCANNOW.description = result;
-                        if (process.HasExited)
-                        {
-                            GlobalData.TasksList.Remove(SFCSCANNOW);
-                            Dispatcher.Invoke(() => { KotoMessageBoxSingle.ShowDialog("已执行修复命令"); });
-                            break;
-                        }
+                        SFCSCANNOW.SetError("用户主动取消");
                     }
                 });
             }
         }
         private void BATTERYINFO_Click(object sender, RoutedEventArgs e)
         {
+            if (GlobalData.TasksList.Contains(GETBATTERYREPORT))
+            {
+                KotoMessageBoxSingle.ShowDialog("该任务已存在,检查任务列表");
+                return;
+            }
             Task.Run(() =>
             {
+                GlobalData.TasksList.Add(GETBATTERYREPORT);
                 ProcessStartInfo startInfo = new()
                 {
                     FileName = "cmd.exe",
@@ -136,35 +161,44 @@ namespace KotoKaze.Views.toolsPages
                 };
 
                 Process process = new() { StartInfo = startInfo };
+                GETBATTERYREPORT.taskProcess = process;
                 process.Start();
 
-                string reportFilePath = Path.Combine(FileManager.WorkDirectory.localDataDirectory, "BatteryReport.html");
-                string reportFilePathTemp = Path.Combine(FileManager.WorkDirectory.softwareTempDirectory, "BatteryReport.html");
-                File.Delete(reportFilePathTemp);
-                using (StreamWriter streamWriter = process.StandardInput)
+                try
                 {
-                    if (streamWriter.BaseStream.CanWrite)
+                    string reportFilePath = Path.Combine(FileManager.WorkDirectory.localDataDirectory, "BatteryReport.html");
+                    string reportFilePathTemp = Path.Combine(FileManager.WorkDirectory.softwareTempDirectory, "BatteryReport.html");
+                    File.Delete(reportFilePathTemp);
+                    using (StreamWriter streamWriter = process.StandardInput)
                     {
-                        streamWriter.WriteLine($"powercfg /batteryreport /output \"{reportFilePathTemp}\"");
-                    }
-                };
-                process.WaitForExit();
-                string reportText = File.ReadAllText(reportFilePathTemp);
+                        if (streamWriter.BaseStream.CanWrite)
+                        {
+                            streamWriter.WriteLine($"powercfg /batteryreport /output \"{reportFilePathTemp}\"");
+                        }
+                    };
+                    GETBATTERYREPORT.Description = "正在生成报告";
+                    process.WaitForExit();
+                    string reportText = File.ReadAllText(reportFilePathTemp);
 
-                string reportTextToChinese = TranslationRules.Translate(reportText, TranslationRules.batteryReport);
+                    GETBATTERYREPORT.Description = "正在格式化报告";
+                    string reportTextToChinese = TranslationRules.Translate(reportText, TranslationRules.batteryReport);
 
-                File.Delete(reportFilePath);
-                File.WriteAllText(reportFilePath, reportTextToChinese);
+                    File.Delete(reportFilePath);
+                    File.WriteAllText(reportFilePath, reportTextToChinese);
 
-                Dispatcher.Invoke(() => 
-                {
-                    var r = KotoMessageBox.ShowDialog("报告文件已保存在程序目录的/LocalData文件夹下,是否打开？");
-                    if (r.IsClose) return;
-                    if (r.IsYes) 
+                    GETBATTERYREPORT.SetFinished();
+
+                    Dispatcher.Invoke(() =>
                     {
-                        Process.Start(new ProcessStartInfo("cmd", $"/c start \"\" \"{reportFilePath}\"") { CreateNoWindow = true });
-                    }
-                });
+                        var r = KotoMessageBox.ShowDialog("报告文件已保存在程序目录的/LocalData文件夹下,是否打开？");
+                        if (r.IsClose) return;
+                        if (r.IsYes)
+                        {
+                            Process.Start(new ProcessStartInfo("cmd", $"/c start \"\" \"{reportFilePath}\"") { CreateNoWindow = true });
+                        }
+                    });
+                }
+                catch(InvalidOperationException) { GETBATTERYREPORT.SetError("用户主动取消"); }
             });
         }
     }

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace KotoKaze.Dynamic
+﻿namespace TestContent
 {
-    public class Double3(double X, double Y, double Z)
+    internal class Double3(double X, double Y, double Z)
     {
         public double X = X;
         public double Y = Y;

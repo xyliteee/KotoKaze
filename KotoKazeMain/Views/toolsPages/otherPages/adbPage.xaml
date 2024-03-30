@@ -24,6 +24,9 @@
                 <Label x:Name="deviceAndroidVersion" BorderThickness="0" Background="Transparent" Padding="10,0,0,0" Width="305" Content="设备安卓版本：索引中" Foreground="#EEEEEE" FontSize="12" Canvas.Top="110" HorizontalContentAlignment="Left"/>
                 <Label x:Name="deviceMemTotal" BorderThickness="0" Background="Transparent" Padding="10,0,0,0" Width="305" Content="设备总内存：索引中" Foreground="#EEEEEE" FontSize="12" Canvas.Top="130" HorizontalContentAlignment="Left"/>
             </Canvas>
+            <Border x:Name="Mask" Canvas.Left="25" Canvas.Top="25" Height="230" Width="295" Background="#1F67B3">
+                <Image x:Name="SettingIcon" Source="\image\icons\setting.png" Width="60" Height="60"/>
+            </Border>
             <Button x:Name="ConnectButotn" Canvas.Left="20" Canvas.Top="280" Style="{StaticResource NomalButtonStyle}" Width="305" Height="30" Content="连接设备" Click="ConnectButotn_Click"/>
         </Canvas>
     </Grid>

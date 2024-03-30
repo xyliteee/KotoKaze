@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TestContent;
 using XyliteeeMainForm;
 using XyliteeeMainForm.Views;
 
@@ -20,5 +21,6 @@ namespace KotoKaze.Static
         public static settingPage SettingPageInstance { get; set; }
         public static List<BackgroundTask> TasksList { get; set; } = [];
         public static bool IsRunning { get; set; } = true;
+
     }
 }

@@ -5,11 +5,10 @@ using System.Diagnostics;
 using System.Windows.Media.Animation;
 using System.Windows;
 using KotoKaze.Static;
-using System.Threading;
 using System.Windows.Threading;
 using System.IO;
 using KotoKaze.Windows;
-using System;
+using TestContent;
 
 namespace XyliteeeMainForm.Views
 {
@@ -66,7 +65,7 @@ namespace XyliteeeMainForm.Views
             {
                 if (double.TryParse(GPUFPS, out double gpuFPS))
                 {
-                    GPUScore = (int)(gpuFPS * 930);
+                    GPUScore = (int)(gpuFPS * 280.5);
                     GPUScoreLabel.Content = GPUScore;
                     GPUDialogScoreLabel.Content = $"平均帧率-{gpuFPS}";
                 }
@@ -440,7 +439,7 @@ namespace XyliteeeMainForm.Views
                         0.05 * rate,
                         0.08 * rate,
                         10 * rate,
-                        0.077 * rate,
+                        0.039 * rate,
                     ];
 
 
@@ -537,8 +536,8 @@ namespace XyliteeeMainForm.Views
                 writeSpeed = WorkLoad.Disk.DiskWriteSpeed();
                 ParentClass.Dispatcher.BeginInvoke(() => { ParentClass.DiskDialogScoreLabel.Content = "硬盘读取测试"; });
                 readSpeed = WorkLoad.Disk.DiskReadSpeed();
-                readScore = (int)(readSpeed/100.0);
-                writeScore = (int)(writeSpeed/100.0);
+                readScore = (int)(readSpeed/160.0);
+                writeScore = (int)(writeSpeed/160.0);
             }
         }
     }
