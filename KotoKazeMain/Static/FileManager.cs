@@ -115,7 +115,7 @@ namespace KotoKaze.Static
                 {
                     using StreamReader sr = new(filePath, Encoding.Default);
                     string currentSection = "";
-                    string line;
+                    string? line;
                     while ((line = sr.ReadLine()) != null)
                     {
                         line = line.Trim();
