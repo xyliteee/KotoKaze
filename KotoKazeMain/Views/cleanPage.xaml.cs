@@ -13,9 +13,7 @@ using Microsoft.Win32;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using System.Diagnostics;
-using HandyControl;
-using System.Management;
-using System.Runtime.InteropServices;
+using CleanContent;
 
 #pragma warning disable CS8600
 #pragma warning disable CS8602

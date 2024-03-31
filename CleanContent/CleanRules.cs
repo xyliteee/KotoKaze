@@ -1,9 +1,6 @@
-﻿using System.IO;
-
-
-namespace KotoKaze.Static
+﻿namespace CleanContent
 {
-    internal class CleanRules
+    public class CleanRules
     {
         public readonly static string APPDATE = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).Replace("Roaming", "");
 

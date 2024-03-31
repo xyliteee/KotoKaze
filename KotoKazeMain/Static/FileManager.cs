@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Text;
-using static System.Data.Entity.Infrastructure.Design.Executor;
+using CleanContent;
 
 namespace KotoKaze.Static
 {

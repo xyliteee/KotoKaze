@@ -13,7 +13,7 @@
     using System;
 #pragma warning disable CA1416 // 验证平台兼容性
 
-    public static class WorkLoad
+    public static partial class WorkLoad
     {
         public static class CPU
         {
@@ -395,22 +395,26 @@
                 }
             }
         }
-        public static class RAM
+        public static partial class RAM
         {
-            [DllImport("TestModule.dll", CallingConvention = CallingConvention.Cdecl)]
-            public extern static int RamWriteSpeed();
+            [LibraryImport("TestModule.dll")]
+            [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
+            public static partial int RamWriteSpeed();
 
-            [DllImport("TestModule.dll", CallingConvention = CallingConvention.Cdecl)]
-            public extern static int RamReadSpeed();
+            [LibraryImport("TestModule.dll")]
+            [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
+            public static partial int RamReadSpeed();
 
         }
-        public static class Disk
+        public static partial class Disk
         {
 
-            [DllImport("TestModule.dll", CallingConvention = CallingConvention.Cdecl)]
-            public extern static int DiskWriteSpeed();
-            [DllImport("TestModule.dll", CallingConvention = CallingConvention.Cdecl)]
-            public extern static int DiskReadSpeed();
+            [LibraryImport("TestModule.dll")]
+            [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
+            public static partial int DiskWriteSpeed();
+            [LibraryImport("TestModule.dll")]
+            [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
+            public static partial int DiskReadSpeed();
         }
     }
 }
