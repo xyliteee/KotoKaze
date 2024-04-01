@@ -12,6 +12,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using static KotoKaze.Dynamic.ADBINFO;
 using KotoKaze.Static;
+using System.Diagnostics;
+using static KotoKaze.Dynamic.BCDEDIT;
 
 namespace KotoKaze.Views.toolsPages.otherPages
 {
@@ -24,7 +26,6 @@ namespace KotoKaze.Views.toolsPages.otherPages
         private readonly SolidColorBrush XiaomiColor = new BrushConverter().ConvertFrom("#FF6600") as SolidColorBrush;
         private readonly SolidColorBrush defaultColor = new BrushConverter().ConvertFrom("#1F67B3") as SolidColorBrush;
         private readonly SolidColorBrush vivotColor = new BrushConverter().ConvertFrom("#415FFF") as SolidColorBrush;
-
         public ADBPage()
         {
             InitializeComponent();
@@ -81,10 +82,24 @@ namespace KotoKaze.Views.toolsPages.otherPages
             });
             
         }
-
         private void ConnectButotn_Click(object sender, RoutedEventArgs e)
         {
             GetPhoneInfomation();
+        }
+        private void UpdataFiles(object sender, RoutedEventArgs e) 
+        {
+            Microsoft.Win32.OpenFileDialog dlg = new()
+            {
+                DefaultExt = ".apk",
+                DefaultDirectory = FileManager.WorkDirectory.backupDirectory,
+                Filter = "APK Files (*.apk)|*.apk"
+            };
+            bool? result = dlg.ShowDialog();
+            if (result == true)
+            {
+                string selectedFilePath = dlg.FileName;
+                InstallAPK(selectedFilePath);
+            }
         }
     }
 }

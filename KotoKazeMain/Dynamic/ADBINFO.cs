@@ -1,4 +1,5 @@
 ﻿using KotoKaze.Static;
+using KotoKaze.Windows;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
@@ -8,13 +9,14 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace KotoKaze.Dynamic
 {
     public class ADBINFO
     {
         private static readonly string adb = Path.Combine(FileManager.WorkDirectory.localDataDirectory, "adb/adb.exe");
-
+        public static readonly BackgroundTask APKINSTALLTASK = new() { Title = "安装APK应用程序" };
         public class PhoneInfo
         {
             public bool isConnected = true;
@@ -47,7 +49,6 @@ namespace KotoKaze.Dynamic
                 if (streamWriter.BaseStream.CanWrite)
                 {
                     streamWriter.WriteLine(cmd);
-
                 }
             }
             while (GlobalData.IsRunning)
@@ -60,7 +61,6 @@ namespace KotoKaze.Dynamic
             process.WaitForExit();
             return results;
         }
-
         private static string GetNumber(string input) 
         {
             string output = string.Empty;
@@ -75,7 +75,6 @@ namespace KotoKaze.Dynamic
             }
             return output;
         }
-
         private static string SearchInList(List<string> sections,string section) 
         {
             string output = string.Empty;
@@ -153,6 +152,65 @@ namespace KotoKaze.Dynamic
             return phoneInfo;
         }
 
+        public static void InstallAPK(string filePath) 
+        {
+            GlobalData.TasksList.Add(APKINSTALLTASK);
+            Task.Run(() =>
+            {
+                ProcessStartInfo startInfo = new()
+                {
+                    FileName = "cmd.exe",
+                    RedirectStandardInput = true,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                };
 
+                Process process = new() { StartInfo = startInfo };
+                APKINSTALLTASK.taskProcess = process;
+
+                process.Start();
+                try
+                {
+                    using (StreamWriter streamWriter = process.StandardInput)
+                    {
+                        if (streamWriter.BaseStream.CanWrite)
+                        {
+                            streamWriter.WriteLine($"{adb} install {filePath}");
+                        }
+                    }
+
+                    using StreamReader reader = process.StandardOutput;
+                    string? result;
+
+                    while (GlobalData.IsRunning && ((result = reader.ReadLine()) != null))
+                    {
+                        if (result == string.Empty || result.Contains("Microsoft") || result.Contains(":\\")) 
+                        {
+                            result = "Preparing......";
+                            continue;
+                        }
+                        if (process.HasExited)
+                        {
+                            if (result.Contains("Success"))
+                            {
+                                APKINSTALLTASK.SetFinished();
+                                GlobalData.MainWindowInstance.Dispatcher.Invoke(() => { KotoMessageBoxSingle.ShowDialog("应用安装完成"); });
+                                break;
+                            }
+                            else 
+                            {
+                                APKINSTALLTASK.SetError("出现错误");
+                            }
+                        }
+                        APKINSTALLTASK.Description = result;
+                    }
+                }
+                catch (InvalidOperationException)
+                {
+                    APKINSTALLTASK.SetError("用户主动取消");
+                }
+            });
+        }
     }
 }

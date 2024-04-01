@@ -285,6 +285,11 @@ namespace XyliteeeMainForm
         {
             TasksListShowZone.Visibility = Visibility.Visible;
         }
+
+        private void Window_Drop(object sender, DragEventArgs e)
+        {
+
+        }
     }
     class BitMapImages 
     {

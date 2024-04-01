@@ -28,6 +28,21 @@
                 <Image x:Name="SettingIcon" Source="\image\icons\setting.png" Width="60" Height="60"/>
             </Border>
             <Button x:Name="ConnectButotn" Canvas.Left="20" Canvas.Top="280" Style="{StaticResource NomalButtonStyle}" Width="305" Height="30" Content="连接设备" Click="ConnectButotn_Click"/>
+            <Canvas x:Name="apkDropZone" Width="305" Canvas.Left="20" Height="160" Canvas.Bottom="20">
+                <Border Height="160" Width="305" Background="White" CornerRadius="10" Opacity="0.5">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#AAAAAA" Direction="0" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
+                    </Border.Effect>
+                    <Image Source="/image/icons/DownloadToPhone.png" Width="48" Height="48"/>
+                </Border>
+                <Label BorderThickness="0" Background="Transparent" Content="点击选择APK安装包以安装" Width="305" Canvas.Bottom="20" Foreground="Gray"/>
+                <Path Stroke="Gray" StrokeThickness="2" StrokeDashArray="4 2">
+                    <Path.Data>
+                        <RectangleGeometry Rect="0,0,305,160" RadiusX="10" RadiusY="10"/>
+                    </Path.Data>
+                </Path>
+                <Button Opacity="0" Width="305" Height="160" Click="UpdataFiles"/>
+            </Canvas>
         </Canvas>
     </Grid>
 </Page>

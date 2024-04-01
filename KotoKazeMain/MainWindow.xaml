@@ -9,11 +9,11 @@
         Title="KotoKaze" WindowStyle="None" Height="540" Width="820" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
     <WindowChrome.WindowChrome>
         <WindowChrome
-     ResizeBorderThickness="0"
-     CaptionHeight="30"
-     CornerRadius="0"
-     UseAeroCaptionButtons="False"
-     GlassFrameThickness="2"/>
+         ResizeBorderThickness="0"
+         CaptionHeight="30"
+         CornerRadius="0"
+         UseAeroCaptionButtons="False"
+         GlassFrameThickness="2"/>
     </WindowChrome.WindowChrome>
 
     <Grid>
