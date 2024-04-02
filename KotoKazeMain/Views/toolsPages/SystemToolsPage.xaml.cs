@@ -145,6 +145,7 @@ namespace KotoKaze.Views.toolsPages
                 GETBATTERYREPORT.Description = "正在格式化报告";
                 string reportTextToChinese = TranslationRules.Translate(reportText, TranslationRules.batteryReport);
 
+                GETBATTERYREPORT.SetFinal();
                 File.Delete(reportFilePath);
                 File.WriteAllText(reportFilePath, reportTextToChinese);
 
