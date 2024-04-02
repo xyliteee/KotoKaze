@@ -32,6 +32,11 @@ namespace KotoKaze.Views.toolsPages.otherPages
             GetPhoneInfomation();
         }
 
+        private void SetButtonState(bool flag) 
+        {
+            intallButton.IsEnabled = flag;
+        } 
+
         private void GetPhoneInfomation() 
         {
             ConnectButotn.IsEnabled = false;
@@ -48,9 +53,12 @@ namespace KotoKaze.Views.toolsPages.otherPages
                         KotoMessageBoxSingle.ShowDialog("连接设备出错，未能读取到设备信息。请记得打开手机的USB调试模式");
                         Mask.Visibility = Visibility.Visible;
                         Animations.ImageTurnRound(SettingIcon, false);
+                        SetButtonState(false);
+                        installDescripition.Content = "请连接设备";
                     }
                     else
                     {
+                        SetButtonState(true);
                         Mask.Visibility = Visibility.Collapsed;
                         Animations.ImageTurnRound(SettingIcon, false);
                         if (TranslationRules.phoneModel.TryGetValue(phoneInfo.name.ToUpper(), out string? modelName))
@@ -76,6 +84,7 @@ namespace KotoKaze.Views.toolsPages.otherPages
                         {
                             BrandBorder.Background = vivotColor;
                         }
+                        installDescripition.Content = "点击以选择APK文件进行安装";
                     }
                     ConnectButotn.IsEnabled = true;
                 });

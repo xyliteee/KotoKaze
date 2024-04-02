@@ -35,20 +35,20 @@ namespace XyliteeeMainForm.Views
         }
         private void GetCurrentData()
         {
-            try 
+            Task.Run(() => 
             {
-                Task.Run(() =>
+                double memoryAvailable;
+                double memoryUsed;
+                double diskTotal;
+                double diskAvailable;
+                double diskUsed;
+                int ramUseRate;
+                int diskUseRate;
+                double cpuUsage;
+                PerformanceCounter cpuCounter = new("Processor", "% Processor Time", "_Total");
+                PerformanceCounter ramCounter = new("Memory", "Available MBytes");
+                try
                 {
-                    double memoryAvailable;
-                    double memoryUsed;
-                    double diskTotal;
-                    double diskAvailable;
-                    double diskUsed;
-                    int ramUseRate;
-                    int diskUseRate;
-                    double cpuUsage;
-                    PerformanceCounter cpuCounter = new("Processor", "% Processor Time", "_Total");
-                    PerformanceCounter ramCounter = new("Memory", "Available MBytes");
                     while (GlobalData.IsRunning)
                     {
                         memoryAvailable = ramCounter.NextValue();
@@ -78,11 +78,9 @@ namespace XyliteeeMainForm.Views
                             diskLabel.Content = $"系统分区使用情况：{diskUsedToGB}GB / {diskTotletToGB}GB";
                         });
                     }
-                });
-            }
-            catch (ThreadAbortException) { }
-            catch (TaskCanceledException) { }
-            
+                }
+                catch (Exception) { }
+            });
         }
     }
 

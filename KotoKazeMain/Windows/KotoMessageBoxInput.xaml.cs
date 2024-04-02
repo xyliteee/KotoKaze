@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace KotoKaze.Windows
 {
@@ -59,18 +60,22 @@ namespace KotoKaze.Windows
         }
         public static MessageResult ShowDialog(string context)
         {
-            KotoMessageBoxInput kotoMessageBox = new()
-            {
-                Context = context,
-                Owner = GlobalData.MainWindowInstance
-            };
-            FrameworkElement BackCanvas = (FrameworkElement)kotoMessageBox.FindName("BackCanvas")!;
-            Animations.ChangeOP(BackCanvas, 0, 1, 0.1);
             MessageResult r = new();
-            kotoMessageBox.Result += (s, e) => {
-                r = e.Result;
-            };
-            kotoMessageBox.ShowDialog();
+            GlobalData.MainWindowInstance.Dispatcher.Invoke(() => 
+            {
+                KotoMessageBoxInput kotoMessageBox = new()
+                {
+                    Context = context,
+                    Owner = GlobalData.MainWindowInstance
+                };
+                FrameworkElement BackCanvas = (FrameworkElement)kotoMessageBox.FindName("BackCanvas")!;
+                Animations.ChangeOP(BackCanvas, 0, 1, 0.1);
+                
+                kotoMessageBox.Result += (s, e) => {
+                    r = e.Result;
+                };
+                kotoMessageBox.ShowDialog();
+            });
             return r;
         }
 

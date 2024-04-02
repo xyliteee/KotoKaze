@@ -54,18 +54,22 @@ namespace KotoKaze.Windows
         }
         public static MessageResult ShowDialog(string context)
         {
-            KotoMessageBox kotoMessageBox = new()
-            {
-                Context = context,
-                Owner = GlobalData.MainWindowInstance
-            };
-            FrameworkElement BackCanvas =(FrameworkElement) kotoMessageBox.FindName("BackCanvas")!;
-            Animations.ChangeOP(BackCanvas, 0, 1, 0.1);
             MessageResult r = new();
-            kotoMessageBox.Result += (s, e) => {
-                r = e.Result;
-            };
-            kotoMessageBox.ShowDialog();
+            GlobalData.MainWindowInstance.Dispatcher.Invoke(() => 
+            {
+                KotoMessageBox kotoMessageBox = new()
+                {
+                    Context = context,
+                    Owner = GlobalData.MainWindowInstance
+                };
+                FrameworkElement BackCanvas = (FrameworkElement)kotoMessageBox.FindName("BackCanvas")!;
+                Animations.ChangeOP(BackCanvas, 0, 1, 0.1);
+
+                kotoMessageBox.Result += (s, e) => {
+                    r = e.Result;
+                };
+                kotoMessageBox.ShowDialog();
+            });
             return r;
         }
 

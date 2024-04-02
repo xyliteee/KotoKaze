@@ -162,6 +162,7 @@ namespace KotoKaze.Dynamic
                     FileName = "cmd.exe",
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,
+                    RedirectStandardError = true,
                     CreateNoWindow = true,
                     UseShellExecute = false,
                 };
@@ -170,46 +171,18 @@ namespace KotoKaze.Dynamic
                 APKINSTALLTASK.taskProcess = process;
 
                 process.Start();
-                try
+                using (StreamWriter streamWriter = process.StandardInput)
                 {
-                    using (StreamWriter streamWriter = process.StandardInput)
+                    if (streamWriter.BaseStream.CanWrite)
                     {
-                        if (streamWriter.BaseStream.CanWrite)
-                        {
-                            streamWriter.WriteLine($"{adb} install {filePath}");
-                        }
-                    }
-
-                    using StreamReader reader = process.StandardOutput;
-                    string? result;
-
-                    while (GlobalData.IsRunning && ((result = reader.ReadLine()) != null))
-                    {
-                        if (result == string.Empty || result.Contains("Microsoft") || result.Contains(":\\")) 
-                        {
-                            result = "Preparing......";
-                            continue;
-                        }
-                        if (process.HasExited)
-                        {
-                            if (result.Contains("Success"))
-                            {
-                                APKINSTALLTASK.SetFinished();
-                                GlobalData.MainWindowInstance.Dispatcher.Invoke(() => { KotoMessageBoxSingle.ShowDialog("应用安装完成"); });
-                                break;
-                            }
-                            else 
-                            {
-                                APKINSTALLTASK.SetError("出现错误");
-                            }
-                        }
-                        APKINSTALLTASK.Description = result;
+                        streamWriter.WriteLine($"{adb} install {filePath}");
                     }
                 }
-                catch (InvalidOperationException)
+                Thread thread = new(() =>
                 {
-                    APKINSTALLTASK.SetError("用户主动取消");
-                }
+                    APKINSTALLTASK.Description = "Performing Streamed Install....";
+                });
+                APKINSTALLTASK.StreamProcess(outputThread:thread);
             });
         }
     }
