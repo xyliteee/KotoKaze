@@ -533,11 +533,11 @@ namespace XyliteeeMainForm.Views
             public void RunTest()
             {
                 ParentClass.Dispatcher.BeginInvoke(() => { ParentClass.DiskDialogScoreLabel.Content = "硬盘写入测试"; });
-                writeSpeed = WorkLoad.Disk.DiskWriteSpeed();
+                writeSpeed = WorkLoad.Disk.DiskWriteRandomSpeed();
                 ParentClass.Dispatcher.BeginInvoke(() => { ParentClass.DiskDialogScoreLabel.Content = "硬盘读取测试"; });
-                readSpeed = WorkLoad.Disk.DiskReadSpeed();
-                readScore = (int)(readSpeed/160.0);
-                writeScore = (int)(writeSpeed/160.0);
+                readSpeed = WorkLoad.Disk.DiskReadRandomSpeed();
+                readScore = (int)(readSpeed);
+                writeScore = (int)(writeSpeed);
             }
         }
     }

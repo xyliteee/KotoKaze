@@ -8,5 +8,5 @@
 
 extern "C" Test_API int RamWriteSpeed();
 extern "C" Test_API int RamReadSpeed();
-extern "C" Test_API int DiskReadSpeed();
-extern "C" Test_API int DiskWriteSpeed();
+extern "C" Test_API int DiskWriteRandomSpeed();
+extern "C" Test_API int DiskReadRandomSpeed();

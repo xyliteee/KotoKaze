@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text;
+using System.Text.Json;
 using CleanContent;
 
 namespace KotoKaze.Static
@@ -11,6 +12,7 @@ namespace KotoKaze.Static
             public static readonly string rootDirectory = AppDomain.CurrentDomain.BaseDirectory;
             public static readonly string backupDirectory = Path.Combine(rootDirectory, "Backup");
             public static readonly string localDataDirectory = Path.Combine(rootDirectory, "LocalData");
+            public static readonly string logfileDirectory = Path.Combine(rootDirectory, "logs");
             public static readonly string softwareTempDirectory = Path.Combine(CleanRules.APPDATE, "Local\\Temp\\KotoKaze");
 
             public static void CreatWorkDirectory()
@@ -18,6 +20,7 @@ namespace KotoKaze.Static
                 Directory.CreateDirectory(backupDirectory);
                 Directory.CreateDirectory(localDataDirectory);
                 Directory.CreateDirectory(softwareTempDirectory);
+                Directory.CreateDirectory(logfileDirectory);
             }
 
             public static void CreatWorkFile() 
@@ -32,11 +35,8 @@ namespace KotoKaze.Static
                 }
             }
         }
-
         public static class IniManager
         {
-            
-
             public static void IniFileSetDefault(string fileName) 
             {
                 switch (fileName) 
@@ -145,7 +145,6 @@ namespace KotoKaze.Static
                 return string.Empty;
             }
         }
-
         public static class Encryption
         {
             private static readonly string Key = "TestKey";
@@ -187,6 +186,18 @@ namespace KotoKaze.Static
                     }
                     return encryptedString;
                 }
+            }
+        }
+        public static class LogManager
+        {
+            private readonly static JsonSerializerOptions jsonSerializerOptions = new() { WriteIndented = true };
+            public async static Task LogWriteAsync(string title, string message)
+            {
+                var log = new { Title = title, Message = message };
+                string json = JsonSerializer.Serialize(log, jsonSerializerOptions);
+                string fileName = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".log";
+                string filePath = Path.Combine(WorkDirectory.logfileDirectory, fileName);
+                await File.WriteAllTextAsync(filePath, json);
             }
         }
     }

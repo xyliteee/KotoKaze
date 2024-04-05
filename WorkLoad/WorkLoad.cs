@@ -42,7 +42,6 @@
             }
             public static class Integer
             {
-
                 public static int Navigation()
                 {
 
@@ -411,10 +410,10 @@
 
             [LibraryImport("TestModule.dll")]
             [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
-            public static partial int DiskWriteSpeed();
+            public static partial int DiskWriteRandomSpeed();
             [LibraryImport("TestModule.dll")]
             [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
-            public static partial int DiskReadSpeed();
+            public static partial int DiskReadRandomSpeed();
         }
     }
 }

@@ -16,6 +16,8 @@ namespace KotoKaze.Dynamic
         private string _description = string.Empty;
         public bool isCancle = false;
         public bool isError = false;
+        public Thread outputThread;
+        public Thread errorThread;
 
         public event Action OnChanged;
         public string Description
@@ -32,6 +34,8 @@ namespace KotoKaze.Dynamic
         }
         public BackgroundTask()
         {
+            outputThread = DefaultOutputProcess();
+            errorThread = DefaultErrorProcess();
             OnChanged += RefreshTaskList;
         }
         public void SetFinal(Action? action=null) 
@@ -58,7 +62,7 @@ namespace KotoKaze.Dynamic
         }
         private Thread DefaultErrorProcess() 
         {
-            Thread thread = new(() =>
+            Thread thread = new(async () =>
             {
                 try
                 {
@@ -66,19 +70,17 @@ namespace KotoKaze.Dynamic
                     if ((errorMessage = taskProcess.StandardError.ReadLine()) != null)
                     {
                         isError = true;
-                        KotoMessageBoxSingle.ShowDialog($"{Title} 发生错误：\n{errorMessage}");
-                        SetFinal();
+                        Description = "error";
+                        await FileManager.LogManager.LogWriteAsync("APK install",errorMessage);
+                        SetFinal(() => { KotoMessageBoxSingle.ShowDialog($"{Title} 发生错误,已保存日志"); });
                     }
                 }
                 catch (InvalidOperationException) { }
             });
             return thread;
         }
-        public void StreamProcess(Thread? outputThread = null, Thread? errorThread = null) 
+        public void StreamProcess() 
         {
-
-            outputThread ??= DefaultOutputProcess();
-            errorThread ??= DefaultErrorProcess();
             outputThread.Start();
             errorThread.Start();
             try 
@@ -86,13 +88,11 @@ namespace KotoKaze.Dynamic
                 taskProcess.WaitForExit();
                 if (!isError && !isCancle)
                 {
-                    SetFinal();
-                    KotoMessageBoxSingle.ShowDialog($"{Title} 执行完成");
+                    SetFinal(() => { KotoMessageBoxSingle.ShowDialog($"{Title} 执行完成"); });
                 }
             } 
             catch(InvalidOperationException) 
             {}
-            
         }
         private static void ButtonCLick(object sender, RoutedEventArgs e)
         {

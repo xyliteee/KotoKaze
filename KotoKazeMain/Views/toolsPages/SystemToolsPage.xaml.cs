@@ -15,9 +15,9 @@ namespace KotoKaze.Views.toolsPages
     /// </summary>
     public partial class SystemToolsPage : Page
     {
-        private readonly BackgroundTask GPEDITTASK = new() { Title = "组策略添加" };
-        private readonly BackgroundTask SFCSCANNOW = new() { Title = "SFC系统修复" };
-        private readonly BackgroundTask GETBATTERYREPORT = new() { Title = "获取电池报告" };
+        private BackgroundTask GPEDITTASK = new();
+        private BackgroundTask SFCSCANNOW = new();
+        private BackgroundTask GETBATTERYREPORT = new();
         public SystemToolsPage()
         {
             InitializeComponent();
@@ -31,6 +31,7 @@ namespace KotoKaze.Views.toolsPages
                 KotoMessageBoxSingle.ShowDialog("该任务已存在,检查任务列表");
                 return;
             }
+            GPEDITTASK = new() { Title = "组策略添加" };
             var r = KotoMessageBox.ShowDialog("这将会为系统添加组策略(gpedit.msc)管理，确定？");
             if (r.IsClose) return;
             if (r.IsYes)
@@ -74,6 +75,7 @@ namespace KotoKaze.Views.toolsPages
                 KotoMessageBoxSingle.ShowDialog("该任务已存在,检查任务列表");
                 return;
             }
+            SFCSCANNOW = new() { Title = "SFC系统修复" };
             var r = KotoMessageBox.ShowDialog("这将会使用系统自带的修复命令，确定？");
             if (r.IsClose) return;
             if (r.IsYes)
@@ -86,6 +88,7 @@ namespace KotoKaze.Views.toolsPages
                         FileName = "cmd.exe",
                         RedirectStandardInput = true,
                         RedirectStandardOutput = true,
+                        RedirectStandardError = true,
                         CreateNoWindow = true,
                         UseShellExecute = false
                     };
@@ -113,6 +116,7 @@ namespace KotoKaze.Views.toolsPages
                 KotoMessageBoxSingle.ShowDialog("该任务已存在,检查任务列表");
                 return;
             }
+            GETBATTERYREPORT = new() { Title = "获取电池报告" };
             Task.Run(() =>
             {
                 GlobalData.TasksList.Add(GETBATTERYREPORT);

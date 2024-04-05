@@ -16,7 +16,7 @@ namespace KotoKaze.Dynamic
     public class ADBINFO
     {
         private static readonly string adb = Path.Combine(FileManager.WorkDirectory.localDataDirectory, "adb/adb.exe");
-        public static readonly BackgroundTask APKINSTALLTASK = new() { Title = "安装APK应用程序" };
+        private static BackgroundTask APKINSTALLTASK = new();
         public class PhoneInfo
         {
             public bool isConnected = true;
@@ -154,6 +154,12 @@ namespace KotoKaze.Dynamic
 
         public static void InstallAPK(string filePath) 
         {
+            if (GlobalData.TasksList.Contains(APKINSTALLTASK))
+            {
+                KotoMessageBoxSingle.ShowDialog("该任务已存在,检查任务列表");
+                return;
+            }
+            APKINSTALLTASK = new() { Title = "安装APK应用程序" };
             GlobalData.TasksList.Add(APKINSTALLTASK);
             Task.Run(() =>
             {
@@ -178,11 +184,11 @@ namespace KotoKaze.Dynamic
                         streamWriter.WriteLine($"{adb} install {filePath}");
                     }
                 }
-                Thread thread = new(() =>
+                APKINSTALLTASK.outputThread = new(() =>
                 {
                     APKINSTALLTASK.Description = "Performing Streamed Install....";
                 });
-                APKINSTALLTASK.StreamProcess(outputThread:thread);
+                APKINSTALLTASK.StreamProcess();
             });
         }
     }
