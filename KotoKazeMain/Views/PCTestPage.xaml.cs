@@ -158,7 +158,7 @@ namespace XyliteeeMainForm.Views
                 GPUWindow.Show();
                 GPUWindow.Test();
             });
-            Thread.Sleep(16000);
+            Thread.Sleep(5000);
             double FPS = Math.Round(1000 / GPUWindow.frameTimes.Average(), 2);
             Dispatcher.Invoke(() =>
             {
@@ -512,8 +512,8 @@ namespace XyliteeeMainForm.Views
                 ParentClass.Dispatcher.Invoke(() => {ParentClass.RAMDialogScoreLabel.Content = "内存读取测试"; });
                 readSpeed = WorkLoad.RAM.RamReadSpeed();
 
-                readScore = (int)(readSpeed*0.5/4.2);
-                writeScore = (int)(writeSpeed*0.5/4.2);
+                readScore = (int)(readSpeed* 0.5 / 8.4);
+                writeScore = (int)(writeSpeed* 0.5 / 8.4);
             }
         }
 
@@ -536,8 +536,8 @@ namespace XyliteeeMainForm.Views
                 writeSpeed = WorkLoad.Disk.DiskWriteRandomSpeed();
                 ParentClass.Dispatcher.BeginInvoke(() => { ParentClass.DiskDialogScoreLabel.Content = "硬盘读取测试"; });
                 readSpeed = WorkLoad.Disk.DiskReadRandomSpeed();
-                readScore = (int)(readSpeed);
-                writeScore = (int)(writeSpeed);
+                readScore = (int)(readSpeed * 0.05);
+                writeScore = (int)(writeSpeed * 0.4);
             }
         }
     }

@@ -291,7 +291,7 @@ namespace XyliteeeMainForm
 
         }
     }
-    class BitMapImages 
+    static class BitMapImages 
     {
         public readonly static BitmapImage homeWhite = new(new Uri("pack://application:,,,/image/icons/Home.png"));
         public readonly static BitmapImage cleanWhite = new(new Uri("pack://application:,,,/image/icons/Clean.png"));

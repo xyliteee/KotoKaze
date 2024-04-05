@@ -60,6 +60,7 @@ Test_API int RamReadSpeed()
     return static_cast<int>(average);
 }
 
+#pragma optimize("", on)
 Test_API int DiskWriteRandomSpeed()
 {
     const int fileSize = 4 * 1024;

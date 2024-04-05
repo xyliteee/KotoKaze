@@ -28,57 +28,41 @@ namespace KotoKaze.Windows
         private double lastTime;
         public List<double> frameTimes = [0];
         private readonly List<Image> TestImages = [];
+        private static bool isRecorded = false; 
         public GPUTestWindow()
         {
             InitializeComponent();
             stopwatch = new Stopwatch();
-            WindowState = WindowState.Maximized;
+            //WindowState = WindowState.Maximized;
             WindowStyle = WindowStyle.None;
         }
 
         private void OnRendering(object sender, EventArgs e)
         {
-            stopwatch.Stop();
-            double currentTime = stopwatch.Elapsed.TotalMilliseconds;
-            double frameTime = currentTime - lastTime;
-            lastTime = currentTime;
-            stopwatch.Start();
-            frameTimes.Add(frameTime);
-        }
-
-        private void TestAction() 
-        {
-            for (int i = 0; i < 10; i++) 
+            if (isRecorded) 
             {
-                Image image = new()
-                {
-                    Source = BitMapImages.TestImage
-                };
-                Base.Children.Add(image);
-                BlurEffect blur = new();
-                DoubleAnimation blurAnimation = new DoubleAnimation(0, 10, TimeSpan.FromSeconds(2))
-                {
-                    AutoReverse = true,
-                    RepeatBehavior = new RepeatBehavior(4)
-                };
-                blur.BeginAnimation(BlurEffect.RadiusProperty, blurAnimation);
-                image.Effect = blur;
-                ScaleTransform scale = new ScaleTransform(1.5, 1.5);
-                DoubleAnimation scaleAnimation = new DoubleAnimation(1.5, 1, TimeSpan.FromSeconds(2));
-                scaleAnimation.AutoReverse = true;
-                scaleAnimation.RepeatBehavior = new RepeatBehavior(4);
-                scale.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation);
-                scale.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnimation);
-                image.RenderTransform = scale;
-                image.RenderTransformOrigin = new Point(0.5, 0.5); // 设置变换原点为中心
+                stopwatch.Stop();
+                double currentTime = stopwatch.Elapsed.TotalMilliseconds;
+                double frameTime = currentTime - lastTime;
+                lastTime = currentTime;
+                stopwatch.Start();
+                frameTimes.Add(frameTime);
+                //messageLable.Content = $"FPS:{Math.Round(1000.0 / frameTime,2)}";
             }
         }
+
+        private void TestAction()
+        {
+            messageLable.Content = "暂时弃置，等待更新";
+            isRecorded = true;
+        }
+
+
 
         public void Test()
         {
             TestAction();
             CompositionTarget.Rendering += OnRendering!;
-            stopwatch.Start();
         }
     }
 }

@@ -6,15 +6,10 @@
         xmlns:local="clr-namespace:KotoKaze.Windows"
         xmlns:s ="clr-namespace:KotoKaze.Static" 
         mc:Ignorable="d"
-        Title="GPUTestWindow" Height="720" Width="1280">
-    <Window.Resources>
-        <s:SizeConverter x:Key="SizeConverter"/>
-    </Window.Resources>
+        Title="GPUTestWindow" Height="720" Width="1280" Background="white">
     <Grid>
-        <Canvas x:Name="Base" 
-        Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Window}}" 
-        Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}">
+        <Canvas x:Name="outBase" Width="1280" Height="720">
+            <Label x:Name="messageLable" Foreground ="Black" BorderThickness="0" Background="White" Opacity="1" Width="200" Height="50" Canvas.Bottom="0" FontSize="20"/>
         </Canvas>
-
     </Grid>
 </Window>
