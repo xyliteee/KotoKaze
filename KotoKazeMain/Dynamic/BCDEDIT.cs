@@ -338,8 +338,6 @@ namespace KotoKaze.Dynamic
                     streamWriter.WriteLine("exit");
                 }
             }
-            //output = process.StandardOutput.ReadToEnd();
-            //Debug.WriteLine(output);
             process.WaitForExit();
             return true;
         }

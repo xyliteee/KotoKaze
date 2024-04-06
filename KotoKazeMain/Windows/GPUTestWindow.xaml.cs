@@ -27,7 +27,6 @@ namespace KotoKaze.Windows
         private readonly Stopwatch stopwatch;
         private double lastTime;
         public List<double> frameTimes = [0];
-        private readonly List<Image> TestImages = [];
         private static bool isRecorded = false; 
         public GPUTestWindow()
         {
