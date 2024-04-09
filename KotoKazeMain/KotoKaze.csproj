@@ -13,6 +13,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Widgets\**" />
+    <EmbeddedResource Remove="Widgets\**" />
+    <None Remove="Widgets\**" />
+    <Page Remove="Widgets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="image\Header\Test2.png" />
     <None Remove="image\icons\cha.png" />
     <None Remove="image\icons\Clean.png" />
@@ -96,7 +103,6 @@
 
   <ItemGroup>
     <Folder Include="Views\toolsPages\SystemToolsPages\" />
-    <Folder Include="Widgets\" />
   </ItemGroup>
 
   <ItemGroup>

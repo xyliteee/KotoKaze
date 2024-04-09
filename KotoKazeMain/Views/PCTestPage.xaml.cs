@@ -170,11 +170,12 @@ namespace XyliteeeMainForm.Views
             });
             IniFileWrite("Performance.ini", "VALUE", "GPU_FPS",FPS.ToString());
         }
-        private void RunRamTest()
+        private async void RunRamTest()
         {
             if (!Path.Exists(Path.Combine(FileManager.WorkDirectory.rootDirectory,"TestModule.dll"))) 
             {
                 KotoMessageBoxSingle.ShowDialog("测试模块TestModule.dll丢失!");
+                await FileManager.LogManager.LogWriteAsync("RAM TEST", "TestMoudle.dll is missing");
                 return;
             }
             Dispatcher.Invoke(() => { RAMScoreLabel.Content = "正在测试"; });
@@ -190,8 +191,14 @@ namespace XyliteeeMainForm.Views
             GC.Collect();
             Thread.Sleep(1000);
         }
-        private void RunDiskTest()
+        private async void RunDiskTest()
         {
+            if (!Path.Exists(Path.Combine(FileManager.WorkDirectory.rootDirectory, "TestModule.dll")))
+            {
+                KotoMessageBoxSingle.ShowDialog("测试模块TestModule.dll丢失!");
+                await FileManager.LogManager.LogWriteAsync("DISK TEST", "TestMoudle.dll is missing");
+                return;
+            }
             Dispatcher.Invoke(() => { DiskScoreLabel.Content = "正在测试"; });
             DiskTest.RunTest();
             Dispatcher.Invoke(() =>
@@ -427,19 +434,19 @@ namespace XyliteeeMainForm.Views
                 RunSingleTest();
                 Thread.Sleep(1000);
                 RunMultiTest();
-                double rate = 1.28;
+                double rate = 1;
                 double[] scoreWeight =
                     [
-                        0.085 * rate, 
-                        0.00001 * rate,
-                        0.14 * rate,
-                        0.000072 * rate,
-                        2.08 * rate,
-                        0.2 * rate,
-                        0.05 * rate,
-                        0.08 * rate,
-                        10 * rate,
-                        0.039 * rate,
+                        0.102 * rate, 
+                        0.0000129 * rate,
+                        0.143 * rate,
+                        0.0000912 * rate,
+                        2.567 * rate,
+                        0.1826 * rate,
+                        0.0586 * rate,
+                        0.0932 * rate,
+                        14.97 * rate,
+                        0.0323 * rate,
                     ];
 
 
@@ -470,6 +477,23 @@ namespace XyliteeeMainForm.Views
                         gaussianCounts[1] * scoreWeight[8]+
                         pskCounts[1] * scoreWeight[9]
                     );
+
+                string path = @"test.txt";
+
+                using (StreamWriter sw = File.AppendText(path))
+                {
+                    sw.WriteLine(aesCounts[0] * 0.4 + aesCounts[1] * 0.6);
+                    sw.WriteLine(navigationCounts[0] * 0.4 + navigationCounts[1] * 0.6);
+                    sw.WriteLine(textCompressCounts[0] * 0.4 + textCompressCounts[1] * 0.6);
+                    sw.WriteLine(textDeCompressCounts[0] * 0.4 + textDeCompressCounts[1] * 0.6);
+                    sw.WriteLine(imageCompressCounts[0] * 0.4 + imageCompressCounts[1] * 0.6);
+                    sw.WriteLine(sqlSearchCounts[0] * 0.4 + sqlSearchCounts[1] * 0.6);
+                    sw.WriteLine(markDownCounts[0] * 0.4 + markDownCounts[1] * 0.6);
+                    sw.WriteLine(solarSystemCounts[0] * 0.4 + solarSystemCounts[1] * 0.6);
+                    sw.WriteLine(gaussianCounts[0] * 0.4 + gaussianCounts[1] * 0.6);
+                    sw.WriteLine(pskCounts[0] * 0.4 + pskCounts[1] * 0.6);
+                }
+
             }
             private static int[] RunTestsInParallel(Func<int> testFunc, int coreCount)
             {
@@ -536,8 +560,8 @@ namespace XyliteeeMainForm.Views
                 writeSpeed = WorkLoad.Disk.DiskWriteRandomSpeed();
                 ParentClass.Dispatcher.BeginInvoke(() => { ParentClass.DiskDialogScoreLabel.Content = "硬盘读取测试"; });
                 readSpeed = WorkLoad.Disk.DiskReadRandomSpeed();
-                readScore = (int)(readSpeed * 0.05);
-                writeScore = (int)(writeSpeed * 0.4);
+                readScore = (int)(readSpeed * 0.04);
+                writeScore = (int)(writeSpeed * 0.3);
             }
         }
     }
