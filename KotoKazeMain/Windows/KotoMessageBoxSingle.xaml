@@ -15,10 +15,10 @@
         Height="540"
         WindowStyle="None"
         Closing="Window_Closing"
-        >
+        CacheMode="BitmapCache">
     <Grid>
         <Grid  Width="820" Height="540">
-            <Canvas CacheMode="BitmapCache" x:Name="BackCanvas" Background="Transparent">
+            <Canvas x:Name="BackCanvas" Background="Transparent">
                 <Border x:Name="BackBorder" Width="820" Height="540" Background="Black" Opacity="0.6"/>
                 <Canvas Width="400" Height="200" Canvas.Left="210" Canvas.Top="170" Background="Transparent">
                     <Border Width="400" Height="200" Background="White" CornerRadius="5">

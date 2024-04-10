@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:KotoKaze.Views.toolsPages"
       mc:Ignorable="d" 
       d:DesignHeight="350" d:DesignWidth="670"
-      Title="SystemToolsPage">
+      Title="SystemToolsPage" CacheMode="BitmapCache">
 
     <Grid>
         <Canvas x:Name="Base" Background="#F3F8FE" Height="350" Width="670">

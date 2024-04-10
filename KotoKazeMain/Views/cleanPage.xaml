@@ -7,7 +7,7 @@
       xmlns:hc="https://handyorg.github.io/handycontrol" x:Class="XyliteeeMainForm.Views.cleanPage"
       mc:Ignorable="d" 
       d:DesignHeight="510" d:DesignWidth="670"
-      Title="cleanPage">
+      Title="cleanPage" CacheMode="BitmapCache">
 
     <Grid>
         <Canvas Background="#F3F8FE">
@@ -67,7 +67,6 @@
 
                 <hc:ScrollViewer  x:Name="ScorllZone" CanContentScroll="False"  Height="470" Width="370" VerticalScrollBarVisibility="Visible">
                     <Canvas x:Name="ScorllCanvas" VerticalAlignment="Top" Width="370"  Height="0">
-
                     </Canvas>
                 </hc:ScrollViewer>
                 

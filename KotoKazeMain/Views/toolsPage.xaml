@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:XyliteeeMainForm.Views"
       mc:Ignorable="d" 
       d:DesignHeight="510" d:DesignWidth="670"
-      Title="toolsPage">
+      Title="toolsPage" CacheMode="BitmapCache">
 
     <Grid>
         <Canvas x:Name="Base" Background="#F3F8FE">

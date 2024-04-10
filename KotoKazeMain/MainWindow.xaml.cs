@@ -16,7 +16,6 @@ namespace XyliteeeMainForm
 {
     public partial class MainWindow : Window
     {
-
         private homePage homePage;
         private cleanPage cleanPage;
         private PCTestPage PCTestPage;
@@ -29,6 +28,7 @@ namespace XyliteeeMainForm
 
         public MainWindow()
         {
+            RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.HighQuality);
             var UpdateLevel = DispatcherPriority.Background;
             StartLoadingWindow s = new();
             void DataInit()

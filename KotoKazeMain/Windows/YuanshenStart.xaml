@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KotoKaze.Windows"
         mc:Ignorable="d"
-        Title="YuanshenStart" Height="450" Width="800" WindowState="Maximized" Background="white">
+        Title="YuanshenStart" Height="450" Width="800" WindowState="Maximized" Background="white" CacheMode="BitmapCache">
     <Grid>
         <Image x:Name="YuanshenImage" Source="/image/Header/Yuanshen.png"/>
     </Grid>
