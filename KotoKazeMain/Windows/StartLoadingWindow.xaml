@@ -5,23 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KotoKaze.Windows"
         mc:Ignorable="d"
-        Title="StartLoadingWindow" Height="300" Width="820" WindowStartupLocation="CenterScreen" WindowStyle="None" Background="Transparent">
-    <WindowChrome.WindowChrome>
-        <WindowChrome
-             ResizeBorderThickness="0"
-             CaptionHeight="30"
-             CornerRadius="0"
-             UseAeroCaptionButtons="False"
-             GlassFrameThickness="2"/>
-    </WindowChrome.WindowChrome>
+        Title="StartLoadingWindow" Height="300" Width="820" WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" Background="White">
+
 
     <Grid>
         <Canvas x:Name="Base" >
-            <Border Background="#F1F9FE" Width="820" Height="300"/>
-            <Label x:Name="LoadingTitle" Content="KotoKaze" BorderThickness="0" Background="Transparent" Foreground="#A0C5E0" FontSize="72" Width="400" Height="100" FontWeight="Bold" Canvas.Top="40" Canvas.Left="80"/>
-            <Border x:Name="progressback" Background="Gray" Width="720" Canvas.Right="0" Height="10" Canvas.Top="130" Opacity="0.2"/>
-            <Border x:Name="progressBar" Background="#A0C5E0" Width="0" Canvas.Right="0" Height="10" Canvas.Top="130"/>
-            <Label x:Name="LoadinText" Background="Transparent" BorderThickness="0" Content="正在启动" Width="820" Height="30" FontSize="16" Foreground="Gray" Canvas.Left="0" Canvas.Top="205" />
+            <Image Canvas.Left="-10" Canvas.Top="-10" x:Name="BackgroundImage" Width="840" Height="320" Stretch="UniformToFill" Opacity="0.8">
+                <Image.Effect>
+                    <BlurEffect KernelType="Gaussian" Radius="0"/>
+                </Image.Effect>
+            </Image>
+            <Border Background="#F1F9FE" Width="820" Height="150" Canvas.Bottom="0" Opacity="0.9"/>
+            <Canvas Width="450" Height="100" Canvas.Left="185" Canvas.Top="20">
+                <Border Width="450" Height="100" Background="White" CornerRadius="10">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
+                    </Border.Effect>
+                </Border>
+                <Image Height="80" Width="80" Source="/image/icons/icon.png" Canvas.Top="10" Canvas.Left="10"/>
+                <Label x:Name="LoadingTitle" Content="KotoKaze" BorderThickness="0" Background="Transparent" Foreground="#A0C5E0" FontSize="72" Padding="0,0,0,0" VerticalContentAlignment="Center" Height="80" FontWeight="Bold" Canvas.Top="10" Canvas.Right="10"/>
+            </Canvas>
+            <Border x:Name="progressback" Background="#CCCCCC" Width="720" Canvas.Right="0" Height="10" Canvas.Top="180" Opacity="1"/>
+            <Border x:Name="progressBar" Background="#A0C5E0" Width="0" Canvas.Right="0" Height="10" Canvas.Top="180"/>
+            <Label x:Name="LoadinText" Background="Transparent" HorizontalContentAlignment="Center" BorderThickness="0" Content="正在启动" Width="820" Height="30" FontSize="16" Foreground="Gray" Canvas.Left="0" Canvas.Top="205" />
         </Canvas>
     </Grid>
 </Window>

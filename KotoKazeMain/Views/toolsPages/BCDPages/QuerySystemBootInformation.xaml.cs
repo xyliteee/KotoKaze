@@ -251,7 +251,7 @@ namespace KotoKaze.Views.toolsPages.BCDPages
                     Color = Color.FromRgb(170, 170, 170),
                     Direction = 270,
                     ShadowDepth = 0,
-                    Opacity = 0.5,
+                    Opacity = 0.2,
                     BlurRadius = 5
                 }
             };
@@ -319,7 +319,7 @@ namespace KotoKaze.Views.toolsPages.BCDPages
                     Color = Color.FromRgb(170, 170, 170),
                     Direction = 270,
                     ShadowDepth = 0,
-                    Opacity = 0.5,
+                    Opacity = 0.2,
                     BlurRadius = 5
                 }
             };

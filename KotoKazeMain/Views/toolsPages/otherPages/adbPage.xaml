@@ -13,7 +13,7 @@
             <Canvas x:Name="DeviceInfomation" Canvas.Top="20" Canvas.Left="20" Height="240" Width="305">
                 <Border x:Name="BrandBorder" Height="240" Width="305" Background="#1F67B3" CornerRadius="10">
                     <Border.Effect>
-                        <DropShadowEffect Color="#AAAAAA" Direction="0" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
+                        <DropShadowEffect Color="#AAAAAA" Direction="0" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                     </Border.Effect>
                 </Border>
                 <Label x:Name="deviceBrand" BorderThickness="0" Background="Transparent" Padding="10,0,0,0" Content="索引中" Foreground="White" FontWeight="Bold" FontSize="22" Width="305" Canvas.Top="0" Height="40" HorizontalContentAlignment="Left"/>
@@ -29,9 +29,9 @@
             </Border>
             <Button x:Name="ConnectButotn" Canvas.Left="20" Canvas.Top="280" Style="{StaticResource NomalButtonStyle}" Width="305" Height="30" Content="连接设备" Click="ConnectButotn_Click"/>
             <Canvas x:Name="apkDropZone" Width="305" Canvas.Left="20" Height="160" Canvas.Bottom="20">
-                <Border Height="160" Width="305" Background="White" CornerRadius="10" Opacity="0.5">
+                <Border Height="160" Width="305" Background="White" CornerRadius="10" Opacity="0.2">
                     <Border.Effect>
-                        <DropShadowEffect Color="#AAAAAA" Direction="0" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
+                        <DropShadowEffect Color="#AAAAAA" Direction="0" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                     </Border.Effect>
                     <Image Source="/image/icons/DownloadToPhone.png" Width="48" Height="48"/>
                 </Border>

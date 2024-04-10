@@ -477,23 +477,21 @@ namespace XyliteeeMainForm.Views
                         gaussianCounts[1] * scoreWeight[8]+
                         pskCounts[1] * scoreWeight[9]
                     );
-
-                string path = @"test.txt";
-
-                using (StreamWriter sw = File.AppendText(path))
-                {
-                    sw.WriteLine(aesCounts[0] * 0.4 + aesCounts[1] * 0.6);
-                    sw.WriteLine(navigationCounts[0] * 0.4 + navigationCounts[1] * 0.6);
-                    sw.WriteLine(textCompressCounts[0] * 0.4 + textCompressCounts[1] * 0.6);
-                    sw.WriteLine(textDeCompressCounts[0] * 0.4 + textDeCompressCounts[1] * 0.6);
-                    sw.WriteLine(imageCompressCounts[0] * 0.4 + imageCompressCounts[1] * 0.6);
-                    sw.WriteLine(sqlSearchCounts[0] * 0.4 + sqlSearchCounts[1] * 0.6);
-                    sw.WriteLine(markDownCounts[0] * 0.4 + markDownCounts[1] * 0.6);
-                    sw.WriteLine(solarSystemCounts[0] * 0.4 + solarSystemCounts[1] * 0.6);
-                    sw.WriteLine(gaussianCounts[0] * 0.4 + gaussianCounts[1] * 0.6);
-                    sw.WriteLine(pskCounts[0] * 0.4 + pskCounts[1] * 0.6);
-                }
-
+                //void WriteSocre() 
+                //{
+                //    string path = @"test.txt";
+                //    using StreamWriter sw = File.AppendText(path);
+                //    sw.WriteLine(aesCounts[0] * 0.4 + aesCounts[1] * 0.6);
+                //    sw.WriteLine(navigationCounts[0] * 0.4 + navigationCounts[1] * 0.6);
+                //    sw.WriteLine(textCompressCounts[0] * 0.4 + textCompressCounts[1] * 0.6);
+                //    sw.WriteLine(textDeCompressCounts[0] * 0.4 + textDeCompressCounts[1] * 0.6);
+                //    sw.WriteLine(imageCompressCounts[0] * 0.4 + imageCompressCounts[1] * 0.6);
+                //    sw.WriteLine(sqlSearchCounts[0] * 0.4 + sqlSearchCounts[1] * 0.6);
+                //    sw.WriteLine(markDownCounts[0] * 0.4 + markDownCounts[1] * 0.6);
+                //    sw.WriteLine(solarSystemCounts[0] * 0.4 + solarSystemCounts[1] * 0.6);
+                //    sw.WriteLine(gaussianCounts[0] * 0.4 + gaussianCounts[1] * 0.6);
+                //    sw.WriteLine(pskCounts[0] * 0.4 + pskCounts[1] * 0.6);
+                //}
             }
             private static int[] RunTestsInParallel(Func<int> testFunc, int coreCount)
             {

@@ -14,7 +14,7 @@
             <Canvas x:Name="BootInformation" Canvas.Top="20" Canvas.Left="20" Height="120" Width="305">
                 <Border Height="120" Width="305" Background="#1F67B3" CornerRadius="10">
                     <Border.Effect>
-                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
+                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                     </Border.Effect>
                 </Border>
                 <Label x:Name="BootDescription" BorderThickness="0" Background="Transparent" Padding="10,0,0,0" Content="Windows Boot Manager" Foreground="White" FontWeight="Bold" FontSize="22" Width="305" Canvas.Top="0" Height="40" HorizontalContentAlignment="Left"/>
@@ -26,7 +26,7 @@
             <Canvas x:Name="SystemInformation" Canvas.Top="160" Canvas.Left="20" Height="330" Width="305" >
                 <Border Height="330" Width="305" Background="White" CornerRadius="10">
                     <Border.Effect>
-                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
+                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                     </Border.Effect>
                 </Border>
                 <hc:ScrollViewer Height="330" Width="305" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
@@ -37,7 +37,7 @@
             <Canvas x:Name="SystemInformationDetail" Canvas.Top="20" Canvas.Right="20" Height="470" Width="305">
                 <Border Height="470" Width="305" Background="White" CornerRadius="10">
                     <Border.Effect>
-                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
+                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                     </Border.Effect>
                     <Image x:Name="SettingIcon" Height="80" Width="80" Source="/image/icons/Setting_an.png"/>
                 </Border>

@@ -135,7 +135,7 @@
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="border" Background="#F3F8FE" CornerRadius="5">
                         <Border.Effect>
-                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="3" Opacity="0.5" BlurRadius="5"/>
+                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                         </Border.Effect>
                         <ContentPresenter x:Name="content" HorizontalAlignment="Center" VerticalAlignment="Center" TextBlock.Foreground="Black"/>
                     </Border>
@@ -168,7 +168,7 @@
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="border" Background="White" CornerRadius="5">
                         <Border.Effect>
-                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
+                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                         </Border.Effect>
                         <ContentPresenter x:Name="content" HorizontalAlignment="Center" VerticalAlignment="Center" TextBlock.Foreground="Black"/>
                     </Border>
@@ -211,7 +211,7 @@
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="border" Background="White" CornerRadius="5">
                         <Border.Effect>
-                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
+                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                         </Border.Effect>
                         <ContentPresenter x:Name="content" HorizontalAlignment="Center" VerticalAlignment="Center" TextBlock.Foreground="Black"/>
                     </Border>
@@ -247,7 +247,7 @@
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="border" Background="#E8203F" CornerRadius="5">
                         <Border.Effect>
-                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
+                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                         </Border.Effect>
                         <ContentPresenter x:Name="content" HorizontalAlignment="Center" VerticalAlignment="Center" TextBlock.Foreground="White"/>
                     </Border>

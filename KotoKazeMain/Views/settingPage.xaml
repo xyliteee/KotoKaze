@@ -11,6 +11,7 @@
     <Grid>
         <Canvas x:Name="Base" Background="#F3F8FE">
             <Button x:Name="importCleanRulesButton" Style="{StaticResource NomalButtonStyle}" Height="30" Width="100" Canvas.Left="20" Canvas.Top="20" Content="导入规则"/>
+            <Button x:Name="ChangeStartWindowWallpaperButton" Style="{StaticResource NomalButtonStyle}" Height="30" Width="100" Canvas.Left="20" Canvas.Top="70" Content="修改启动壁纸" Click="ChangeStartWindowWallpaperButton_Click"/>
         </Canvas>
     </Grid>
 </Page>

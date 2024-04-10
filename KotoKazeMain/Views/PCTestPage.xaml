@@ -13,19 +13,19 @@
             <Canvas x:Name="CtrlZone" Width="630" Canvas.Left="20" Canvas.Top="20" Height="130">
                 <Border Width="630" Height="130" CornerRadius="20" Background="White">
                     <Border.Effect>
-                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
+                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                     </Border.Effect>
                 </Border>
                 <Canvas x:Name="TestButtonZone" Background="Transparent" Canvas.Top="15" Canvas.Left="20" Width="100" Height="100">
                     <Border x:Name="TestButtonBorder" Width="100" Height="100" CornerRadius="100" Background="#F3F8FE">
                         <Border.Effect>
-                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
+                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                         </Border.Effect>
                     </Border>
                     <Image x:Name="TestImage" Width="40" Canvas.Left="30" Height="40" Canvas.Top="30" Source="/image/icons/scaning.png"/>
                     <Button x:Name="TestButton" Width="100" Height="100" Opacity="0" Click="TestButton_Click" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave"/>
                 </Canvas>
-                <Label x:Name="ScoreLabel" Background="Transparent" Canvas.Left="140" Canvas.Top="20" Height="90" FontSize="40" FontWeight="Bold" BorderThickness="0"  Content="等待测量"/>
+                <Label x:Name="ScoreLabel" Background="Transparent" Canvas.Left="140" Canvas.Top="20" Height="90" FontSize="40" FontWeight="Bold" BorderThickness="0"  Content="等待测试"/>
                 <TextBox Height="110" Text="1.测试时不要进行其他操作&#x0a;2.笔记本电脑请确保电源已连接&#x0a;3.本测试仅作参考，测试项目以及标准与其他软件并不一致&#x0a;4.测试时会卡顿，属于正常现象" TextWrapping="Wrap" FontSize="16" Canvas.Top="10" Canvas.Right="20" Width="280" BorderThickness="0" Background="Transparent"/>
             </Canvas>
            
@@ -34,11 +34,11 @@
                 <Canvas x:Name="CPUCanvas" Height="320"  Canvas.Bottom="0" Canvas.Left="20" Width="140">
                     <Border Width="140" Height="320" CornerRadius="20" Background="White">
                         <Border.Effect>
-                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
+                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                         </Border.Effect>
                     </Border>
                     <Label Content="CPU" FontSize="20" FontWeight="Bold" Height="34" BorderThickness="0" Width="120" Canvas.Left="10" Canvas.Top="120" Background="Transparent"/>
-                    <Label x:Name="CPUScoreLabel" Content="等待测量" FontSize="24" FontWeight="Bold" Height="40" BorderThickness="0" Width="120" Canvas.Left="10" Canvas.Top="154" Background="Transparent"/>
+                    <Label x:Name="CPUScoreLabel" Content="等待测试" FontSize="24" FontWeight="Bold" Height="40" BorderThickness="0" Width="120" Canvas.Left="10" Canvas.Top="154" Background="Transparent"/>
                     <Label x:Name="CPUDialogScoreLabel" Content="" FontSize="12"  Height="34" BorderThickness="0" Width="120" Canvas.Left="10" Canvas.Top="190" Background="Transparent"/>
                     <Image Canvas.Left="30" Width="80" Canvas.Top="20" Height="80" Source="/image/icons/CPU.png"/>
                     <Button x:Name="CPUTestButton" Canvas.Left="30" Width="80" Canvas.Top="20" Height="80" Opacity="0" Click="CPUTestButton_Click"/>
@@ -47,11 +47,11 @@
                 <Canvas x:Name="GPUCanvas" Height="320"  Canvas.Bottom="0" Canvas.Left="180" Width="140">
                     <Border Width="140" Height="320" CornerRadius="20" Background="White">
                         <Border.Effect>
-                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
+                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                         </Border.Effect>
                     </Border>
                     <Label Content="GPU" FontSize="20" FontWeight="Bold" Height="34" BorderThickness="0" Width="120" Canvas.Left="10" Canvas.Top="120" Background="Transparent"/>
-                    <Label x:Name="GPUScoreLabel" Content="等待测量" FontSize="24" FontWeight="Bold" Height="40" BorderThickness="0" Width="120" Canvas.Left="10" Canvas.Top="154" Background="Transparent"/>
+                    <Label x:Name="GPUScoreLabel" Content="等待测试" FontSize="24" FontWeight="Bold" Height="40" BorderThickness="0" Width="120" Canvas.Left="10" Canvas.Top="154" Background="Transparent"/>
                     <Label x:Name="GPUDialogScoreLabel" Content="" FontSize="12"  Height="34" BorderThickness="0" Width="120" Canvas.Left="10" Canvas.Top="190" Background="Transparent"/>
                     <Image Canvas.Left="30" Width="80" Canvas.Top="20" Height="80" Source="/image/icons/PCTest_b.png"/>
                     <Button x:Name="GPUTestButton" Canvas.Left="30" Width="80" Canvas.Top="20" Height="80" Opacity="0" Click="GPUTestButton_Click"/>
@@ -61,11 +61,11 @@
                 <Canvas x:Name="RAMCanvas" Height="320"  Canvas.Bottom="0" Canvas.Right="180" Width="140">
                     <Border Width="140" Height="320" CornerRadius="20" Background="White">
                         <Border.Effect>
-                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
+                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                         </Border.Effect>
                     </Border>
                     <Label Content="RAM" FontSize="20" FontWeight="Bold" Height="34" BorderThickness="0" Width="120" Canvas.Left="10" Canvas.Top="120" Background="Transparent"/>
-                    <Label x:Name="RAMScoreLabel" Content="等待测量" FontSize="24" FontWeight="Bold" Height="40" BorderThickness="0" Width="120" Canvas.Left="10" Canvas.Top="154" Background="Transparent"/>
+                    <Label x:Name="RAMScoreLabel" Content="等待测试" FontSize="24" FontWeight="Bold" Height="40" BorderThickness="0" Width="120" Canvas.Left="10" Canvas.Top="154" Background="Transparent"/>
                     <Label x:Name="RAMDialogScoreLabel" Content="" FontSize="12"  Height="34" BorderThickness="0" Width="120" Canvas.Left="10" Canvas.Top="190" Background="Transparent"/>
                     <Image Canvas.Left="30" Width="80" Canvas.Top="20" Height="80" Source="/image/icons/RAM.png"/>
                     <Button x:Name="RAMTestButton" Canvas.Left="30" Width="80" Canvas.Top="20" Height="80" Opacity="0" Click="RAMTestButton_Click"/>
@@ -75,11 +75,11 @@
                 <Canvas x:Name="DiskCanvas" Height="320"  Canvas.Bottom="0" Canvas.Right="20" Width="140">
                     <Border Width="140" Height="320" CornerRadius="20" Background="White">
                         <Border.Effect>
-                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
+                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                         </Border.Effect>
                     </Border>
                     <Label Content="Disk" FontSize="20" FontWeight="Bold" Height="34" BorderThickness="0" Width="120" Canvas.Left="10" Canvas.Top="120" Background="Transparent"/>
-                    <Label x:Name="DiskScoreLabel" Content="等待测量" FontSize="24" FontWeight="Bold" Height="40" BorderThickness="0" Width="120" Canvas.Left="10" Canvas.Top="154" Background="Transparent"/>
+                    <Label x:Name="DiskScoreLabel" Content="等待测试" FontSize="24" FontWeight="Bold" Height="40" BorderThickness="0" Width="120" Canvas.Left="10" Canvas.Top="154" Background="Transparent"/>
                     <Label x:Name="DiskDialogScoreLabel" Content="" FontSize="12"  Height="34" BorderThickness="0" Width="120" Canvas.Left="10" Canvas.Top="190" Background="Transparent"/>
                     <Image Canvas.Left="30" Width="80" Canvas.Top="20" Height="80" Source="/image/icons/Disk.png"/>
                     <Button x:Name="DiskTestButton" Canvas.Left="30" Width="80" Canvas.Top="20" Height="80" Opacity="0" Click="DiskTestButton_Click"/>

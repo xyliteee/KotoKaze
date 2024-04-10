@@ -193,9 +193,10 @@ namespace KotoKaze.Static
             private readonly static JsonSerializerOptions jsonSerializerOptions = new() { WriteIndented = true };
             public async static Task LogWriteAsync(string title, string message)
             {
-                var log = new { Title = title, Message = message };
+                string time = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
+                string fileName = time + ".log";
+                var log = new { Title = title, Message = message,Time = time };
                 string json = JsonSerializer.Serialize(log, jsonSerializerOptions);
-                string fileName = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".log";
                 string filePath = Path.Combine(WorkDirectory.logfileDirectory, fileName);
                 await File.WriteAllTextAsync(filePath, json);
             }

@@ -22,7 +22,7 @@
             <Canvas Width="400" Height="200" Canvas.Left="210" Canvas.Top="170" Background="Transparent">
                 <Border Width="400" Height="200" Background="White" CornerRadius="10">
                     <Border.Effect>
-                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="10"/>
+                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="10"/>
                     </Border.Effect>
                 </Border>
                 <Border Width="400" Height="30" Background="#F3F8FE" CornerRadius="10">

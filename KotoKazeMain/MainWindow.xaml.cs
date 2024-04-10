@@ -10,6 +10,7 @@ using System.Windows.Navigation;
 using XyliteeeMainForm.Views;
 using KotoKaze.Windows;
 using KotoKaze.Dynamic;
+using System.Windows.Threading;
 #pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
 namespace XyliteeeMainForm
 {
@@ -29,67 +30,78 @@ namespace XyliteeeMainForm
         public MainWindow()
         {
             StartLoadingWindow s = new();
-            async Task DataInit() 
+            void DataInit() 
             {
-                InitializeComponent();
-                GlobalData.MainWindowInstance = this;
-                Hide();
+                Dispatcher.Invoke(() => 
+                {
+                    InitializeComponent();
+                    GlobalData.MainWindowInstance = this;
+                    Hide();
+                },DispatcherPriority.Loaded);
                 s.progressBar.Width = 120;
 
                 s.LoadinText.Content = "正在初始化信息页面";
-                await Task.Delay(100);
-                homePage = new();
-                GlobalData.HomePageInstance = homePage;
+                Dispatcher.Invoke(() => 
+                {
+                    homePage = new();
+                    GlobalData.HomePageInstance = homePage;
+                }, DispatcherPriority.Loaded);
                 s.progressBar.Width = 410;
 
                 s.LoadinText.Content = "正在初始化清理页面";
-                await Task.Delay(100);
-                cleanPage = new();
-                GlobalData.CleanPageInstance = cleanPage;
+                Dispatcher.Invoke(() =>
+                {
+                    cleanPage = new();
+                    GlobalData.CleanPageInstance = cleanPage;
+                }, DispatcherPriority.Loaded);
                 s.progressBar.Width = 460;
 
                 s.LoadinText.Content = "正在初始化测试页面";
-                await Task.Delay(100);
-                PCTestPage = new();
-                GlobalData.PCTestPageInstance = PCTestPage;
+                Dispatcher.Invoke(() =>
+                {
+                    PCTestPage = new();
+                    GlobalData.PCTestPageInstance = PCTestPage;
+                }, DispatcherPriority.Loaded);
                 s.progressBar.Width = 580;
 
                 s.LoadinText.Content = "正在初始化工具页面";
-                await Task.Delay(100);
-                toolsPage = new();
-                GlobalData.ToolsPageInstance = toolsPage;
+                Dispatcher.Invoke(() =>
+                {
+                    toolsPage = new();
+                    GlobalData.ToolsPageInstance = toolsPage;
+                }, DispatcherPriority.Loaded);
                 s.progressBar.Width = 610;
 
                 s.LoadinText.Content = "正在初始化设置页面";
-                await Task.Delay(100);
-                settingPage = new();
-                GlobalData.SettingPageInstance = settingPage;
+                Dispatcher.Invoke(() =>
+                {
+                    settingPage = new();
+                    GlobalData.SettingPageInstance = settingPage;
+                }, DispatcherPriority.Loaded);
                 s.progressBar.Width = 640;
 
                 s.LoadinText.Content = "正在进行最终设置";
-                await Task.Delay(100);
-                actionFrame.Navigate(homePage);
-                currentPage = (Page)actionFrame.Content;
-                actionFrame.Navigated += PageChanged;
-                buttons[0] = homePageButton;
-                buttons[1] = cleanPageButton;
-                buttons[2] = PCTestPageButton;
-                buttons[3] = toolsPageButton;
-                buttons[4] = settingPageButton;
-                WindowStyle = WindowStyle.SingleBorderWindow;
-                FileManager.WorkDirectory.CreatWorkDirectory();
-                FileManager.WorkDirectory.CreatWorkFile();
+                Dispatcher.Invoke(() =>
+                {
+                    actionFrame.Navigate(homePage);
+                    currentPage = (Page)actionFrame.Content;
+                    actionFrame.Navigated += PageChanged;
+                    buttons[0] = homePageButton;
+                    buttons[1] = cleanPageButton;
+                    buttons[2] = PCTestPageButton;
+                    buttons[3] = toolsPageButton;
+                    buttons[4] = settingPageButton;
+                    WindowStyle = WindowStyle.SingleBorderWindow;
+                    FileManager.WorkDirectory.CreatWorkDirectory();
+                    FileManager.WorkDirectory.CreatWorkFile();
+                }, DispatcherPriority.Loaded);
                 s.progressBar.Width = 720;
             }
-            async void Start() 
-            {
-                s.Show();
-                await DataInit();
-                s.Close();
-                Show();
-                CheckFirstUse();
-            }
-            Start();
+            s.Show();
+            DataInit();
+            s.Close();
+            Show();
+            CheckFirstUse();
         }
         private static async void CheckFirstUse() 
         {
@@ -248,22 +260,22 @@ namespace XyliteeeMainForm
             switch (button.Name)
             {
                 case "homePageButton":
-                    Animations.PageSilderMoveing(PageSilder, 30);
+                    Animations.PageSilderMoveing(PageSilder, 50);
                     actionFrame.Navigate(homePage);
                     homeImage.Source = BitMapImages.homeBlue;
                     break;
                 case "cleanPageButton":
-                    Animations.PageSilderMoveing(PageSilder, 70);
+                    Animations.PageSilderMoveing(PageSilder, 90);
                     actionFrame.Navigate(cleanPage);
                     cleanImage.Source = BitMapImages.cleanBlue;
                     break;
                 case "PCTestPageButton":
-                    Animations.PageSilderMoveing(PageSilder, 110);
+                    Animations.PageSilderMoveing(PageSilder, 130);
                     actionFrame.Navigate(PCTestPage);
                     testImage.Source = BitMapImages.testBlue;
                     break;
                 case "toolsPageButton":
-                    Animations.PageSilderMoveing(PageSilder, 150);
+                    Animations.PageSilderMoveing(PageSilder, 170);
                     actionFrame.Navigate(toolsPage);
                     toolsImage.Source = BitMapImages.toolsBlue;
                     break;

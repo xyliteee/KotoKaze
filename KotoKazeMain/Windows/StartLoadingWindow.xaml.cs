@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using KotoKaze.Static;
+﻿using KotoKaze.Static;
+using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
@@ -23,6 +14,24 @@ namespace KotoKaze.Windows
         public StartLoadingWindow()
         {
             InitializeComponent();
+            SetWallpaper();
+        }
+
+        private async void SetWallpaper() 
+        {
+            string wallpaperPath = System.IO.Path.Combine(FileManager.WorkDirectory.localDataDirectory, "StartWallpaper.png");
+            if (File.Exists(wallpaperPath)) 
+            {
+                try
+                {
+                    BitmapImage wallpaper = new(new Uri(wallpaperPath));
+                    BackgroundImage.Source = wallpaper;
+                }
+                catch (Exception e)
+                {
+                    await FileManager.LogManager.LogWriteAsync("Wallpaper Error", e.ToString());
+                }
+            }
         }
     }
 }

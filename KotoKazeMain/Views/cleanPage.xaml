@@ -14,14 +14,14 @@
             <Canvas x:Name="leftZone" Width="240" Height="470" Canvas.Left="20" Canvas.Top="20"   >
                 <Border Width="240" Height="470" CornerRadius="20" Background="White">
                     <Border.Effect>
-                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
+                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                     </Border.Effect>
                 </Border>
                 
                 <Canvas x:Name="CleanButtonZone" Background="Transparent" Canvas.Top="20" Canvas.Left="70" Width="100" Height="100">
                     <Border x:Name="CleanButtonBorder" Width="100" Height="100" CornerRadius="100" Background="#F3F8FE">
                         <Border.Effect>
-                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
+                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                         </Border.Effect>
                     </Border>
                     <Image x:Name="CleanImage" Width="40" Canvas.Left="30" Height="40" Canvas.Top="30" Source="/image/icons/scan.png"/>
@@ -61,7 +61,7 @@
             <Canvas x:Name="rightZone" Height="470"  Canvas.Top="20" Canvas.Right="20" Width="370">
                 <Border Width="370" Height="470" CornerRadius="20" Background="White">
                     <Border.Effect>
-                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
+                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                     </Border.Effect>
                 </Border>
 
@@ -74,7 +74,7 @@
                 <Canvas x:Name="RefreshButtonZone"  Background="Transparent"  Canvas.Top="-20" Canvas.Right="165" Width="40" Height="40">
                     <Border x:Name="RefreshButtonBorder" Width="40" Height="40" CornerRadius="100" Background="#F3F8FE">
                         <Border.Effect>
-                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
+                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                         </Border.Effect>
                     </Border>
                     <Image x:Name="RefreshImage" Width="30" Canvas.Left="5" Height="30" Canvas.Top="5" Source="/image/icons/scaning.png"/>

@@ -40,25 +40,25 @@
                         <GradientStop Color="#1F67B3" Offset="1" />
                     </LinearGradientBrush>
                 </Canvas.Background>
-                <Canvas x:Name="homePageCanvas" Height="40" Width="150" Canvas.Top="20">
+                <Canvas x:Name="homePageCanvas" Height="40" Width="150" Canvas.Top="40">
                     <Button x:Name="homePageButton"  Style="{StaticResource DockButton}" VerticalAlignment="Center" Height="40" Width="150"
                 Content="            首页" IsEnabled="False"  Foreground="#1F67B3" FontSize="16" FontFamily="Microsoft Yahei" FontWeight="Bold" HorizontalAlignment="Left" Click="DockButtonAction" MouseEnter="DockButtonEnter" MouseLeave="DockButtonLeave"/>
                     <Image x:Name="homeImage"  Height="24" Width="24" Canvas.Top="8" Canvas.Left="20" IsHitTestVisible="False" Source="\image\icons\Home_b.png"/>
                 </Canvas>
 
-                <Canvas x:Name="cleanPageCanvas" Height="40" Width="150" Canvas.Top="60">
+                <Canvas x:Name="cleanPageCanvas" Height="40" Width="150" Canvas.Top="80">
                     <Button x:Name="cleanPageButton" Style="{StaticResource DockButton}" VerticalAlignment="Center" Height="40" Width="150"
                 Content="            清理" TextBlock.Foreground="White" FontSize="16" FontFamily="Microsoft Yahei" FontWeight="Bold" HorizontalAlignment="Left" Click="DockButtonAction" MouseEnter="DockButtonEnter" MouseLeave="DockButtonLeave"/>
                     <Image x:Name="cleanImage"  Height="24" Width="24" Canvas.Top="8" Canvas.Left="20" IsHitTestVisible="False" Source="\image\icons\Clean.png"/>
                 </Canvas>
 
-                <Canvas x:Name="PCTestCanvas" Height="40" Width="150" Canvas.Top="100">
+                <Canvas x:Name="PCTestCanvas" Height="40" Width="150" Canvas.Top="120">
                     <Button x:Name="PCTestPageButton" Style="{StaticResource DockButton}" VerticalAlignment="Center" Height="40" Width="150"
                 Content="            测试" TextBlock.Foreground="White" FontSize="16" FontFamily="Microsoft Yahei" FontWeight="Bold" HorizontalAlignment="Left" Click="DockButtonAction" MouseEnter="DockButtonEnter" MouseLeave="DockButtonLeave"/>
                     <Image x:Name="testImage"  Height="24" Width="24" Canvas.Top="8" Canvas.Left="20" IsHitTestVisible="False" Source="\image\icons\PCTest.png"/>
                 </Canvas>
 
-                <Canvas x:Name="toolsCanvas" Height="40" Width="150" Canvas.Top="140">
+                <Canvas x:Name="toolsCanvas" Height="40" Width="150" Canvas.Top="160">
                     <Button x:Name="toolsPageButton" Style="{StaticResource DockButton}" VerticalAlignment="Center" Height="40" Width="150"
                 Content="            工具" TextBlock.Foreground="White" FontSize="16" FontFamily="Microsoft Yahei" FontWeight="Bold" HorizontalAlignment="Left" Click="DockButtonAction" MouseEnter="DockButtonEnter" MouseLeave="DockButtonLeave"/>
                     <Image  x:Name="toolsImage"  Height="24" Width="24" Canvas.Top="8" Canvas.Left="20" IsHitTestVisible="False" Source="\image\icons\Tools.png"/>
@@ -70,7 +70,7 @@
                     <Image  x:Name="settingImage" Height="24" Width="24" Canvas.Top="8" Canvas.Left="20" IsHitTestVisible="False" Source="\image\icons\setting.png"/>
                 </Canvas>
 
-                <Canvas x:Name="PageSilder" Width="5" Height="20" Background="Transparent" Canvas.Left="5" Canvas.Top="30">
+                <Canvas x:Name="PageSilder" Width="5" Height="20" Background="Transparent" Canvas.Left="5" Canvas.Top="50">
                     <Border Background="#1F67B3" Width="5" Height="20" CornerRadius="2"/>
                 </Canvas>
 

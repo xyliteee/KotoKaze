@@ -8,8 +8,9 @@
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x64</Platforms>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <ApplicationIcon>studio.ico</ApplicationIcon>
+    <ApplicationIcon>image\icons\icon.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,6 +30,7 @@
     <None Remove="image\icons\DownloadToPhone.png" />
     <None Remove="image\icons\Home.png" />
     <None Remove="image\icons\home_b.png" />
+    <None Remove="image\icons\icon.png" />
     <None Remove="image\icons\PCTest.png" />
     <None Remove="image\icons\PCTest_b.png" />
     <None Remove="image\icons\RAM.png" />
@@ -48,11 +50,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="studio.ico" />
+    <Content Include="image\icons\icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="image\icons\DownloadToPhone.png" />
+    <Resource Include="image\icons\icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </Resource>
     <Resource Include="image\icons\Task.png" />
     <Resource Include="image\Header\Test2.png" />
     <Resource Include="image\icons\cha.png" />
