@@ -29,7 +29,7 @@ namespace XyliteeeMainForm
 
         public MainWindow()
         {
-
+            var UpdateLevel = DispatcherPriority.Background;
             StartLoadingWindow s = new();
             void DataInit()
             {
@@ -37,7 +37,7 @@ namespace XyliteeeMainForm
                 {
                     InitializeComponent();
                     GlobalData.MainWindowInstance = this;
-                }, DispatcherPriority.Loaded);
+                }, UpdateLevel);
                 s.progressBar.Width = 120;
 
                 s.LoadinText.Content = "正在初始化信息页面";
@@ -45,7 +45,7 @@ namespace XyliteeeMainForm
                 {
                     homePage = new();
                     GlobalData.HomePageInstance = homePage;
-                }, DispatcherPriority.Loaded);
+                }, UpdateLevel);
                 s.progressBar.Width = 410;
 
                 s.LoadinText.Content = "正在初始化清理页面";
@@ -53,7 +53,7 @@ namespace XyliteeeMainForm
                 {
                     cleanPage = new();
                     GlobalData.CleanPageInstance = cleanPage;
-                }, DispatcherPriority.Loaded);
+                }, UpdateLevel);
                 s.progressBar.Width = 460;
 
                 s.LoadinText.Content = "正在初始化测试页面";
@@ -61,7 +61,7 @@ namespace XyliteeeMainForm
                 {
                     PCTestPage = new();
                     GlobalData.PCTestPageInstance = PCTestPage;
-                }, DispatcherPriority.Loaded);
+                }, UpdateLevel);
                 s.progressBar.Width = 580;
 
                 s.LoadinText.Content = "正在初始化工具页面";
@@ -69,7 +69,7 @@ namespace XyliteeeMainForm
                 {
                     toolsPage = new();
                     GlobalData.ToolsPageInstance = toolsPage;
-                }, DispatcherPriority.Loaded);
+                }, UpdateLevel);
                 s.progressBar.Width = 610;
 
                 s.LoadinText.Content = "正在初始化设置页面";
@@ -77,7 +77,7 @@ namespace XyliteeeMainForm
                 {
                     settingPage = new();
                     GlobalData.SettingPageInstance = settingPage;
-                }, DispatcherPriority.Loaded);
+                }, UpdateLevel);
                 s.progressBar.Width = 640;
 
                 s.LoadinText.Content = "正在进行最终设置";
@@ -94,7 +94,7 @@ namespace XyliteeeMainForm
                     WindowStyle = WindowStyle.SingleBorderWindow;
                     FileManager.WorkDirectory.CreatWorkDirectory();
                     FileManager.WorkDirectory.CreatWorkFile();
-                }, DispatcherPriority.Loaded);
+                },  UpdateLevel);
                 s.progressBar.Width = 720;
             }
             s.Show();
