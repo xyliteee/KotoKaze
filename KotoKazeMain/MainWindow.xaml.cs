@@ -29,19 +29,19 @@ namespace XyliteeeMainForm
 
         public MainWindow()
         {
+
             StartLoadingWindow s = new();
-            void DataInit() 
+            void DataInit()
             {
-                Dispatcher.Invoke(() => 
+                Dispatcher.Invoke(() =>
                 {
                     InitializeComponent();
                     GlobalData.MainWindowInstance = this;
-                    Hide();
-                },DispatcherPriority.Loaded);
+                }, DispatcherPriority.Loaded);
                 s.progressBar.Width = 120;
 
                 s.LoadinText.Content = "正在初始化信息页面";
-                Dispatcher.Invoke(() => 
+                Dispatcher.Invoke(() =>
                 {
                     homePage = new();
                     GlobalData.HomePageInstance = homePage;

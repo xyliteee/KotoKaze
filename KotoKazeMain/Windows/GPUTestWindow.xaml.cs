@@ -32,7 +32,7 @@ namespace KotoKaze.Windows
         {
             InitializeComponent();
             stopwatch = new Stopwatch();
-            //WindowState = WindowState.Maximized;
+            WindowState = WindowState.Maximized;
             WindowStyle = WindowStyle.None;
         }
 
@@ -45,7 +45,7 @@ namespace KotoKaze.Windows
                 double frameTime = currentTime - lastTime;
                 lastTime = currentTime;
                 stopwatch.Start();
-                frameTimes.Add(frameTime);
+                frameTimes.Add(99999);
                 //messageLable.Content = $"FPS:{Math.Round(1000.0 / frameTime,2)}";
             }
         }
