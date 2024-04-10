@@ -29,7 +29,7 @@ namespace KotoKaze.Windows
                 }
                 catch (Exception e)
                 {
-                    await FileManager.LogManager.LogWriteAsync("Wallpaper Error", e.ToString());
+                    await FileManager.LogManager.LogWriteAsync("Wallpaper Error", e.ToString(),"检查LocalDate目录下的StartWallpaper.png是否为正确的图片");
                 }
             }
         }
