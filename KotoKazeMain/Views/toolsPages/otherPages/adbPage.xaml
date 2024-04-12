@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:KotoKaze.Views.toolsPages.otherPages"
       mc:Ignorable="d" 
       d:DesignHeight="510" d:DesignWidth="670"
-      Title="adb" CacheMode="BitmapCache">
+      Title="adb" >
 
     <Grid>
         <Canvas Background="#F3F8FE">

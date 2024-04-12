@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:XyliteeeMainForm.Views"
       mc:Ignorable="d" 
       d:DesignHeight="510" d:DesignWidth="670"
-      Title="toolsPage" CacheMode="BitmapCache">
+      Title="toolsPage" >
 
     <Grid>
         <Canvas x:Name="Base" Background="#F3F8FE">
@@ -56,7 +56,7 @@
             <Canvas Width="670" Canvas.Bottom="0" Height="350">
                 <Frame x:Name="ToolsNegate" Width="670" Height="350" NavigationUIVisibility ="Hidden" BorderThickness="0"/>
             </Canvas>
-            <Frame CacheMode="BitmapCache" x:Name="secondActionFrame"  BorderThickness="0" Background="Transparent" Visibility="Collapsed"  NavigationUIVisibility="Hidden" Height="510" Width="670"/>
+            <Frame  x:Name="secondActionFrame"  BorderThickness="0" Background="Transparent" Visibility="Collapsed"  NavigationUIVisibility="Hidden" Height="510" Width="670"/>
         </Canvas>
 
     </Grid>

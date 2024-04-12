@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:XyliteeeMainForm.Views"
       mc:Ignorable="d" 
       d:DesignHeight="510" d:DesignWidth="670"
-      Title="PCTestPage" CacheMode="BitmapCache">
+      Title="PCTestPage" >
 
     <Grid>
         <Canvas x:Name="Baseborder" Background="#F3F8FE">

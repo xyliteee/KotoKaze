@@ -28,7 +28,6 @@ namespace XyliteeeMainForm
 
         public MainWindow()
         {
-            RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.HighQuality);
             var UpdateLevel = DispatcherPriority.Background;
             StartLoadingWindow s = new();
             void DataInit()

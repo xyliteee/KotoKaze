@@ -7,7 +7,7 @@
       xmlns:hc="https://handyorg.github.io/handycontrol" x:Class="XyliteeeMainForm.Views.homePage"
       mc:Ignorable="d" 
       d:DesignHeight="510" d:DesignWidth="670"
-      Title="homePage" CacheMode="BitmapCache">
+      Title="homePage">
 
     <Grid>
         <Canvas Background="#F3F8FE">
