@@ -228,7 +228,6 @@ namespace XyliteeeMainForm.Views
 
         private void CleanButton_Click(object sender, RoutedEventArgs e)
         {
-            
 
             if (isScanned)
             {

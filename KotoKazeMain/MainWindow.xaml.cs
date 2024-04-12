@@ -102,22 +102,29 @@ namespace XyliteeeMainForm
             Show();
             CheckFirstUse();
         }
-        private static async void CheckFirstUse() 
+        private void CheckFirstUse() 
         {
-            string value = IniFileRead("Application.ini", "SETTING", "ISFIRST_USE");
-            if (value == "FALSE") return;
-            else if (value == "TRUE")
+            Task.Run(() => 
             {
-                //await Task.Delay(1000);
-                KotoMessageBoxSingle.ShowDialog("看起来您是第一次使用本软件，但我实际上也没什么好说的");
-                IniFileWrite("Application.ini", "SETTING", "ISFIRST_USE", "FALSE");
-            }
-            else if (value == "ERROR")
-            {
-                await Task.Delay(1000);
-                KotoMessageBoxSingle.ShowDialog("检测到文件被修改，已重置");
-                IniFileSetDefault("Application.ini");
-            }
+                string value = IniFileRead("Application.ini", "SETTING", "ISFIRST_USE");
+                if (value == "FALSE") return;
+                else if (value == "TRUE")
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        KotoMessageBoxSingle.ShowDialog("看起来您是第一次使用本软件，但我实际上也没什么好说的");
+                    }, DispatcherPriority.Background);
+                    IniFileWrite("Application.ini", "SETTING", "ISFIRST_USE", "FALSE");
+                }
+                else if (value == "ERROR")
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        KotoMessageBoxSingle.ShowDialog("检测到文件被修改，已重置");
+                    }, DispatcherPriority.Background);
+                    IniFileSetDefault("Application.ini");
+                }
+            });
         }
 
         private void PageChanged(object sender, NavigationEventArgs e) 
