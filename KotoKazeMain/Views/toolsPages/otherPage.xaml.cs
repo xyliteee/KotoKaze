@@ -55,7 +55,7 @@ namespace KotoKaze.Views.toolsPages
                 {
                     ADBDOWNLOAD.Description = $"下载出错，第{times}次重试......";
                 }
-                isSuccessful = await Network.Download("https://dl.google.com/android/repository/platform-tools-latest-windows.zip", adbZipFile);
+                isSuccessful = await Network.DownloadAsync("https://dl.google.com/android/repository/platform-tools-latest-windows.zip", adbZipFile);
                 if (isSuccessful) {break;}
                 if (times == 4) 
                 {

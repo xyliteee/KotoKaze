@@ -11,7 +11,7 @@ namespace KotoKaze.Static
     {
         private static readonly string Agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0";
 
-        public static async Task<bool> Download(string url, string path)
+        public static async Task<bool> DownloadAsync(string url, string path)
         {
             try
             {
