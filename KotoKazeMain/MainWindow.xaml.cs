@@ -11,95 +11,37 @@ using XyliteeeMainForm.Views;
 using KotoKaze.Windows;
 using KotoKaze.Dynamic;
 using System.Windows.Threading;
-#pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
 namespace XyliteeeMainForm
 {
     public partial class MainWindow : Window
     {
-        private homePage homePage;
-        private cleanPage cleanPage;
-        private PCTestPage PCTestPage;
-        private toolsPage toolsPage;
-        private settingPage settingPage;
+        private readonly homePage homePage;
+        private readonly cleanPage cleanPage;
+        private readonly PCTestPage PCTestPage;
+        private readonly toolsPage toolsPage;
+        private readonly settingPage settingPage;
         private Page currentPage;
         private readonly Button[] buttons = new Button[5];
         private readonly SolidColorBrush blueTextColor = new BrushConverter().ConvertFrom("#1F67B3") as SolidColorBrush;
 
 
-        public MainWindow()
+        public MainWindow(homePage homePage,cleanPage cleanPage,PCTestPage PCTestPage,toolsPage toolsPage,settingPage settingPage)
         {
-            var UpdateLevel = DispatcherPriority.Background;
-            StartLoadingWindow s = new();
-            void DataInit()
-            {
-                Dispatcher.Invoke(() =>
-                {
-                    InitializeComponent();
-                    GlobalData.MainWindowInstance = this;
-                }, UpdateLevel);
-                s.progressBar.Width = 120;
-
-                s.LoadinText.Content = "正在初始化信息页面";
-                Dispatcher.Invoke(() =>
-                {
-                    homePage = new();
-                    GlobalData.HomePageInstance = homePage;
-                }, UpdateLevel);
-                s.progressBar.Width = 410;
-
-                s.LoadinText.Content = "正在初始化清理页面";
-                Dispatcher.Invoke(() =>
-                {
-                    cleanPage = new();
-                    GlobalData.CleanPageInstance = cleanPage;
-                }, UpdateLevel);
-                s.progressBar.Width = 460;
-
-                s.LoadinText.Content = "正在初始化测试页面";
-                Dispatcher.Invoke(() =>
-                {
-                    PCTestPage = new();
-                    GlobalData.PCTestPageInstance = PCTestPage;
-                }, UpdateLevel);
-                s.progressBar.Width = 580;
-
-                s.LoadinText.Content = "正在初始化工具页面";
-                Dispatcher.Invoke(() =>
-                {
-                    toolsPage = new();
-                    GlobalData.ToolsPageInstance = toolsPage;
-                }, UpdateLevel);
-                s.progressBar.Width = 610;
-
-                s.LoadinText.Content = "正在初始化设置页面";
-                Dispatcher.Invoke(() =>
-                {
-                    settingPage = new();
-                    GlobalData.SettingPageInstance = settingPage;
-                }, UpdateLevel);
-                s.progressBar.Width = 640;
-
-                s.LoadinText.Content = "正在进行最终设置";
-                Dispatcher.Invoke(() =>
-                {
-                    actionFrame.Navigate(homePage);
-                    currentPage = (Page)actionFrame.Content;
-                    actionFrame.Navigated += PageChanged;
-                    buttons[0] = homePageButton;
-                    buttons[1] = cleanPageButton;
-                    buttons[2] = PCTestPageButton;
-                    buttons[3] = toolsPageButton;
-                    buttons[4] = settingPageButton;
-                    WindowStyle = WindowStyle.SingleBorderWindow;
-                    FileManager.WorkDirectory.CreatWorkDirectory();
-                    FileManager.WorkDirectory.CreatWorkFile();
-                },  UpdateLevel);
-                s.progressBar.Width = 720;
-            }
-            s.Show();
-            DataInit();
-            s.Close();
-            Show();
+            InitializeComponent();
+            this.homePage = homePage;
+            this.cleanPage = cleanPage;
+            this.PCTestPage = PCTestPage; 
+            this.toolsPage = toolsPage;
+            this.settingPage = settingPage;
+            actionFrame.Navigate(homePage);
+            currentPage = (Page)actionFrame.Content;
+            actionFrame.Navigated += PageChanged;
+            buttons[0] = homePageButton;
+            buttons[1] = cleanPageButton;
+            buttons[2] = PCTestPageButton;
+            buttons[3] = toolsPageButton;
+            buttons[4] = settingPageButton;
+            WindowStyle = WindowStyle.SingleBorderWindow;
             CheckFirstUse();
         }
         private void CheckFirstUse() 
@@ -168,7 +110,7 @@ namespace XyliteeeMainForm
         private void ShutdownButton_Click(object sender, RoutedEventArgs e)//关闭按钮
         {
             GlobalData.IsRunning = false;
-            Close();
+            Application.Current.Shutdown();
         }
         private void BackButton_Click(object sender, RoutedEventArgs e) //返回反扭
         {

@@ -18,8 +18,6 @@ namespace KotoKaze.Static
             };
             canvas.BeginAnimation(Canvas.TopProperty, animation);
         }
-
-
         static public void ButtonSilderMoveing(FrameworkElement widget, int end)
         {
             DoubleAnimation animation = new()
@@ -30,7 +28,6 @@ namespace KotoKaze.Static
             };
             widget.BeginAnimation(Canvas.LeftProperty, animation);
         }
-
         static public void ChangeOP(FrameworkElement widget, double start,double end,double time) 
         {
             DoubleAnimation animation = new()
@@ -41,7 +38,6 @@ namespace KotoKaze.Static
             };
             widget.BeginAnimation(UIElement.OpacityProperty, animation);
         }
-
         static public void ImageTurnRound(Image image, bool flag,double time = 1)
         {
             DoubleAnimation animation = new()
@@ -65,7 +61,6 @@ namespace KotoKaze.Static
 
             rotateTransform.BeginAnimation(RotateTransform.AngleProperty, animation);
         }
-
         static public void FrameMoving(FrameworkElement widget, double from) 
         {
             DoubleAnimation animation = new()
@@ -76,6 +71,16 @@ namespace KotoKaze.Static
                 EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
             };
             widget.BeginAnimation(Canvas.TopProperty, animation);
+        }
+        static public void ChangeWidth(FrameworkElement widget, int width)
+        {
+            DoubleAnimation animation = new()
+            {
+                From = widget.Width, // 起始宽度
+                To = width, // 目标宽度
+                Duration = new Duration(TimeSpan.FromSeconds(0.2)) // 动画持续时间
+            };
+            widget.BeginAnimation(FrameworkElement.WidthProperty, animation); // 开始动画
         }
     }
 }
