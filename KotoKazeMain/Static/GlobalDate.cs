@@ -19,7 +19,7 @@ namespace KotoKaze.Static
         public static cleanPage CleanPageInstance { get; set; }
         public static PCTestPage PCTestPageInstance { get; set; }
         public static settingPage SettingPageInstance { get; set; }
-        public static List<BackgroundTask> TasksList { get; set; } = [];
+        public static BackgroundTaskList<BackgroundTask> TasksList { get; set; } = [];
         public static bool IsRunning { get; set; } = true;
 
     }

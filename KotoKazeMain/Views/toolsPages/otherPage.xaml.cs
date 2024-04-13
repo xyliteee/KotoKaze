@@ -20,7 +20,7 @@ namespace KotoKaze.Views.toolsPages
     /// </summary>
     public partial class otherPage : Page
     {
-        private readonly BackgroundTask ADBDOWNLOAD = new() {Title = "ADB组件下载" };
+        private readonly NetWorkBackgroundTask ADBDOWNLOAD = new(new Network.Downloader()) {Title = "ADB组件下载"};
         public otherPage()
         {
             InitializeComponent();
@@ -42,20 +42,20 @@ namespace KotoKaze.Views.toolsPages
                 return;
             }
 
-            var rr = KotoMessageBox.ShowDialog("ADB组件缺失,是否下载？\n可能需要特殊的网络环境");
+            var rr = KotoMessageBox.ShowDialog("ADB组件缺失,是否下载？\n这可能需要特殊的网络环境。");
             if (!rr.IsYes){ return; }
-
             GlobalData.TasksList.Add(ADBDOWNLOAD);
+            ADBDOWNLOAD.Description = "正在准备下载......";
             string adbZipFile = Path.Combine(WorkDirectory.softwareTempDirectory, "adb.zip");
-            ADBDOWNLOAD.Description = "正在下载....";
             bool isSuccessful;
             for (int times = 0; times < 5; times++) 
             {
                 if (times != 0)
                 {
-                    ADBDOWNLOAD.Description = $"下载出错，第{times}次重试......";
+                    ADBDOWNLOAD.Description = $"下载出错，第{times}次重试";
+                    await Task.Delay(1000);
                 }
-                isSuccessful = await Network.DownloadAsync("https://dl.google.com/android/repository/platform-tools-latest-windows.zip", adbZipFile);
+                isSuccessful = await ADBDOWNLOAD.downloader.DownloadAsync("https://dl.google.com/android/repository/platform-tools-latest-windows.zip", adbZipFile);
                 if (isSuccessful) {break;}
                 if (times == 4) 
                 {

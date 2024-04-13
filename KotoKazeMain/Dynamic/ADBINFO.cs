@@ -16,7 +16,7 @@ namespace KotoKaze.Dynamic
     public class ADBINFO
     {
         private static readonly string adb = Path.Combine(FileManager.WorkDirectory.BinDirectory, "platform-tools/adb.exe");
-        private static BackgroundTask APKINSTALLTASK = new();
+        
         public class PhoneInfo
         {
             public bool isConnected = true;
@@ -153,7 +153,7 @@ namespace KotoKaze.Dynamic
             return phoneInfo;
         }
 
-        public static void InstallAPK(string filePath) 
+        public static void InstallAPK(string filePath,CMDBackgroundTask APKINSTALLTASK) 
         {
             if (GlobalData.TasksList.Contains(APKINSTALLTASK))
             {

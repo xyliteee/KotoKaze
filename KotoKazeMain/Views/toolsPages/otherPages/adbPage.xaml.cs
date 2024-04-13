@@ -23,6 +23,7 @@ namespace KotoKaze.Views.toolsPages.otherPages
     public partial class ADBPage : Page
     {
         private PhoneInfo phoneInfo = new();
+        private readonly CMDBackgroundTask APKINSTALLTASK = new();
         private readonly SolidColorBrush XiaomiColor = new BrushConverter().ConvertFrom("#FF6600") as SolidColorBrush;
         private readonly SolidColorBrush defaultColor = new BrushConverter().ConvertFrom("#1F67B3") as SolidColorBrush;
         private readonly SolidColorBrush vivotColor = new BrushConverter().ConvertFrom("#415FFF") as SolidColorBrush;
@@ -107,7 +108,7 @@ namespace KotoKaze.Views.toolsPages.otherPages
             if (result == true)
             {
                 string selectedFilePath = dlg.FileName;
-                InstallAPK(selectedFilePath);
+                InstallAPK(selectedFilePath,APKINSTALLTASK);
             }
         }
     }
