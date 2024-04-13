@@ -11,6 +11,7 @@ using XyliteeeMainForm.Views;
 using KotoKaze.Windows;
 using KotoKaze.Dynamic;
 using System.Windows.Threading;
+using System.Diagnostics;
 namespace XyliteeeMainForm
 {
     public partial class MainWindow : Window
@@ -20,6 +21,7 @@ namespace XyliteeeMainForm
         private readonly PCTestPage PCTestPage;
         private readonly toolsPage toolsPage;
         private readonly settingPage settingPage;
+        private BitmapCache? pageBitmapCache;
         private Page currentPage;
         private readonly Button[] buttons = new Button[5];
         private readonly SolidColorBrush blueTextColor = new BrushConverter().ConvertFrom("#1F67B3") as SolidColorBrush;
@@ -33,6 +35,8 @@ namespace XyliteeeMainForm
             this.PCTestPage = PCTestPage; 
             this.toolsPage = toolsPage;
             this.settingPage = settingPage;
+            this.toolsPage = toolsPage;
+            EnablePageCache(true);
             actionFrame.Navigate(homePage);
             currentPage = (Page)actionFrame.Content;
             actionFrame.Navigated += PageChanged;
@@ -43,6 +47,23 @@ namespace XyliteeeMainForm
             buttons[4] = settingPageButton;
             WindowStyle = WindowStyle.SingleBorderWindow;
             CheckFirstUse();
+        }
+
+        private void EnablePageCache(bool flag) 
+        {
+            if (flag)
+            {
+                pageBitmapCache = new();
+            }
+            else 
+            {
+                pageBitmapCache = null;
+            }
+            homePage.CacheMode = pageBitmapCache;
+            cleanPage.CacheMode = pageBitmapCache;
+            PCTestPage.CacheMode = pageBitmapCache;
+            toolsPage.CacheMode = pageBitmapCache;
+            settingPage.CacheMode = pageBitmapCache;
         }
         private void CheckFirstUse() 
         {
@@ -103,9 +124,23 @@ namespace XyliteeeMainForm
                 UpdateLayout();
             }
         }
+        private void Window_StateChanged(object sender, EventArgs e)
+        {
+            if (WindowState == WindowState.Minimized)
+            {
+                EnablePageCache(false);
+                GC.Collect();
+            }
+            else
+            {
+                EnablePageCache(true);
+            }
+            
+        }
         private void MinButton_Click(object sender, RoutedEventArgs e)//窗口最小化按钮
         {
             WindowState = WindowState.Minimized;
+
         }
         private void ShutdownButton_Click(object sender, RoutedEventArgs e)//关闭按钮
         {
@@ -244,11 +279,6 @@ namespace XyliteeeMainForm
         private void TaskListButton_Click(object sender, RoutedEventArgs e)
         {
             TasksListShowZone.Visibility = Visibility.Visible;
-        }
-
-        private void Window_Drop(object sender, DragEventArgs e)
-        {
-
         }
     }
     static class BitMapImages 

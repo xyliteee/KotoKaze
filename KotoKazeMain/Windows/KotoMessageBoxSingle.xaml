@@ -15,7 +15,7 @@
         Height="540"
         WindowStyle="None"
         Closing="Window_Closing"
-        >
+        CacheMode="BitmapCache">
     <Grid>
         <Grid  Width="820" Height="540">
             <Canvas x:Name="BackCanvas" Background="Transparent">

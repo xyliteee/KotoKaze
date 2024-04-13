@@ -10,7 +10,7 @@
       Title="homePage">
 
     <Grid>
-        <Canvas Background="#F3F8FE">
+        <Canvas Background="#F3F8FE" >
             <Canvas x:Name="basicalInfoBar" Width="630" Canvas.Left="20" Height="200" Canvas.Top="20">
                 <Border Width="630" Height="200" CornerRadius="20" Background="White">
                     <Border.Effect>

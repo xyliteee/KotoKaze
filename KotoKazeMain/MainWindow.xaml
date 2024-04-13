@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:XyliteeeMainForm"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
-        Title="KotoKaze" WindowStyle="None" Height="540" Width="820" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" >
+        Title="KotoKaze" WindowStyle="None" Height="540" Width="820" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" StateChanged="Window_StateChanged">
     <WindowChrome.WindowChrome>
         <WindowChrome
          ResizeBorderThickness="0"
@@ -79,7 +79,7 @@
                 <Button x:Name="TaskListButton" Click="TaskListButton_Click" Style="{StaticResource minButtonStyle}" Opacity="0.3" Height="30" Width="30" Canvas.Left="0" Canvas.Bottom="0"/>
             </Canvas>
             <Canvas x:Name="actionZone" Background="#F1F9FE" Canvas.Right="0" Canvas.Top="30" Height="510" Width="670">
-                <Frame  x:Name="actionFrame"  BorderThickness="0" Background="Transparent" NavigationUIVisibility="Hidden" Height="510" Width="670" CacheMode="BitmapCache"/>
+                <Frame  x:Name="actionFrame"  BorderThickness="0" Background="Transparent" NavigationUIVisibility="Hidden" Height="510" Width="670"/>
             </Canvas>
 
             <Canvas x:Name="TasksListShowZone" Width="820" Height="510" Canvas.Top="30" Visibility="Collapsed">

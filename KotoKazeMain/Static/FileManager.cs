@@ -11,7 +11,7 @@ namespace KotoKaze.Static
         {
             public static readonly string rootDirectory = AppDomain.CurrentDomain.BaseDirectory;
             public static readonly string backupDirectory = Path.Combine(rootDirectory, "Backup");
-            public static readonly string localDataDirectory = Path.Combine(rootDirectory, "LocalData");
+            public static readonly string localDataDirectory = Path.Combine(rootDirectory, "Bin");
             public static readonly string logfileDirectory = Path.Combine(rootDirectory, "logs");
             public static readonly string softwareTempDirectory = Path.Combine(CleanRules.APPDATE, "Local\\Temp\\KotoKaze");
 

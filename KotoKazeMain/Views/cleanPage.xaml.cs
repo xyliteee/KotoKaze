@@ -35,6 +35,7 @@ namespace XyliteeeMainForm.Views
         public cleanPage()
         {
             InitializeComponent();
+            RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.LowQuality);
         }
         private void Button_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
