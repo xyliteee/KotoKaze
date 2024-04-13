@@ -62,7 +62,6 @@ namespace KotoKaze.Views.toolsPages
                             streamWriter.WriteLine("FOR %F IN (\"%SystemRoot%\\servicing\\Packages\\Microsoft-Windows-GroupPolicy-ClientExtensions-Package~*.mum\") DO (DISM /Online /NoRestart /Add-Package:\"%F\")");
                         }
                     }
-
                     GPEDITTASK.StreamProcess();
                 });
             }
@@ -132,7 +131,7 @@ namespace KotoKaze.Views.toolsPages
                 GETBATTERYREPORT.taskProcess = process;
                 process.Start();
 
-                string reportFilePath = Path.Combine(FileManager.WorkDirectory.localDataDirectory, "BatteryReport.html");
+                string reportFilePath = Path.Combine(FileManager.WorkDirectory.BinDirectory, "BatteryReport.html");
                 string reportFilePathTemp = Path.Combine(FileManager.WorkDirectory.softwareTempDirectory, "BatteryReport.html");
                 File.Delete(reportFilePathTemp);
                 using (StreamWriter streamWriter = process.StandardInput)

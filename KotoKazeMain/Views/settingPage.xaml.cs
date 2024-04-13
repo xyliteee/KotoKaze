@@ -25,7 +25,7 @@ namespace XyliteeeMainForm.Views
             if (openFileDialog.ShowDialog() == true)
             {
                 string sourceFilePath = openFileDialog.FileName;
-                string destFilePath = Path.Combine(FileManager.WorkDirectory.localDataDirectory, "StartWallpaper" + ".png"); // 目标文件路径
+                string destFilePath = Path.Combine(FileManager.WorkDirectory.BinDirectory, "StartWallpaper" + ".png"); // 目标文件路径
                 File.Copy(sourceFilePath, destFilePath, true);
                 KotoMessageBoxSingle.ShowDialog("已成功复制壁纸文件");
             }

@@ -15,7 +15,7 @@ namespace KotoKaze.Dynamic
 {
     public class ADBINFO
     {
-        private static readonly string adb = Path.Combine(FileManager.WorkDirectory.localDataDirectory, "adb/adb.exe");
+        private static readonly string adb = Path.Combine(FileManager.WorkDirectory.BinDirectory, "platform-tools/adb.exe");
         private static BackgroundTask APKINSTALLTASK = new();
         public class PhoneInfo
         {
@@ -58,6 +58,7 @@ namespace KotoKaze.Dynamic
                 else if (temp == string.Empty || temp.Contains("Microsoft") || temp.Contains(":\\")) { continue; }
                 else { results.Add(temp); }
             }
+            Debug.WriteLine(process.StandardOutput.ReadToEnd());
             process.WaitForExit();
             return results;
         }

@@ -19,7 +19,7 @@ namespace KotoKaze.Windows
 
         private async void SetWallpaper() 
         {
-            string wallpaperPath = System.IO.Path.Combine(FileManager.WorkDirectory.localDataDirectory, "StartWallpaper.png");
+            string wallpaperPath = System.IO.Path.Combine(FileManager.WorkDirectory.BinDirectory, "StartWallpaper.png");
             if (File.Exists(wallpaperPath)) 
             {
                 try

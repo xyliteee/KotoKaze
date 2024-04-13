@@ -1,7 +1,11 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
+using System.IO.Compression;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using CleanContent;
+using KotoKaze.Dynamic;
 
 namespace KotoKaze.Static
 {
@@ -11,25 +15,26 @@ namespace KotoKaze.Static
         {
             public static readonly string rootDirectory = AppDomain.CurrentDomain.BaseDirectory;
             public static readonly string backupDirectory = Path.Combine(rootDirectory, "Backup");
-            public static readonly string localDataDirectory = Path.Combine(rootDirectory, "Bin");
+            public static readonly string BinDirectory = Path.Combine(rootDirectory, "Bin");
             public static readonly string logfileDirectory = Path.Combine(rootDirectory, "logs");
             public static readonly string softwareTempDirectory = Path.Combine(CleanRules.APPDATE, "Local\\Temp\\KotoKaze");
 
             public static void CreatWorkDirectory()
             {
                 Directory.CreateDirectory(backupDirectory);
-                Directory.CreateDirectory(localDataDirectory);
+                Directory.CreateDirectory(BinDirectory);
                 Directory.CreateDirectory(softwareTempDirectory);
                 Directory.CreateDirectory(logfileDirectory);
             }
 
+
             public static void CreatWorkFile() 
             {
-                if (!Path.Exists(Path.Combine(localDataDirectory, "Performance.ini"))) 
+                if (!Path.Exists(Path.Combine(BinDirectory, "Performance.ini"))) 
                 {
                     IniManager.IniFileSetDefault("Performance.ini");
                 }
-                if (!Path.Exists(Path.Combine(localDataDirectory, "Application.ini")))
+                if (!Path.Exists(Path.Combine(BinDirectory, "Application.ini")))
                 {
                     IniManager.IniFileSetDefault("Application.ini");
                 }
@@ -63,7 +68,7 @@ namespace KotoKaze.Static
                 key = key.ToUpper();
                 value = Encryption.Encrypt(value.ToUpper());
                 Dictionary<string, Dictionary<string, string>> data = [];
-                string filePath = Path.Combine(WorkDirectory.localDataDirectory, fileName);
+                string filePath = Path.Combine(WorkDirectory.BinDirectory, fileName);
                 if (File.Exists(filePath))
                 {
                     using StreamReader sr = new(filePath, Encoding.Default);
@@ -106,7 +111,7 @@ namespace KotoKaze.Static
 
             public static string IniFileRead(string fileName, string section, string key)
             {
-                string filePath = Path.Combine(WorkDirectory.localDataDirectory, fileName);
+                string filePath = Path.Combine(WorkDirectory.BinDirectory, fileName);
                 section = section.ToUpper();
                 key = key.ToUpper();
                 Dictionary<string, Dictionary<string, string>> data = [];
@@ -203,6 +208,22 @@ namespace KotoKaze.Static
                 string json = JsonSerializer.Serialize(log, jsonSerializerOptions);
                 string filePath = Path.Combine(WorkDirectory.logfileDirectory, fileName);
                 await File.WriteAllTextAsync(filePath, json);
+            }
+        }
+
+        public async static Task<bool> UnzipAsync(string filePath, string targetPath)
+        {
+            try
+            {
+                Directory.CreateDirectory(targetPath);
+                ZipFile.ExtractToDirectory(filePath, targetPath);
+                Debug.WriteLine(targetPath);
+                return true;
+            }
+            catch (Exception e)
+            {
+                await LogManager.LogWriteAsync("ADB UNZIP Error", e.ToString());
+                return false;
             }
         }
     }
