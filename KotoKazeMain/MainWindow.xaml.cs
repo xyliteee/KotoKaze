@@ -21,9 +21,9 @@ namespace XyliteeeMainForm
         private readonly PCTestPage PCTestPage;
         private readonly toolsPage toolsPage;
         private readonly settingPage settingPage;
-        private BitmapCache? pageBitmapCache;
+        private BitmapCache?[] pageBitmapCache = [];
         private Page currentPage;
-        private readonly Button[] buttons = new Button[5];
+        private readonly Button[] buttons = [];
         private readonly SolidColorBrush blueTextColor = new BrushConverter().ConvertFrom("#1F67B3") as SolidColorBrush;
 
 
@@ -40,11 +40,7 @@ namespace XyliteeeMainForm
             actionFrame.Navigate(homePage);
             currentPage = (Page)actionFrame.Content;
             actionFrame.Navigated += PageChanged;
-            buttons[0] = homePageButton;
-            buttons[1] = cleanPageButton;
-            buttons[2] = PCTestPageButton;
-            buttons[3] = toolsPageButton;
-            buttons[4] = settingPageButton;
+            buttons = [homePageButton, cleanPageButton, PCTestPageButton, toolsPageButton, settingPageButton];
             WindowStyle = WindowStyle.SingleBorderWindow;
             CheckFirstUse();
         }
@@ -53,17 +49,17 @@ namespace XyliteeeMainForm
         {
             if (flag)
             {
-                pageBitmapCache = new();
+                pageBitmapCache = [new(),new(),new(),new(),new()];
             }
             else 
             {
-                pageBitmapCache = null;
+                pageBitmapCache = [null,null,null,null,null];
             }
-            homePage.CacheMode = pageBitmapCache;
-            cleanPage.CacheMode = pageBitmapCache;
-            PCTestPage.CacheMode = pageBitmapCache;
-            toolsPage.CacheMode = pageBitmapCache;
-            settingPage.CacheMode = pageBitmapCache;
+            homePage.CacheMode = pageBitmapCache[0];
+            cleanPage.CacheMode = pageBitmapCache[1];
+            PCTestPage.CacheMode = pageBitmapCache[2];
+            toolsPage.CacheMode = pageBitmapCache[3];
+            settingPage.CacheMode = pageBitmapCache[4];
         }
         private void CheckFirstUse() 
         {
