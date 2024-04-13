@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using KotoKaze.Windows;
 
 namespace KotoKaze.Dynamic
 {
@@ -13,8 +14,10 @@ namespace KotoKaze.Dynamic
 
         public class Downloader
         {
+            public string title;
             public long fileSize = 0;
             private long _fileDateHaveAlreadyDownloaded;
+            public HttpClient client = new();
             public Action? action;
             public long FileDateHaveAlreadyDownloaded
             {
@@ -25,12 +28,21 @@ namespace KotoKaze.Dynamic
                     action?.Invoke();
                 }
             }
+            public Downloader(string title) 
+            {
+                this.title = title;
+                client = new HttpClient();
+            }
+
+            ~Downloader() 
+            {
+                client.Dispose();
+            }
 
             public async Task<bool> DownloadAsync(string url, string path)
             {
                 try
                 {
-                    using HttpClient client = new();
                     client.DefaultRequestHeaders.UserAgent.ParseAdd(Agent);
                     using HttpResponseMessage response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
                     response.EnsureSuccessStatusCode();
@@ -44,14 +56,14 @@ namespace KotoKaze.Dynamic
 
                     do
                     {
-                        var read = await contentStream.ReadAsync(buffer, 0, buffer.Length);
+                        var read = await contentStream.ReadAsync(buffer);
                         if (read == 0)
                         {
                             isMoreToRead = false;
                         }
                         else
                         {
-                            await fileStream.WriteAsync(buffer, 0, read);
+                            await fileStream.WriteAsync(buffer.AsMemory(0, read));
 
                             totalRead += read;
                             FileDateHaveAlreadyDownloaded = totalRead;
@@ -66,27 +78,7 @@ namespace KotoKaze.Dynamic
                     return false;
                 }
             }
+
         }
-
-
-        public static async Task<bool> DownloadAsync(string url, string path)
-        {
-            try
-            {
-                using HttpClient client = new();
-                client.DefaultRequestHeaders.UserAgent.ParseAdd(Agent);
-                using HttpResponseMessage response = await client.GetAsync(url);
-                response.EnsureSuccessStatusCode();
-                using FileStream fs = new(path, FileMode.Create);
-                await response.Content.CopyToAsync(fs);
-                return true;
-            }
-            catch (Exception e)
-            {
-                await LogManager.LogWriteAsync("ADB Download Error", e.ToString());
-                return false;
-            }
-        }
-
     }
 }

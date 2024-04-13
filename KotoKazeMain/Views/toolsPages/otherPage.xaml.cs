@@ -20,7 +20,7 @@ namespace KotoKaze.Views.toolsPages
     /// </summary>
     public partial class otherPage : Page
     {
-        private readonly NetWorkBackgroundTask ADBDOWNLOAD = new(new Network.Downloader()) {Title = "ADB组件下载"};
+        private readonly NetworkBackgroundTask ADBDOWNLOAD = new(new Network.Downloader("ADB Download")) {Title = "ADB组件下载"};
         public otherPage()
         {
             InitializeComponent();
@@ -55,20 +55,19 @@ namespace KotoKaze.Views.toolsPages
                     ADBDOWNLOAD.Description = $"下载出错，第{times}次重试";
                     await Task.Delay(1000);
                 }
-                isSuccessful = await ADBDOWNLOAD.downloader.DownloadAsync("https://dl.google.com/android/repository/platform-tools-latest-windows.zip", adbZipFile);
+                string adbDownloadUrl = "https://dl.google.com/android/repository/platform-tools-latest-windows.zip";
+                isSuccessful = await ADBDOWNLOAD.downloader.DownloadAsync(adbDownloadUrl, adbZipFile);
                 if (isSuccessful) {break;}
                 if (times == 4) 
                 {
-                    ADBDOWNLOAD.SetFinal(() => { KotoMessageBoxSingle.ShowDialog("下载错误，已生成日志文件"); });
                     return;
                 }
             }
             ADBDOWNLOAD.Description = "正在解压....";
-            isSuccessful = await UnzipAsync(adbZipFile,WorkDirectory.BinDirectory);
+            isSuccessful = await UnzipAsync(adbZipFile,WorkDirectory.BinDirectory,"ADB UnZip");
             if (!isSuccessful || !Path.Exists(adbPath))
             {
                 ADBDOWNLOAD.SetFinal(() => { KotoMessageBoxSingle.ShowDialog("解压错误，已生成日志文件"); });
-                ADBDOWNLOAD.SetFinal();
                 return;
             }
             ADBDOWNLOAD.SetFinal(() => { KotoMessageBoxSingle.ShowDialog("ADB组件安装完成"); });

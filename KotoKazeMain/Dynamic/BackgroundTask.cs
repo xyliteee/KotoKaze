@@ -19,9 +19,10 @@ namespace KotoKaze.Dynamic
         public string Description
         {
             get { return _description; }
-            set 
+            set
             {
-                GlobalData.MainWindowInstance.Dispatcher.Invoke(() => 
+                _description = value;
+                GlobalData.MainWindowInstance.Dispatcher.Invoke(() =>
                 {
                     DescriptionLable.Content = value;
                 });
@@ -207,16 +208,30 @@ namespace KotoKaze.Dynamic
         }
     }
 
-    public class NetWorkBackgroundTask : BackgroundTask 
+    public class NetworkBackgroundTask : BackgroundTask 
     {
         public Network.Downloader downloader;
-        public NetWorkBackgroundTask(Network.Downloader downloader) 
+        public NetworkBackgroundTask(Network.Downloader downloader) 
         {
             this.downloader = downloader;
             this.downloader.action = new Action(() => 
             {
                 Description = $"已下载：{downloader.FileDateHaveAlreadyDownloaded * 100 / downloader.fileSize}% [{new string('*', (int)(downloader.FileDateHaveAlreadyDownloaded * 35 / downloader.fileSize))}]";
             });
+        }
+        private static void ShutdownTask(NetworkBackgroundTask backgroundTask)
+        {
+            backgroundTask.isCancle = true;
+            backgroundTask.Description = "正在取消......";
+            backgroundTask.downloader.client.CancelPendingRequests();
+            GlobalData.TasksList.Remove(backgroundTask);
+            KotoMessageBoxSingle.ShowDialog($"{backgroundTask.Title}被用户取消");
+        }
+        private static void ButtonCLick(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            NetworkBackgroundTask backgroundTask = (NetworkBackgroundTask)button.Tag;
+            ShutdownTask(backgroundTask);
         }
     }
 }

@@ -211,7 +211,7 @@ namespace KotoKaze.Static
             }
         }
 
-        public async static Task<bool> UnzipAsync(string filePath, string targetPath)
+        public async static Task<bool> UnzipAsync(string filePath, string targetPath,string title)
         {
             try
             {
@@ -222,7 +222,7 @@ namespace KotoKaze.Static
             }
             catch (Exception e)
             {
-                await LogManager.LogWriteAsync("ADB UNZIP Error", e.ToString());
+                await LogManager.LogWriteAsync(title, e.ToString());
                 return false;
             }
         }
