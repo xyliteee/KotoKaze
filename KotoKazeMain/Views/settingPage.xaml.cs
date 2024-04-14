@@ -62,7 +62,7 @@ namespace XyliteeeMainForm.Views
                 isDownloadSuccessful = await ADBINSTALL.downloader.DownloadAsync(ADBINSTALLUrl, adbZipFile);
                 if (isDownloadSuccessful == isSucessful) break;
                 if (isDownloadSuccessful == isCancle)  return;
-                if (times == 4 || isDownloadSuccessful == isCancle) 
+                if (times == 4 && isDownloadSuccessful == isError) 
                 {
                     ADBINSTALL.SetFinal(() => { KotoMessageBoxSingle.ShowDialog("下载出错，建议检查网络状况"); });
                     return;

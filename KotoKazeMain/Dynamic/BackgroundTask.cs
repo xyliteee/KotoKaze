@@ -255,7 +255,7 @@ namespace KotoKaze.Dynamic
         {
             isCancle = true;
             Description = "正在取消......";
-            downloader.client.CancelPendingRequests();
+            downloader.isDownloading = false;
             GlobalData.TasksList.Remove(this);
             if (!showMessage) return;
             KotoMessageBoxSingle.ShowDialog($"{Title}被用户取消");

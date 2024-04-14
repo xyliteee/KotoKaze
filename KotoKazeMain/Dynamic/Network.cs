@@ -21,7 +21,7 @@ namespace KotoKaze.Dynamic
             public readonly static int isError = -1;
             public long fileSize = 0;
             private long _fileDateHaveAlreadyDownloaded;
-            public HttpClient client = new();
+            public bool isDownloading = true;
             public Action? action;
             public long FileDateHaveAlreadyDownloaded
             {
@@ -35,18 +35,14 @@ namespace KotoKaze.Dynamic
             public Downloader(string title) 
             {
                 this.title = title;
-                client = new HttpClient();
-            }
-
-            ~Downloader() 
-            {
-                client.Dispose();
             }
 
             public async Task<int> DownloadAsync(string url, string path)
             {
                 try
                 {
+                    isDownloading = true;
+                    using HttpClient client = new();
                     client.DefaultRequestHeaders.UserAgent.ParseAdd(Agent);
                     using HttpResponseMessage response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
                     response.EnsureSuccessStatusCode();
@@ -60,6 +56,10 @@ namespace KotoKaze.Dynamic
 
                     do
                     {
+                        if (!isDownloading) 
+                        {
+                            throw new TaskCanceledException();
+                        }
                         var read = await contentStream.ReadAsync(buffer);
                         if (read == 0)
                         {
