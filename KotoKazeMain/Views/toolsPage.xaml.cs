@@ -12,11 +12,15 @@ namespace XyliteeeMainForm.Views
     public partial class toolsPage : Page
     {
         private readonly SolidColorBrush blueColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A0C5E0"));
+        public readonly SystemToolsPage systemToolsPage = new();
+        public readonly DISMPage DismPage = new();
+        public readonly BCDPage BcdPage = new();
+        public readonly otherPage otherPage = new();
         public toolsPage()
         {
             InitializeComponent();
             TipsBox.Content = "这里包含了一些系统功能相关的工具";
-            ToolsNegate.Navigate(new SystemToolsPage());
+            ToolsNegate.Navigate(systemToolsPage);
             WindowsButton.IsEnabled = false;
         }
 
@@ -35,7 +39,7 @@ namespace XyliteeeMainForm.Views
             SetButtonState((Button) sender);
             Animations.ButtonSilderMoveing(Silder, 195);
             TipsBox.Content = "这里包含了一些基于DISM的工具，可能具有不可恢复的危险性";
-            ToolsNegate.Navigate(new DISMPage());
+            ToolsNegate.Navigate(DismPage);
         }
 
         private void WindowsButton_Click(object sender, RoutedEventArgs e) 
@@ -43,7 +47,7 @@ namespace XyliteeeMainForm.Views
             SetButtonState((Button)sender);
             Animations.ButtonSilderMoveing(Silder,35);
             TipsBox.Content = "这里包含了一些系统功能相关的工具";
-            ToolsNegate.Navigate(new SystemToolsPage());
+            ToolsNegate.Navigate(systemToolsPage);
         }
 
         private void BCDButton_Click(object sender, RoutedEventArgs e)
@@ -51,7 +55,7 @@ namespace XyliteeeMainForm.Views
             SetButtonState((Button)sender);
             Animations.ButtonSilderMoveing(Silder, 355);
             TipsBox.Content = "这里包含了一些基于BCD的引导工具，可能具有不可恢复的危险性";
-            ToolsNegate.Navigate(new BCDPage());
+            ToolsNegate.Navigate(BcdPage);
         }
 
         private void OtherButton_Click(object sender, RoutedEventArgs e)
@@ -59,7 +63,7 @@ namespace XyliteeeMainForm.Views
             SetButtonState((Button)sender);
             Animations.ButtonSilderMoveing(Silder, 515);
             TipsBox.Content = "这里包含了一些其他未归类的工具";
-            ToolsNegate.Navigate(new otherPage());
+            ToolsNegate.Navigate(otherPage);
         }
 
         public void ShowSecondPage(bool show) 

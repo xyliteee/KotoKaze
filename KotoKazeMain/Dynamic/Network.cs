@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using KotoKaze.Windows;
+using System.Diagnostics;
 
 namespace KotoKaze.Dynamic
 {
@@ -15,6 +16,9 @@ namespace KotoKaze.Dynamic
         public class Downloader
         {
             public string title;
+            public readonly static int isCancle = 1;
+            public readonly static int isSucessful = 0;
+            public readonly static int isError = -1;
             public long fileSize = 0;
             private long _fileDateHaveAlreadyDownloaded;
             public HttpClient client = new();
@@ -39,7 +43,7 @@ namespace KotoKaze.Dynamic
                 client.Dispose();
             }
 
-            public async Task<bool> DownloadAsync(string url, string path)
+            public async Task<int> DownloadAsync(string url, string path)
             {
                 try
                 {
@@ -70,12 +74,14 @@ namespace KotoKaze.Dynamic
                         }
                     } while (isMoreToRead);
 
-                    return true;
+                    return isSucessful;
                 }
+                catch (TaskCanceledException) 
+                { return isCancle; }
                 catch (Exception e)
                 {
-                    await LogManager.LogWriteAsync("ADB Download Error", e.ToString());
-                    return false;
+                    await LogManager.LogWriteAsync($"{title} Error", e.ToString());
+                    return isError;
                 }
             }
 

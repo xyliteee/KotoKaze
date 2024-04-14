@@ -98,5 +98,6 @@
                 </Canvas>
             </Canvas>
         </Canvas>
+        <Label x:Name = "messageMask"  Height="540" Width="820" Background="Black" IsHitTestVisible="False" Opacity="0"/>
     </Grid>
 </Window>

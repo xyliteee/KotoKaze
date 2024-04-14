@@ -68,9 +68,11 @@ namespace KotoKaze.Windows
                     Context = context,
                     Owner = GlobalData.MainWindowInstance
                 };
-                FrameworkElement BackCanvas = (FrameworkElement)kotoMessageBox.FindName("BackCanvas")!;
-                Animations.ChangeOP(BackCanvas, 0, 1, 0.1);
-                
+                Window window = (Window)kotoMessageBox.FindName("window")!;
+                GlobalData.messageBoxList.Add(window);
+                Animations.ChangeOP(window, 0, 1, 0.1);
+                Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0.6, 0.1);
+
                 kotoMessageBox.Result += (s, e) => {
                     r = e.Result;
                 };
@@ -82,12 +84,14 @@ namespace KotoKaze.Windows
         private void No_Button_Click(object sender, RoutedEventArgs e)
         {
             _isLegal = true;
+            Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0, 0.1);
             Close();
             Result?.Invoke(this, new MessageBoxEventArgs() { Result = new MessageResult() { IsYes = false } });
         }
         private void Yes_Button_Click(object sender, RoutedEventArgs e)
         {
             _isLegal = true;
+            Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0, 0.1);
             Close();
             Result?.Invoke(this, new MessageBoxEventArgs() { Result = new MessageResult() 
             { 
@@ -116,6 +120,7 @@ namespace KotoKaze.Windows
         {
             _isLegal = true;
             Close();
+            Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0, 0.1);
             Result?.Invoke(this, new MessageBoxEventArgs()
             {
                 Result = new MessageResult()
@@ -123,6 +128,15 @@ namespace KotoKaze.Windows
                     IsClose = true,
                 }
             });
+        }
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            GlobalData.messageBoxList.Remove(this);
+            if (GlobalData.messageBoxList.Count == 0)
+            {
+                Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0, 0.1);
+            }
+            base.OnClosing(e);
         }
     }
 }

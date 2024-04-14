@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using static KotoKaze.Dynamic.BackgroundTaskList;
 
 
 namespace KotoKaze.Views.toolsPages
@@ -26,7 +27,7 @@ namespace KotoKaze.Views.toolsPages
         private void EnableGPEDIT_Click(object sender, RoutedEventArgs e)
         {
 
-            if (GlobalData.TasksList.Contains(GPEDITTASK)) 
+            if (IsTaskRunning(GPEDITTASK)) 
             {
                 KotoMessageBoxSingle.ShowDialog("该任务已存在,检查任务列表");
                 return;
@@ -68,7 +69,7 @@ namespace KotoKaze.Views.toolsPages
         }
         private void SFCSCNOW_Click(object sender, RoutedEventArgs e)
         {
-            if (GlobalData.TasksList.Contains(SFCSCANNOW))
+            if (IsTaskRunning(SFCSCANNOW))
             {
                 KotoMessageBoxSingle.ShowDialog("该任务已存在,检查任务列表");
                 return;
@@ -108,7 +109,7 @@ namespace KotoKaze.Views.toolsPages
         }
         private void BATTERYINFO_Click(object sender, RoutedEventArgs e)
         {
-            if (GlobalData.TasksList.Contains(GETBATTERYREPORT))
+            if (IsTaskRunning(GETBATTERYREPORT))
             {
                 KotoMessageBoxSingle.ShowDialog("该任务已存在,检查任务列表");
                 return;

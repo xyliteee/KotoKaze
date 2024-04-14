@@ -1,6 +1,7 @@
 ﻿using KotoKaze.Static;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,8 +63,10 @@ namespace KotoKaze.Windows
                     Context = context,
                     Owner = GlobalData.MainWindowInstance
                 };
-                FrameworkElement BackCanvas = (FrameworkElement)kotoMessageBox.FindName("BackCanvas")!;
-                Animations.ChangeOP(BackCanvas, 0, 1, 0.1);
+                Window window = (Window)kotoMessageBox.FindName("window")!;
+                GlobalData.messageBoxList.Add(window);
+                Animations.ChangeOP(window, 0, 1, 0.1);
+                Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0.6, 0.1);
 
                 kotoMessageBox.Result += (s, e) => {
                     r = e.Result;
@@ -101,6 +104,15 @@ namespace KotoKaze.Windows
                     IsClose = true,
                 }
             });
+        }
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            GlobalData.messageBoxList.Remove(this);
+            if (GlobalData.messageBoxList.Count == 0) 
+            {
+                Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0, 0.1);
+            }
+            base.OnClosing(e);
         }
     }
 }

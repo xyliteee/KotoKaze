@@ -10,8 +10,10 @@
 
     <Grid>
         <Canvas x:Name="Base" Background="#F3F8FE">
-            <Button x:Name="importCleanRulesButton" Style="{StaticResource NomalButtonStyle}" Height="30" Width="100" Canvas.Left="20" Canvas.Top="20" Content="导入规则"/>
+            <Button x:Name="ImportCleanRulesButton" Style="{StaticResource NomalButtonStyle}" Height="30" Width="100" Canvas.Left="20" Canvas.Top="20" Content="导入规则"/>
             <Button x:Name="ChangeStartWindowWallpaperButton" Style="{StaticResource NomalButtonStyle}" Height="30" Width="100" Canvas.Left="20" Canvas.Top="70" Content="修改启动壁纸" Click="ChangeStartWindowWallpaperButton_Click"/>
+            <Button x:Name="ReinstallADBButton" Style="{StaticResource NomalButtonStyle}" Height="30" Width="100" Canvas.Left="20" Canvas.Top="120" Content="重新安装ADB" Click="ReinstallADBButton_Click"/>
+            <Button x:Name="ShutdownAllTaskButton" Style="{StaticResource NomalButtonStyle}" Height="30" Width="100" Canvas.Left="20" Canvas.Top="170" Content="终止所有任务" Click="ShutdownAllTaskButton_Click"/>
         </Canvas>
     </Grid>
 </Page>

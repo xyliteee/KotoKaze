@@ -1,11 +1,9 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using CleanContent;
-using KotoKaze.Dynamic;
 
 namespace KotoKaze.Static
 {
@@ -77,9 +75,9 @@ namespace KotoKaze.Static
                     while ((line = sr.ReadLine()) != null)
                     {
                         line = line.Trim();
-                        if (line.StartsWith("[") && line.EndsWith("]"))
+                        if (line.StartsWith('[') && line.EndsWith(']'))
                         {
-                            currentSection = line.Substring(1, line.Length - 2);
+                            currentSection = line[1..^1];
                             data[currentSection] = [];
                         }
                         else if (currentSection != "")
@@ -115,7 +113,6 @@ namespace KotoKaze.Static
                 section = section.ToUpper();
                 key = key.ToUpper();
                 Dictionary<string, Dictionary<string, string>> data = [];
-                // 如果文件存在，读取数据
                 if (File.Exists(filePath))
                 {
                     using StreamReader sr = new(filePath, Encoding.Default);
@@ -124,7 +121,7 @@ namespace KotoKaze.Static
                     while ((line = sr.ReadLine()) != null)
                     {
                         line = line.Trim();
-                        if (line.StartsWith("[") && line.EndsWith("]"))
+                        if (line.StartsWith('[') && line.EndsWith(']'))
                         {
                             currentSection = line.Substring(1, line.Length - 2);
                             data[currentSection] = [];
@@ -140,13 +137,11 @@ namespace KotoKaze.Static
                     }
                 }
 
-                // 如果找到了section和key
                 if (data.ContainsKey(section) && data[section].ContainsKey(key))
                 {
                     string result = data[section][key];
                     return Encryption.Decrypt(result);
                 }
-                // 如果没有找到，返回空
                 return string.Empty;
             }
         }
@@ -209,15 +204,23 @@ namespace KotoKaze.Static
                 string filePath = Path.Combine(WorkDirectory.logfileDirectory, fileName);
                 await File.WriteAllTextAsync(filePath, json);
             }
+            public static void LogWrite(string title, string message, string suggestion = "None")
+            {
+                string time = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
+                string fileName = time + ".log";
+                var log = new { Title = title, Message = message, Time = time, Suggestion = suggestion };
+                string json = JsonSerializer.Serialize(log, jsonSerializerOptions);
+                string filePath = Path.Combine(WorkDirectory.logfileDirectory, fileName);
+                File.WriteAllText(filePath, json);
+            }
         }
 
-        public async static Task<bool> UnzipAsync(string filePath, string targetPath,string title)
+        public async static Task<bool> UnzipAsync(string filePath, string targetPath,string title = "UnZip")
         {
             try
             {
                 Directory.CreateDirectory(targetPath);
                 ZipFile.ExtractToDirectory(filePath, targetPath);
-                Debug.WriteLine(targetPath);
                 return true;
             }
             catch (Exception e)

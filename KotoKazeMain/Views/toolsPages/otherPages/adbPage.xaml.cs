@@ -3,17 +3,9 @@ using KotoKaze.Windows;
 using Translation;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using static KotoKaze.Dynamic.ADBINFO;
 using KotoKaze.Static;
-using System.Diagnostics;
-using static KotoKaze.Dynamic.BCDEDIT;
 
 namespace KotoKaze.Views.toolsPages.otherPages
 {

@@ -28,7 +28,7 @@ namespace KotoKaze.Static
             };
             widget.BeginAnimation(Canvas.LeftProperty, animation);
         }
-        static public void ChangeOP(FrameworkElement widget, double start,double end,double time) 
+        static public void ChangeOP(FrameworkElement widget, double? start,double? end,double time) 
         {
             DoubleAnimation animation = new()
             {

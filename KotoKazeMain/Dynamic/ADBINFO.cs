@@ -8,8 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Threading;
+using static KotoKaze.Dynamic.BackgroundTaskList;
 
 namespace KotoKaze.Dynamic
 {
@@ -58,7 +57,6 @@ namespace KotoKaze.Dynamic
                 else if (temp == string.Empty || temp.Contains("Microsoft") || temp.Contains(":\\")) { continue; }
                 else { results.Add(temp); }
             }
-            Debug.WriteLine(process.StandardOutput.ReadToEnd());
             process.WaitForExit();
             return results;
         }
@@ -155,7 +153,7 @@ namespace KotoKaze.Dynamic
 
         public static void InstallAPK(string filePath,CMDBackgroundTask APKINSTALLTASK) 
         {
-            if (GlobalData.TasksList.Contains(APKINSTALLTASK))
+            if (IsTaskRunning(APKINSTALLTASK))
             {
                 KotoMessageBoxSingle.ShowDialog("该任务已存在,检查任务列表");
                 return;

@@ -37,14 +37,15 @@ namespace KotoKaze.Dynamic
         {
             Button button = (Button)sender;
             BackgroundTask backgroundTask = (BackgroundTask)button.Tag;
-            ShutdownTask(backgroundTask);
+            backgroundTask.Shutdown();
         }
-        private static void ShutdownTask(BackgroundTask backgroundTask)
+        virtual public void Shutdown(bool showMessage = true)
         {
-            backgroundTask.isCancle = true;
-            backgroundTask.Description = "正在取消......";
-            GlobalData.TasksList.Remove(backgroundTask);
-            KotoMessageBoxSingle.ShowDialog($"{backgroundTask.Title}被用户取消");
+            isCancle = true;
+            Description = "正在取消......";
+            GlobalData.TasksList.Remove(this);
+            if (!showMessage) return;
+            KotoMessageBoxSingle.ShowDialog($"{Title}被用户取消");
         }
         private static void CreatSingleCard(BackgroundTask backgroundTask, int index)
         {
@@ -133,78 +134,103 @@ namespace KotoKaze.Dynamic
         public Process taskProcess;
         public Thread outputThread;
         public Thread errorThread;
+        private readonly CancellationTokenSource cts = new ();
 
-        
         public CMDBackgroundTask()
         {
             taskProcess = new();
             outputThread = DefaultOutputProcess();
             errorThread = DefaultErrorProcess();
         }
-        
-        private Thread DefaultOutputProcess() 
+
+        private Thread DefaultOutputProcess()
         {
             Thread thread = new(() =>
             {
                 try
                 {
-                    string? res;
-                    while ((res = taskProcess.StandardOutput.ReadLine()) != null)
+                    Task<string?> readLineTask = taskProcess.StandardOutput.ReadLineAsync();
+                    while (!cts.Token.IsCancellationRequested)
                     {
-                        Description = res;
+                        if (readLineTask.IsCompleted)
+                        {
+                            Description = readLineTask.Result;
+                            readLineTask = taskProcess.StandardOutput.ReadLineAsync();
+                        }
+                        else
+                        {
+                            Thread.Sleep(16);
+                        }
                     }
                 }
                 catch (InvalidOperationException) { }
             });
             return thread;
         }
-        private Thread DefaultErrorProcess() 
+        private Thread DefaultErrorProcess()
         {
-            Thread thread = new(async () =>
+            Thread thread = new(() =>
             {
                 try
                 {
-                    string? errorMessage;
-                    if ((errorMessage = taskProcess.StandardError.ReadLine()) != null)
+                    Task<string?> readLineTask = taskProcess.StandardError.ReadLineAsync();
+                    while (!cts.Token.IsCancellationRequested)
                     {
-                        isError = true;
-                        Description = "error";
-                        await FileManager.LogManager.LogWriteAsync("APK install",errorMessage);
-                        SetFinal(() => { KotoMessageBoxSingle.ShowDialog($"{Title} 发生错误,已保存日志"); });
+                        if (readLineTask.IsCompleted)
+                        {
+                            string? errorMessage = readLineTask.Result;
+                            if (!string.IsNullOrEmpty(errorMessage))
+                            {
+                                isError = true;
+                                Description = "error";
+                                FileManager.LogManager.LogWrite(Title+" Error", errorMessage);
+                                SetFinal(() => { KotoMessageBoxSingle.ShowDialog($"{Title} 发生错误,已保存日志"); });
+                                break;
+                            }
+                            readLineTask = taskProcess.StandardError.ReadLineAsync();
+                        }
+                        else
+                        {
+                            Thread.Sleep(16);
+                        }
                     }
                 }
-                catch (InvalidOperationException) { }
+                catch (InvalidOperationException) {}
             });
             return thread;
         }
+
         public void StreamProcess() 
         {
             outputThread.Start();
             errorThread.Start();
             try 
             {
+                errorThread.Join();
+                outputThread.Join();
                 taskProcess.WaitForExit();
                 if (!isError && !isCancle)
                 {
                     SetFinal(() => { KotoMessageBoxSingle.ShowDialog($"{Title} 执行完成"); });
                 }
             } 
-            catch(InvalidOperationException) 
-            {}
+            catch(InvalidOperationException){}
         }
         private static void ButtonCLick(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
             CMDBackgroundTask backgroundTask = (CMDBackgroundTask)button.Tag;
-            ShutdownTask(backgroundTask);
+            backgroundTask.Shutdown();
         }
-        private static void ShutdownTask(CMDBackgroundTask backgroundTask)
+        override public void Shutdown(bool showMessage = true)
         {
-            backgroundTask.isCancle = true;
-            backgroundTask.Description = "正在取消......";
-            backgroundTask.taskProcess.Close();
-            GlobalData.TasksList.Remove(backgroundTask);
-            KotoMessageBoxSingle.ShowDialog($"{backgroundTask.Title}被用户取消");
+            isCancle = true;
+            Description = "正在取消......";
+            taskProcess.Kill();
+            cts.Cancel();
+            GlobalData.TasksList.Remove(this);
+            if (!showMessage) return;
+            KotoMessageBoxSingle.ShowDialog($"{Title}被用户取消");
         }
     }
 
@@ -219,19 +245,20 @@ namespace KotoKaze.Dynamic
                 Description = $"已下载：{downloader.FileDateHaveAlreadyDownloaded * 100 / downloader.fileSize}% [{new string('*', (int)(downloader.FileDateHaveAlreadyDownloaded * 35 / downloader.fileSize))}]";
             });
         }
-        private static void ShutdownTask(NetworkBackgroundTask backgroundTask)
-        {
-            backgroundTask.isCancle = true;
-            backgroundTask.Description = "正在取消......";
-            backgroundTask.downloader.client.CancelPendingRequests();
-            GlobalData.TasksList.Remove(backgroundTask);
-            KotoMessageBoxSingle.ShowDialog($"{backgroundTask.Title}被用户取消");
-        }
         private static void ButtonCLick(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
             NetworkBackgroundTask backgroundTask = (NetworkBackgroundTask)button.Tag;
-            ShutdownTask(backgroundTask);
+            backgroundTask.Shutdown();
+        }
+        override public void Shutdown(bool showMessage = true)
+        {
+            isCancle = true;
+            Description = "正在取消......";
+            downloader.client.CancelPendingRequests();
+            GlobalData.TasksList.Remove(this);
+            if (!showMessage) return;
+            KotoMessageBoxSingle.ShowDialog($"{Title}被用户取消");
         }
     }
 }

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using KotoKaze.Static;
+using System.Diagnostics.Eventing.Reader;
 
 namespace KotoKaze.Dynamic
 {
@@ -26,12 +24,14 @@ namespace KotoKaze.Dynamic
             }
             return result;
         }
-
-        public new void RemoveAt(int index)
+        
+    }
+    public static class BackgroundTaskList
+    {
+        public static bool IsTaskRunning(BackgroundTask backgroundTask)
         {
-            base.RemoveAt(index);
-            OnChange.Invoke();
+            if (GlobalData.TasksList.Contains(backgroundTask)) return true;
+            return false;
         }
     }
-
 }
