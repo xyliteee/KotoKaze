@@ -36,32 +36,15 @@ namespace KotoKaze.Views.toolsPages
             if (r.IsClose) return;
             if (r.IsYes)
             {
-                GlobalData.TasksList.Add(GPEDITTASK);
                 Task.Run(() =>
                 {
-                    ProcessStartInfo startInfo = new()
-                    {
-                        FileName = "cmd.exe",
-                        RedirectStandardInput = true,
-                        RedirectStandardOutput = true,
-                        RedirectStandardError = true,
-                        CreateNoWindow = true,
-                        UseShellExecute = false,
-                    };
-
-                    Process process = new() { StartInfo = startInfo };
-                    GPEDITTASK.taskProcess = process;
-
-                    process.Start();
-
-                    using (StreamWriter streamWriter = process.StandardInput)
-                    {
-                        if (streamWriter.BaseStream.CanWrite)
-                        {
-                            streamWriter.WriteLine("FOR %F IN (\"%SystemRoot%\\servicing\\Packages\\Microsoft-Windows-GroupPolicy-ClientTools-Package~*.mum\") DO (DISM /Online /NoRestart /Add-Package:\"%F\")");
-                            streamWriter.WriteLine("FOR %F IN (\"%SystemRoot%\\servicing\\Packages\\Microsoft-Windows-GroupPolicy-ClientExtensions-Package~*.mum\") DO (DISM /Online /NoRestart /Add-Package:\"%F\")");
-                        }
-                    }
+                    GPEDITTASK.Start();
+                    string[] commands = 
+                    [
+                        "FOR %F IN (\"%SystemRoot%\\servicing\\Packages\\Microsoft-Windows-GroupPolicy-ClientTools-Package~*.mum\") DO (DISM /Online /NoRestart /Add-Package:\"%F\")",
+                        "FOR %F IN (\"%SystemRoot%\\servicing\\Packages\\Microsoft-Windows-GroupPolicy-ClientExtensions-Package~*.mum\") DO (DISM /Online /NoRestart /Add-Package:\"%F\")"
+                    ];
+                    GPEDITTASK.CommandWrite(commands);
                     GPEDITTASK.StreamProcess();
                 });
             }
@@ -78,31 +61,10 @@ namespace KotoKaze.Views.toolsPages
             if (r.IsClose) return;
             if (r.IsYes)
             {
-                GlobalData.TasksList.Add(SFCSCANNOW);
                 Task.Run(() =>
                 {
-                    ProcessStartInfo startInfo = new()
-                    {
-                        FileName = "cmd.exe",
-                        RedirectStandardInput = true,
-                        RedirectStandardOutput = true,
-                        RedirectStandardError = true,
-                        CreateNoWindow = true,
-                        UseShellExecute = false
-                    };
-
-                    Process process = new() { StartInfo = startInfo };
-                    SFCSCANNOW.taskProcess = process;
-                    process.Start();
-
-                    using (StreamWriter streamWriter = process.StandardInput)
-                    {
-                        if (streamWriter.BaseStream.CanWrite)
-                        {
-                            streamWriter.WriteLine("SFC /SCANNOW");
-                        }
-                    }
-
+                    SFCSCANNOW.Start();
+                    SFCSCANNOW.CommandWrite(["SFC /SCANNOW"]);
                     SFCSCANNOW.StreamProcess();
                 });
             }
@@ -116,37 +78,19 @@ namespace KotoKaze.Views.toolsPages
             }
             Task.Run(() =>
             {
-                GlobalData.TasksList.Add(GETBATTERYREPORT);
-                ProcessStartInfo startInfo = new()
-                {
-                    FileName = "cmd.exe",
-                    RedirectStandardInput = true,
-                    CreateNoWindow = true,
-                    UseShellExecute = false
-                };
-
-                Process process = new() { StartInfo = startInfo };
-                GETBATTERYREPORT.taskProcess = process;
-                process.Start();
-
+                GETBATTERYREPORT.Start();
                 string reportFilePath = Path.Combine(FileManager.WorkDirectory.BinDirectory, "BatteryReport.html");
                 string reportFilePathTemp = Path.Combine(FileManager.WorkDirectory.softwareTempDirectory, "BatteryReport.html");
                 File.Delete(reportFilePathTemp);
-                using (StreamWriter streamWriter = process.StandardInput)
-                {
-                    if (streamWriter.BaseStream.CanWrite)
-                    {
-                        streamWriter.WriteLine($"powercfg /batteryreport /output \"{reportFilePathTemp}\"");
-                    }
-                };
+                GETBATTERYREPORT.CommandWrite([$"powercfg /batteryreport /output \"{reportFilePathTemp}\""]);
                 GETBATTERYREPORT.Description = "正在生成报告";
-                process.WaitForExit();
+                GETBATTERYREPORT.taskProcess.WaitForExit();
                 string reportText = File.ReadAllText(reportFilePathTemp);
 
                 GETBATTERYREPORT.Description = "正在格式化报告";
                 string reportTextToChinese = TranslationRules.Translate(reportText, TranslationRules.batteryReport);
 
-                GETBATTERYREPORT.SetFinal();
+                GETBATTERYREPORT.SetFinished();
                 File.Delete(reportFilePath);
                 File.WriteAllText(reportFilePath, reportTextToChinese);
 

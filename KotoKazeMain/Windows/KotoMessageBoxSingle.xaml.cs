@@ -62,10 +62,7 @@ namespace KotoKaze.Windows
                     Context = context,
                     Owner = GlobalData.MainWindowInstance
                 };
-                Window window = (Window)kotoMessageBox.FindName("window")!;
-                GlobalData.messageBoxList.Add(window);
-                Animations.ChangeOP(window, 0, 1, 0.1);
-                Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0.6, 0.1);
+                KotoMessageBox.RunShow(kotoMessageBox);
 
                 kotoMessageBox.Result += (s, e) => {
                     r = e.Result;
@@ -102,7 +99,7 @@ namespace KotoKaze.Windows
             GlobalData.messageBoxList.Remove(this);
             if (GlobalData.messageBoxList.Count == 0)
             {
-                Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0, 0.1);
+                Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0, 0.05);
             }
             base.OnClosing(e);
         }

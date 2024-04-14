@@ -159,30 +159,10 @@ namespace KotoKaze.Dynamic
                 return;
             }
             APKINSTALLTASK = new() { Title = "安装APK应用程序" };
-            GlobalData.TasksList.Add(APKINSTALLTASK);
             Task.Run(() =>
             {
-                ProcessStartInfo startInfo = new()
-                {
-                    FileName = "cmd.exe",
-                    RedirectStandardInput = true,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    CreateNoWindow = true,
-                    UseShellExecute = false,
-                };
-
-                Process process = new() { StartInfo = startInfo };
-                APKINSTALLTASK.taskProcess = process;
-
-                process.Start();
-                using (StreamWriter streamWriter = process.StandardInput)
-                {
-                    if (streamWriter.BaseStream.CanWrite)
-                    {
-                        streamWriter.WriteLine($"{adb} install {filePath}");
-                    }
-                }
+                APKINSTALLTASK.Start();
+                APKINSTALLTASK.CommandWrite([$"{adb} install {filePath}"]);
                 APKINSTALLTASK.outputThread = new(() =>
                 {
                     APKINSTALLTASK.Description = "Performing Streamed Install....";

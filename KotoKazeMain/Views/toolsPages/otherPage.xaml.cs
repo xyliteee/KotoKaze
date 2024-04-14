@@ -44,8 +44,7 @@ namespace KotoKaze.Views.toolsPages
 
             var rr = KotoMessageBox.ShowDialog("ADB组件缺失,是否下载?");
             if (!rr.IsYes){ return; }
-            GlobalData.TasksList.Add(ADBINSTALL);
-            ADBINSTALL.Description = "正在准备下载......";
+            ADBINSTALL.Start();
             string adbZipFile = Path.Combine(WorkDirectory.softwareTempDirectory, "adb.zip");//ADB压缩包的下载路径
             int isDownloadSuccessful;
             if (!Path.Exists(adbZipFile)) //如果在下载路径发现了该文件，跳过下载
@@ -63,7 +62,7 @@ namespace KotoKaze.Views.toolsPages
                     if (isDownloadSuccessful == isCancle) return;
                     if (times == 4 && isDownloadSuccessful == isError)
                     {
-                        ADBINSTALL.SetFinal(() => { KotoMessageBoxSingle.ShowDialog("下载出错，建议检查网络状况"); });
+                        ADBINSTALL.SetFinished(() => { KotoMessageBoxSingle.ShowDialog("下载出错，建议检查网络状况"); });
                         return;
                     }
                 }
@@ -72,10 +71,10 @@ namespace KotoKaze.Views.toolsPages
             bool isSuccessful = await UnzipAsync(adbZipFile,WorkDirectory.BinDirectory,"ADB UnZip");
             if (!isSuccessful || !Path.Exists(adbPath))
             {
-                ADBINSTALL.SetFinal(() => { KotoMessageBoxSingle.ShowDialog("解压错误，已生成日志文件"); });
+                ADBINSTALL.SetFinished(() => { KotoMessageBoxSingle.ShowDialog("解压错误，已生成日志文件"); });
                 return;
             }
-            ADBINSTALL.SetFinal(() => { KotoMessageBoxSingle.ShowDialog("ADB组件安装完成"); });
+            ADBINSTALL.SetFinished(() => { KotoMessageBoxSingle.ShowDialog("ADB组件安装完成"); });
 
         }
     }

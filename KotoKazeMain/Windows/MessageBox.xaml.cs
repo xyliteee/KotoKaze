@@ -40,7 +40,6 @@ namespace KotoKaze.Windows
         bool _isLegal = false;
 #pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
         public KotoMessageBox()
-#pragma warning restore CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
         {
             InitializeComponent();
         }
@@ -53,6 +52,15 @@ namespace KotoKaze.Windows
             mb.Result += result;
             mb.Show();
         }
+
+        public static void RunShow(FrameworkElement kotoMessageBox) 
+        {
+            FrameworkElement window = (FrameworkElement)kotoMessageBox.FindName("window")!;
+            FrameworkElement MessageBox = (FrameworkElement)kotoMessageBox.FindName("MessageBox");
+            GlobalData.messageBoxList.Add(window);
+            Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0.6, 0.05);
+            Animations.ChangeSize(MessageBox, 0.05, 0.95, 1);
+        }
         public static MessageResult ShowDialog(string context)
         {
             MessageResult r = new();
@@ -63,11 +71,7 @@ namespace KotoKaze.Windows
                     Context = context,
                     Owner = GlobalData.MainWindowInstance
                 };
-                Window window = (Window)kotoMessageBox.FindName("window")!;
-                GlobalData.messageBoxList.Add(window);
-                Animations.ChangeOP(window, 0, 1, 0.1);
-                Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0.6, 0.1);
-
+                RunShow(kotoMessageBox);
                 kotoMessageBox.Result += (s, e) => {
                     r = e.Result;
                 };
@@ -110,7 +114,7 @@ namespace KotoKaze.Windows
             GlobalData.messageBoxList.Remove(this);
             if (GlobalData.messageBoxList.Count == 0) 
             {
-                Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0, 0.1);
+                Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0, 0.05);
             }
             base.OnClosing(e);
         }

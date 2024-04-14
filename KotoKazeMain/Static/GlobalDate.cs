@@ -22,7 +22,7 @@ namespace KotoKaze.Static
         public static PCTestPage PCTestPageInstance { get; set; }
         public static settingPage SettingPageInstance { get; set; }
         public static BackgroundTaskList<BackgroundTask> TasksList { get; set; } = [];
-        public static List<Window> messageBoxList { get; set; } = [];
+        public static List<FrameworkElement> messageBoxList { get; set; } = [];
         public static bool IsRunning { get; set; } = true;
 
     }

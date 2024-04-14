@@ -43,6 +43,22 @@ namespace XyliteeeMainForm
             buttons = [homePageButton, cleanPageButton, PCTestPageButton, toolsPageButton, settingPageButton];
             WindowStyle = WindowStyle.SingleBorderWindow;
             CheckFirstUse();
+            BackroundTaskViewInit();
+        }
+
+        private void BackroundTaskViewInit() 
+        {
+            TaskListMessage.Content = "无任务";
+            Label label = new()
+            {
+                Content = "没有后台任务正在进行",
+                Background = Brushes.Transparent,
+                BorderThickness = new Thickness(0),
+                Width = 390,
+                Height = 30
+            };
+            ScorllCanvas.Children.Add(label);
+            Canvas.SetTop(label, 50);
         }
 
         private void EnablePageCache(bool flag) 

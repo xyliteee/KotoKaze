@@ -1,4 +1,5 @@
-﻿using KotoKaze.Static;
+﻿using KotoKaze.Dynamic;
+using KotoKaze.Static;
 using KotoKaze.Windows;
 using SevenZip.Compression.LZ;
 using System.Windows;
@@ -33,9 +34,9 @@ namespace XyliteeeMainForm
                 s.LoadinText.Content = "正在进行应用程序设置";
                 Dispatcher.Invoke(() =>
                 {
-                   InitializeComponent();
-                   FileManager.WorkDirectory.CreatWorkDirectory();
-                   FileManager.WorkDirectory.CreatWorkFile();
+                    InitializeComponent();
+                    FileManager.WorkDirectory.CreatWorkDirectory();
+                    FileManager.WorkDirectory.CreatWorkFile();
                 }, UpdateLevel);
                 s.progressBar.Width = 120;
 

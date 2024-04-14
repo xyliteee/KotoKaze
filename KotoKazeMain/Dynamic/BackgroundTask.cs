@@ -6,6 +6,7 @@ using System.Windows.Threading;
 using System.Diagnostics;
 using KotoKaze.Windows;
 using System;
+using System.IO;
 
 namespace KotoKaze.Dynamic
 {
@@ -28,10 +29,18 @@ namespace KotoKaze.Dynamic
                 });
             }
         }
-        public void SetFinal(Action? action = null)
+        public void SetFinished(Action? action = null)
         {
             GlobalData.TasksList.Remove(this);
             action?.Invoke();
+        }
+        virtual public void Start() 
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Description = "正在启动......";
+            });
+            GlobalData.TasksList.Add(this);
         }
         private static void ButtonCLick(object sender, RoutedEventArgs e)
         {
@@ -100,7 +109,7 @@ namespace KotoKaze.Dynamic
         }
         public static void RefreshTaskList()
         {
-            GlobalData.MainWindowInstance.Dispatcher.Invoke(() =>
+            Application.Current.Dispatcher.Invoke(() =>
             {
                 GlobalData.MainWindowInstance.ScorllCanvas.Children.Clear();
                 if (GlobalData.TasksList.Count == 0)
@@ -131,18 +140,30 @@ namespace KotoKaze.Dynamic
     }
     public class CMDBackgroundTask:BackgroundTask
     {
-        public Process taskProcess;
         public Thread outputThread;
         public Thread errorThread;
         private readonly CancellationTokenSource cts = new ();
+        private static readonly ProcessStartInfo startInfo = new()
+        {
+            FileName = "cmd.exe",
+            RedirectStandardInput = true,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            CreateNoWindow = true,
+            UseShellExecute = false
+        };
+        public readonly Process taskProcess = new() { StartInfo = startInfo };
 
         public CMDBackgroundTask()
         {
-            taskProcess = new();
             outputThread = DefaultOutputProcess();
             errorThread = DefaultErrorProcess();
         }
-
+        override public void Start()
+        {
+            base.Start();
+            taskProcess.Start();
+        }
         private Thread DefaultOutputProcess()
         {
             Thread thread = new(() =>
@@ -184,7 +205,7 @@ namespace KotoKaze.Dynamic
                                 isError = true;
                                 Description = "error";
                                 FileManager.LogManager.LogWrite(Title+" Error", errorMessage);
-                                SetFinal(() => { KotoMessageBoxSingle.ShowDialog($"{Title} 发生错误,已保存日志"); });
+                                SetFinished(() => { KotoMessageBoxSingle.ShowDialog($"{Title} 发生错误,已保存日志"); });
                                 break;
                             }
                             readLineTask = taskProcess.StandardError.ReadLineAsync();
@@ -199,7 +220,17 @@ namespace KotoKaze.Dynamic
             });
             return thread;
         }
-
+        public void CommandWrite(string[] commands ) 
+        {
+            using StreamWriter streamWriter = taskProcess.StandardInput;
+            if (streamWriter.BaseStream.CanWrite)
+            {
+                foreach (string commad in commands)
+                {
+                    streamWriter.WriteLine(commad);
+                }
+            }
+        }
         public void StreamProcess() 
         {
             outputThread.Start();
@@ -211,7 +242,7 @@ namespace KotoKaze.Dynamic
                 taskProcess.WaitForExit();
                 if (!isError && !isCancle)
                 {
-                    SetFinal(() => { KotoMessageBoxSingle.ShowDialog($"{Title} 执行完成"); });
+                    SetFinished(() => { KotoMessageBoxSingle.ShowDialog($"{Title} 执行完成"); });
                 }
             } 
             catch(InvalidOperationException){}

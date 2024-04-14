@@ -72,15 +72,21 @@ namespace KotoKaze.Static
             };
             widget.BeginAnimation(Canvas.TopProperty, animation);
         }
-        static public void ChangeWidth(FrameworkElement widget, int width)
+        static public void ChangeSize(FrameworkElement widget, double time, double? from, double? to)
         {
+            ScaleTransform scale = new();
+            widget.RenderTransform = scale;
+            widget.RenderTransformOrigin = new (0.5, 0.5);
             DoubleAnimation animation = new()
             {
-                From = widget.Width, // 起始宽度
-                To = width, // 目标宽度
-                Duration = new Duration(TimeSpan.FromSeconds(0.2)) // 动画持续时间
+                From = from,
+                To = to,
+                Duration = TimeSpan.FromSeconds(time)
             };
-            widget.BeginAnimation(FrameworkElement.WidthProperty, animation); // 开始动画
+            scale.BeginAnimation(ScaleTransform.ScaleXProperty, animation);
+            scale.BeginAnimation(ScaleTransform.ScaleYProperty, animation);
         }
+
+
     }
 }
