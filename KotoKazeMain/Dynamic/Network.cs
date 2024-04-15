@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using KotoKaze.Windows;
 using System.Diagnostics;
+using KotoKaze.Static;
 
 namespace KotoKaze.Dynamic
 {
@@ -72,7 +73,7 @@ namespace KotoKaze.Dynamic
                             totalRead += read;
                             FileDateHaveAlreadyDownloaded = totalRead;
                         }
-                    } while (isMoreToRead);
+                    } while (isMoreToRead && GlobalData.IsRunning);
 
                     return isSucessful;
                 }

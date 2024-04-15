@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
 using System.Xml.Linq;
 
 namespace KotoKaze.Static
@@ -41,6 +43,15 @@ namespace KotoKaze.Static
                 return (false, e.ToString());
             }
             
+        }
+
+        public static void UpdateUI(Action action, DispatcherPriority priority = DispatcherPriority.Normal)
+        {
+            try
+            {
+               Application.Current.Dispatcher.Invoke(action, priority);
+            }
+            catch (Exception){}
         }
     }
 }

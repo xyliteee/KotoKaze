@@ -55,7 +55,7 @@ namespace KotoKaze.Windows
         public static MessageResult ShowDialog(string context)
         {
             MessageResult r = new();
-            Application.Current.Dispatcher.Invoke(() => 
+            ProcessControl.UpdateUI(() => 
             {
                 KotoMessageBoxSingle kotoMessageBox = new()
                 {

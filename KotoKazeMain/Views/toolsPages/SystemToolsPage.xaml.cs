@@ -26,7 +26,6 @@ namespace KotoKaze.Views.toolsPages
 
         private void EnableGPEDIT_Click(object sender, RoutedEventArgs e)
         {
-
             if (IsTaskRunning(GPEDITTASK)) 
             {
                 KotoMessageBoxSingle.ShowDialog("该任务已存在,检查任务列表");
@@ -37,19 +36,15 @@ namespace KotoKaze.Views.toolsPages
             if (r.IsYes)
             {
                 GPEDITTASK = new() { Title = "组策略添加" };
-                Task.Run(() =>
-                {
-                    GPEDITTASK.Start();
-                    string[] commands = 
-                    [
-                        "FOR %F IN (\"%SystemRoot%\\servicing\\Packages\\Microsoft-Windows-GroupPolicy-ClientTools-Package~*.mum\") DO (DISM /Online /NoRestart /Add-Package:\"%F\")",
-                        "FOR %F IN (\"%SystemRoot%\\servicing\\Packages\\Microsoft-Windows-GroupPolicy-ClientExtensions-Package~*.mum\") DO (DISM /Online /NoRestart /Add-Package:\"%F\")"
-                    ];
-                    GPEDITTASK.CommandWrite(commands);
-                    GPEDITTASK.StreamProcess();
-                });
+                GPEDITTASK.Start();
+                string[] commands = 
+                [
+                    "FOR %F IN (\"%SystemRoot%\\servicing\\Packages\\Microsoft-Windows-GroupPolicy-ClientTools-Package~*.mum\") DO (DISM /Online /NoRestart /Add-Package:\"%F\")",
+                    "FOR %F IN (\"%SystemRoot%\\servicing\\Packages\\Microsoft-Windows-GroupPolicy-ClientExtensions-Package~*.mum\") DO (DISM /Online /NoRestart /Add-Package:\"%F\")"
+                ];
+                GPEDITTASK.CommandWrite(commands);
+                GPEDITTASK.StreamProcess();
             }
-
         }
         private void SFCSCNOW_Click(object sender, RoutedEventArgs e)
         {
@@ -62,13 +57,10 @@ namespace KotoKaze.Views.toolsPages
             if (r.IsClose) return;
             if (r.IsYes)
             {
-                SFCSCANNOW = new(){ Title = "SFC系统修复" };
-                Task.Run(() =>
-                {
-                    SFCSCANNOW.Start();
-                    SFCSCANNOW.CommandWrite(["SFC /SCANNOW"]);
-                    SFCSCANNOW.StreamProcess();
-                });
+                SFCSCANNOW = new() { Title = "SFC系统修复" };
+                SFCSCANNOW.Start();
+                SFCSCANNOW.CommandWrite(["SFC /SCANNOW"]);
+                SFCSCANNOW.StreamProcess();
             }
         }
         private void BATTERYINFO_Click(object sender, RoutedEventArgs e)
@@ -79,8 +71,8 @@ namespace KotoKaze.Views.toolsPages
                 return;
             }
             GETBATTERYREPORT = new() { Title = "获取电池报告" };
-            Task.Run(() =>
-            {
+            Task.Run(() => 
+            { 
                 GETBATTERYREPORT.Start();
                 string reportFilePath = Path.Combine(FileManager.WorkDirectory.BinDirectory, "BatteryReport.html");
                 string reportFilePathTemp = Path.Combine(FileManager.WorkDirectory.softwareTempDirectory, "BatteryReport.html");

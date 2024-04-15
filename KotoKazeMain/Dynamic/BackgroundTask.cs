@@ -25,7 +25,7 @@ namespace KotoKaze.Dynamic
             set
             {
                 _description = value;
-                Application.Current.Dispatcher.Invoke(() =>
+                ProcessControl.UpdateUI(() =>
                 {
                     DescriptionLable.Content = value;
                 });
@@ -38,7 +38,7 @@ namespace KotoKaze.Dynamic
         }
         virtual public void Start() 
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            ProcessControl.UpdateUI(() =>
             {
                 Description = "正在启动......";
             });
@@ -111,7 +111,7 @@ namespace KotoKaze.Dynamic
         }
         public static void RefreshTaskList()
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            ProcessControl.UpdateUI(() =>
             {
                 GlobalData.MainWindowInstance.ScorllCanvas.Children.Clear();
                 if (GlobalData.TasksList.Count == 0)
@@ -177,17 +177,22 @@ namespace KotoKaze.Dynamic
                 try
                 {
                     Task<string?> readLineTask = taskProcess.StandardOutput.ReadLineAsync();
-                    while (!(isCancle || isError || isFinished))
+                    int index = 0;
+                    while (!(isCancle || isError || isFinished) && GlobalData.IsRunning)
                     {
-                        if (readLineTask.IsCompleted && readLineTask.Result!=string.Empty)
+                        if (readLineTask.IsCompleted)
                         {
-                            Description = readLineTask.Result;
+                            if (!string.IsNullOrEmpty(readLineTask.Result)) 
+                            {
+                                Description = readLineTask.Result;
+                            }
                             readLineTask = taskProcess.StandardOutput.ReadLineAsync();
                         }
                         else
                         {
                             Thread.Sleep(16);
                         }
+                        index++;
                     }
                 }
                 catch (InvalidOperationException) { }
@@ -201,7 +206,7 @@ namespace KotoKaze.Dynamic
                 try
                 {
                     Task<string?> readLineTask = taskProcess.StandardError.ReadLineAsync();
-                    while (!(isCancle || isError || isFinished))
+                    while (!(isCancle || isError || isFinished) && GlobalData.IsRunning)
                     {
                         if (readLineTask.IsCompleted)
                         {
@@ -245,14 +250,17 @@ namespace KotoKaze.Dynamic
             errorThread.Start();
             try 
             {
-                taskProcess.WaitForExit();//等待进程完成
-                isFinished = true;//进程完成
-                errorThread.Join(1000);//等待错误流线程完成
-                outputThread.Join(1000);//等待输出流线程完成
-                if (!(isError || isCancle))//如果没有错误也不是打断
+                Task.Run(() => 
                 {
-                    SetFinished(() => { KotoMessageBoxSingle.ShowDialog($"{Title} 执行完成"); });
-                }
+                    taskProcess.WaitForExit();//等待进程完成
+                    isFinished = true;//进程完成
+                    errorThread.Join(1000);//等待错误流线程完成
+                    outputThread.Join(1000);//等待输出流线程完成
+                    if (!(isError || isCancle))//如果没有错误也不是打断
+                    {
+                        SetFinished(() => { KotoMessageBoxSingle.ShowDialog($"{Title} 执行完成"); });
+                    }
+                });
             } 
             catch(InvalidOperationException){}
         }
@@ -264,40 +272,43 @@ namespace KotoKaze.Dynamic
         }
         override public void Shutdown(bool showMessage = true)
         {
+            void SetShutdown() 
+            {
+                isCancle = true;//设置取消标识
+                outputThread.Join(1000);//等待输出线程,最多等待1000秒
+                errorThread.Join(1000);//等待错误线程
+                SetFinished(() =>
+                {
+                    if (showMessage) KotoMessageBoxSingle.ShowDialog($"{Title}被用户取消");
+                });
+            }
             Description = "正在取消......";
             taskProcess.Close();//手动关闭进程
-            try
+            Task.Run(() => 
             {
-                if (!taskProcess.WaitForExit(5000))
+                try
                 {
-                    taskProcess.Kill();
-                };
-            }
-            catch (InvalidOperationException)
-            {
-                //表明进程已经因为Close方法立刻响应而退出，不需要额外处理
-            }
-            catch (Exception e) 
-            {
-                KotoMessageBoxSingle.ShowDialog($"{Title}取消时发生了意外的错误，已生成日志文件");
-                Task.Run(async () => 
-                {
-                    await FileManager.LogManager.LogWriteAsync($"{Title} Interupt Error",e.ToString());
-                });
-            }
-            finally
-            {
-                Task.Run(() =>
-                {
-                    isCancle = true;//设置取消标识
-                    outputThread.Join(1000);//等待输出线程,最多等待1000秒
-                    errorThread.Join(1000);//等待错误线程
-                    SetFinished(() =>
+                    if (!taskProcess.WaitForExit(5000))
                     {
-                        if (showMessage) KotoMessageBoxSingle.ShowDialog($"{Title}被用户取消");
+                        taskProcess.Kill();
+                    };
+                    SetShutdown();
+                }
+                catch (InvalidOperationException)
+                {
+                    //表明进程已经因为Close方法立刻响应而退出，taskProcess.WaitForExits是无意义的,不需要额外处理,继续设置即可
+                    SetShutdown();
+                }
+
+                catch (Exception e)
+                {
+                    KotoMessageBoxSingle.ShowDialog($"{Title}取消时发生了未知的错误，已生成日志文件");
+                    Task.Run(async () =>
+                    {
+                        await FileManager.LogManager.LogWriteAsync($"{Title} Interupt Error", e.ToString());
                     });
-                });
-            }
+                }
+            });
         }
     }
 
