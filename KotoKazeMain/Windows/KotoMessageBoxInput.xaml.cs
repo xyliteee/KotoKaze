@@ -61,7 +61,7 @@ namespace KotoKaze.Windows
         public static MessageResult ShowDialog(string context)
         {
             MessageResult r = new();
-            GlobalData.MainWindowInstance.Dispatcher.Invoke(() => 
+            Application.Current.Dispatcher.Invoke(() => 
             {
                 KotoMessageBoxInput kotoMessageBox = new()
                 {

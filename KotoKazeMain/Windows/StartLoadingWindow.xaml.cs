@@ -19,7 +19,13 @@ namespace KotoKaze.Windows
 
         private async void SetWallpaper() 
         {
+            string wallpaperPathTemp = System.IO.Path.Combine(FileManager.WorkDirectory.BinDirectory, "StartWallpaper_Temp.png");
             string wallpaperPath = System.IO.Path.Combine(FileManager.WorkDirectory.BinDirectory, "StartWallpaper.png");
+            if (File.Exists(wallpaperPathTemp)) 
+            {
+                File.Delete(wallpaperPath);
+                File.Move(wallpaperPathTemp, wallpaperPath);
+            } 
             if (File.Exists(wallpaperPath)) 
             {
                 try
@@ -29,7 +35,7 @@ namespace KotoKaze.Windows
                 }
                 catch (Exception e)
                 {
-                    await FileManager.LogManager.LogWriteAsync("Wallpaper Error", e.ToString(),"检查LocalDate目录下的StartWallpaper.png是否为正确的图片");
+                    await FileManager.LogManager.LogWriteAsync("Wallpaper Error", e.ToString(),"检查Bin目录下的StartWallpaper.png是否为正确的图片");
                 }
             }
         }

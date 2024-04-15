@@ -28,8 +28,9 @@ namespace KotoKaze.Dynamic
     }
     public static class BackgroundTaskList
     {
-        public static bool IsTaskRunning(BackgroundTask backgroundTask)
+        public static bool IsTaskRunning(BackgroundTask? backgroundTask)
         {
+            if (backgroundTask == null) { return false; }
             if (GlobalData.TasksList.Contains(backgroundTask)) return true;
             return false;
         }

@@ -16,7 +16,7 @@ namespace XyliteeeMainForm.Views
     /// </summary>
     public partial class settingPage : Page
     {
-        public readonly NetworkBackgroundTask ADBINSTALL = new(new Network.Downloader("ADB Download")) { Title = "ADB组件下载" };
+        public NetworkBackgroundTask? ADBINSTALL;
         public settingPage()
         {
             InitializeComponent();
@@ -24,14 +24,17 @@ namespace XyliteeeMainForm.Views
 
         private void ChangeStartWindowWallpaperButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            string[] fileType = ["png", "jpeg", "jpg", "bmp"];
+            string filter = string.Join(";", fileType.Select(x => "*." + x));
+            string filterString = $"图片文件 ({filter})|{filter}";
             OpenFileDialog openFileDialog = new()
             {
-                Filter = "Image files (*.png;*.jpeg;*.jpg)|*.png;*.jpeg;*.jpg"
+                Filter = filterString
             };
             if (openFileDialog.ShowDialog() == true)
             {
                 string sourceFilePath = openFileDialog.FileName;
-                string destFilePath = Path.Combine(WorkDirectory.BinDirectory, "StartWallpaper.png"); // 目标文件路径
+                string destFilePath = Path.Combine(WorkDirectory.BinDirectory, "StartWallpaper_temp.png"); // 目标文件路径
                 File.Copy(sourceFilePath, destFilePath, true);
                 KotoMessageBoxSingle.ShowDialog("已成功复制壁纸文件");
             }
@@ -47,6 +50,7 @@ namespace XyliteeeMainForm.Views
 
             var rr = KotoMessageBox.ShowDialog("是否重新安装ADB组件");
             if (!rr.IsYes) { return; }
+            ADBINSTALL = new(new Network.Downloader("ADB Download")) { Title = "ADB组件下载" };
             ADBINSTALL.Start();
             string adbZipFile = Path.Combine(WorkDirectory.softwareTempDirectory, "adb.zip");//ADB压缩包的下载路径
             int isDownloadSuccessful;

@@ -7,6 +7,7 @@ using System.Diagnostics;
 using KotoKaze.Windows;
 using System;
 using System.IO;
+using HelixToolkit.Logger;
 
 namespace KotoKaze.Dynamic
 {
@@ -17,13 +18,14 @@ namespace KotoKaze.Dynamic
         private Label DescriptionLable = new();
         public bool isCancle = false;
         public bool isError = false;
+        public bool isFinished = false;
         public string Description
         {
             get { return _description; }
             set
             {
                 _description = value;
-                GlobalData.MainWindowInstance.Dispatcher.Invoke(() =>
+                Application.Current.Dispatcher.Invoke(() =>
                 {
                     DescriptionLable.Content = value;
                 });
@@ -140,8 +142,10 @@ namespace KotoKaze.Dynamic
     }
     public class CMDBackgroundTask:BackgroundTask
     {
-        public Thread outputThread;
-        public Thread errorThread;
+        public Action outputThreadAction;
+        private Thread outputThread;
+        public Action errorThreadAction;
+        private Thread errorThread;
         private readonly CancellationTokenSource cts = new ();
         private static readonly ProcessStartInfo startInfo = new()
         {
@@ -156,24 +160,26 @@ namespace KotoKaze.Dynamic
 
         public CMDBackgroundTask()
         {
-            outputThread = DefaultOutputProcess();
-            errorThread = DefaultErrorProcess();
+            outputThreadAction = DefaultOutputProcess();
+            errorThreadAction = DefaultErrorProcess();
+            outputThread = new(() => { });
+            errorThread = new(() =>{ });
         }
         override public void Start()
         {
             base.Start();
             taskProcess.Start();
         }
-        private Thread DefaultOutputProcess()
+        private Action DefaultOutputProcess()
         {
-            Thread thread = new(() =>
+            Action action = new(() => 
             {
                 try
                 {
                     Task<string?> readLineTask = taskProcess.StandardOutput.ReadLineAsync();
-                    while (!cts.Token.IsCancellationRequested)
+                    while (!(isCancle || isError || isFinished))
                     {
-                        if (readLineTask.IsCompleted)
+                        if (readLineTask.IsCompleted && readLineTask.Result!=string.Empty)
                         {
                             Description = readLineTask.Result;
                             readLineTask = taskProcess.StandardOutput.ReadLineAsync();
@@ -186,16 +192,16 @@ namespace KotoKaze.Dynamic
                 }
                 catch (InvalidOperationException) { }
             });
-            return thread;
+            return action;
         }
-        private Thread DefaultErrorProcess()
+        private Action DefaultErrorProcess()
         {
-            Thread thread = new(() =>
+            Action action = new(() => 
             {
                 try
                 {
                     Task<string?> readLineTask = taskProcess.StandardError.ReadLineAsync();
-                    while (!cts.Token.IsCancellationRequested)
+                    while (!(isCancle || isError || isFinished))
                     {
                         if (readLineTask.IsCompleted)
                         {
@@ -204,7 +210,7 @@ namespace KotoKaze.Dynamic
                             {
                                 isError = true;
                                 Description = "error";
-                                FileManager.LogManager.LogWrite(Title+" Error", errorMessage);
+                                FileManager.LogManager.LogWrite(Title + " Error", errorMessage);
                                 SetFinished(() => { KotoMessageBoxSingle.ShowDialog($"{Title} 发生错误,已保存日志"); });
                                 break;
                             }
@@ -216,9 +222,9 @@ namespace KotoKaze.Dynamic
                         }
                     }
                 }
-                catch (InvalidOperationException) {}
+                catch (InvalidOperationException) { }
             });
-            return thread;
+            return action;
         }
         public void CommandWrite(string[] commands ) 
         {
@@ -233,14 +239,17 @@ namespace KotoKaze.Dynamic
         }
         public void StreamProcess() 
         {
+            outputThread = new(() => { outputThreadAction(); });
+            errorThread = new(() => { errorThreadAction(); });
             outputThread.Start();
             errorThread.Start();
             try 
             {
-                errorThread.Join();
-                outputThread.Join();
-                taskProcess.WaitForExit();
-                if (!isError && !isCancle)
+                taskProcess.WaitForExit();//等待进程完成
+                isFinished = true;//进程完成
+                errorThread.Join(1000);//等待错误流线程完成
+                outputThread.Join(1000);//等待输出流线程完成
+                if (!(isError || isCancle))//如果没有错误也不是打断
                 {
                     SetFinished(() => { KotoMessageBoxSingle.ShowDialog($"{Title} 执行完成"); });
                 }
@@ -255,13 +264,40 @@ namespace KotoKaze.Dynamic
         }
         override public void Shutdown(bool showMessage = true)
         {
-            isCancle = true;
             Description = "正在取消......";
-            taskProcess.Kill();
-            cts.Cancel();
-            GlobalData.TasksList.Remove(this);
-            if (!showMessage) return;
-            KotoMessageBoxSingle.ShowDialog($"{Title}被用户取消");
+            taskProcess.Close();//手动关闭进程
+            try
+            {
+                if (!taskProcess.WaitForExit(5000))
+                {
+                    taskProcess.Kill();
+                };
+            }
+            catch (InvalidOperationException)
+            {
+                //表明进程已经因为Close方法立刻响应而退出，不需要额外处理
+            }
+            catch (Exception e) 
+            {
+                KotoMessageBoxSingle.ShowDialog($"{Title}取消时发生了意外的错误，已生成日志文件");
+                Task.Run(async () => 
+                {
+                    await FileManager.LogManager.LogWriteAsync($"{Title} Interupt Error",e.ToString());
+                });
+            }
+            finally
+            {
+                Task.Run(() =>
+                {
+                    isCancle = true;//设置取消标识
+                    outputThread.Join(1000);//等待输出线程,最多等待1000秒
+                    errorThread.Join(1000);//等待错误线程
+                    SetFinished(() =>
+                    {
+                        if (showMessage) KotoMessageBoxSingle.ShowDialog($"{Title}被用户取消");
+                    });
+                });
+            }
         }
     }
 
@@ -284,12 +320,8 @@ namespace KotoKaze.Dynamic
         }
         override public void Shutdown(bool showMessage = true)
         {
-            isCancle = true;
-            Description = "正在取消......";
             downloader.isDownloading = false;
-            GlobalData.TasksList.Remove(this);
-            if (!showMessage) return;
-            KotoMessageBoxSingle.ShowDialog($"{Title}被用户取消");
+            base.Shutdown();
         }
     }
 }

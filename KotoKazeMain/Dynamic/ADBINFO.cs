@@ -151,7 +151,7 @@ namespace KotoKaze.Dynamic
             return phoneInfo;
         }
 
-        public static void InstallAPK(string filePath,CMDBackgroundTask APKINSTALLTASK) 
+        public static void InstallAPK(string filePath,CMDBackgroundTask? APKINSTALLTASK) 
         {
             if (IsTaskRunning(APKINSTALLTASK))
             {
@@ -163,7 +163,7 @@ namespace KotoKaze.Dynamic
             {
                 APKINSTALLTASK.Start();
                 APKINSTALLTASK.CommandWrite([$"{adb} install {filePath}"]);
-                APKINSTALLTASK.outputThread = new(() =>
+                APKINSTALLTASK.outputThreadAction = new(() =>
                 {
                     APKINSTALLTASK.Description = "Performing Streamed Install....";
                 });

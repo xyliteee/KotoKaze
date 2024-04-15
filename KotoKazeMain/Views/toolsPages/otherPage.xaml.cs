@@ -20,7 +20,7 @@ namespace KotoKaze.Views.toolsPages
     /// </summary>
     public partial class otherPage : Page
     {
-        public readonly NetworkBackgroundTask ADBINSTALL = new(new Network.Downloader("ADB Download")) {Title = "ADB组件下载"};
+        public NetworkBackgroundTask? ADBINSTALL;
         public otherPage()
         {
             InitializeComponent();
@@ -44,6 +44,7 @@ namespace KotoKaze.Views.toolsPages
 
             var rr = KotoMessageBox.ShowDialog("ADB组件缺失,是否下载?");
             if (!rr.IsYes){ return; }
+            ADBINSTALL = new(new Network.Downloader("ADB Download")) { Title = "ADB组件下载" };
             ADBINSTALL.Start();
             string adbZipFile = Path.Combine(WorkDirectory.softwareTempDirectory, "adb.zip");//ADB压缩包的下载路径
             int isDownloadSuccessful;

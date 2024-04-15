@@ -16,9 +16,9 @@ namespace KotoKaze.Views.toolsPages
     /// </summary>
     public partial class SystemToolsPage : Page
     {
-        private readonly CMDBackgroundTask GPEDITTASK = new() { Title = "组策略添加"};
-        private readonly CMDBackgroundTask SFCSCANNOW = new() { Title = "SFC系统修复"};
-        private readonly CMDBackgroundTask GETBATTERYREPORT = new() { Title = "获取电池报告"};
+        private CMDBackgroundTask? GPEDITTASK;
+        private CMDBackgroundTask? SFCSCANNOW;
+        private CMDBackgroundTask? GETBATTERYREPORT;
         public SystemToolsPage()
         {
             InitializeComponent();
@@ -36,6 +36,7 @@ namespace KotoKaze.Views.toolsPages
             if (r.IsClose) return;
             if (r.IsYes)
             {
+                GPEDITTASK = new() { Title = "组策略添加" };
                 Task.Run(() =>
                 {
                     GPEDITTASK.Start();
@@ -61,6 +62,7 @@ namespace KotoKaze.Views.toolsPages
             if (r.IsClose) return;
             if (r.IsYes)
             {
+                SFCSCANNOW = new(){ Title = "SFC系统修复" };
                 Task.Run(() =>
                 {
                     SFCSCANNOW.Start();
@@ -76,6 +78,7 @@ namespace KotoKaze.Views.toolsPages
                 KotoMessageBoxSingle.ShowDialog("该任务已存在,检查任务列表");
                 return;
             }
+            GETBATTERYREPORT = new() { Title = "获取电池报告" };
             Task.Run(() =>
             {
                 GETBATTERYREPORT.Start();
@@ -96,7 +99,7 @@ namespace KotoKaze.Views.toolsPages
 
                 Dispatcher.Invoke(() =>
                 {
-                    var r = KotoMessageBox.ShowDialog("报告文件已保存在程序目录的/LocalData文件夹下,是否打开？");
+                    var r = KotoMessageBox.ShowDialog("报告文件已保存在程序目录的/Bin文件夹下,是否打开？");
                     if (r.IsClose) return;
                     if (r.IsYes)
                     {
