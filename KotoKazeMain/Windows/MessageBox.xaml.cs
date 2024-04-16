@@ -11,6 +11,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
@@ -21,6 +22,7 @@ namespace KotoKaze.Windows
     /// </summary>
     public partial class KotoMessageBox : Window
     {
+        private static double AnimationTimeline = 0.1;
         public class MessageResult
         {
             public bool IsYes { get; set; } = true;
@@ -53,14 +55,7 @@ namespace KotoKaze.Windows
             mb.Show();
         }
 
-        public static void RunShow(FrameworkElement kotoMessageBox) 
-        {
-            FrameworkElement window = (FrameworkElement)kotoMessageBox.FindName("window")!;
-            FrameworkElement MessageBox = (FrameworkElement)kotoMessageBox.FindName("MessageBox");
-            GlobalData.messageBoxList.Add(window);
-            Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0.6, 0.05);
-            Animations.ChangeSize(MessageBox, 0.05, 0.95, 1);
-        }
+        
         public static MessageResult ShowDialog(string context)
         {
             MessageResult r = new();
@@ -109,14 +104,37 @@ namespace KotoKaze.Windows
                 }
             });
         }
+        public static void RunClose(FrameworkElement frameworkElement) 
+        {
+            GlobalData.messageBoxList.Remove(frameworkElement);
+            if (GlobalData.messageBoxList.Count == 0)
+            {
+                Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0, 0);
+                Animations.ChangeBlur(GlobalData.MainWindowInstance.mainBase, 0, null, 0);
+            }
+        }
+        public static void RunShow(FrameworkElement kotoMessageBox)
+        {
+            FrameworkElement window = (FrameworkElement)kotoMessageBox.FindName("window")!;
+            GlobalData.messageBoxList.Add(window);
+            Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0.3, AnimationTimeline);
+            Animations.ChangeSize(window, AnimationTimeline, 0.95, 1);
+            Animations.ChangeBlur(GlobalData.MainWindowInstance.mainBase, AnimationTimeline, null, 5);
+        }
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            GlobalData.messageBoxList.Remove(this);
-            if (GlobalData.messageBoxList.Count == 0) 
-            {
-                Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0, 0.05);
-            }
+            RunClose(this);
             base.OnClosing(e);
+        }
+        private void MinButton_Click(object sender, RoutedEventArgs e)//窗口最小化按钮
+        {
+            WindowState = WindowState.Minimized;
+
+        }
+        private void ShutdownWindowButton_Click(object sender, RoutedEventArgs e)//关闭按钮
+        {
+            GlobalData.IsRunning = false;
+            Application.Current.Shutdown();
         }
     }
 }

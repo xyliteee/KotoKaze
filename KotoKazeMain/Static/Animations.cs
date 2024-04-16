@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
 using XyliteeeMainForm.Views;
 
 namespace KotoKaze.Static
@@ -86,7 +87,17 @@ namespace KotoKaze.Static
             scale.BeginAnimation(ScaleTransform.ScaleXProperty, animation);
             scale.BeginAnimation(ScaleTransform.ScaleYProperty, animation);
         }
-
-
+        static public void ChangeBlur(FrameworkElement widget, double time, double? from, double? to)
+        {
+            BlurEffect blur = new();
+            widget.Effect = blur;
+            DoubleAnimation animation = new()
+            {
+                From = from,
+                To = to,
+                Duration = TimeSpan.FromSeconds(time)
+            };
+            blur.BeginAnimation(BlurEffect.RadiusProperty, animation);
+        }
     }
 }

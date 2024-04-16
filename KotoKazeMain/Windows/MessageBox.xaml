@@ -12,14 +12,14 @@
         ResizeMode="NoResize"
         ShowInTaskbar="False"
         WindowStartupLocation="CenterOwner"
-        Width="820"
-        Height="540"
+        Width="400"
+        Height="200"
         WindowStyle="None"
         Closing="Window_Closing"
-        >
-    <Grid  Width="820" Height="540">
+        CacheMode="BitmapCache">
+    <Grid  Width="400" Height="200">
         <Canvas x:Name="BackCanvas" Background="Transparent">
-            <Canvas x:Name="MessageBox" Width="400" Height="200" Canvas.Left="210" Canvas.Top="170" Background="Transparent">
+            <Canvas x:Name="MessageBox" Width="400" Height="200" Background="Transparent" >
                 <Border Width="400" Height="200" Background="White" CornerRadius="10">
                     <Border.Effect>
                         <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="10"/>

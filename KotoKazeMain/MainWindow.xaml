@@ -17,8 +17,8 @@
     </WindowChrome.WindowChrome>
 
     <Grid>
-        
-        <Canvas>
+
+        <Canvas x:Name="mainBase">
             <Canvas x:Name="topBarleft" Width="150" Height="30" Background="#A0C5E0">
                 <Button x:Name="backButton" WindowChrome.IsHitTestVisibleInChrome="True"  Click="BackButton_Click" FontSize="14" FontWeight ="Bold" Content="←" Visibility="Collapsed" Height="30" Width="40" Canvas.Left="0" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource minButtonStyle}"/>
             </Canvas>
@@ -32,72 +32,73 @@
                 <Button x:Name="minButton" WindowChrome.IsHitTestVisibleInChrome="True" Click="MinButton_Click" FontSize="12" Content="—" Height="30" Width="40" Canvas.Right="40" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource minButtonStyle}"/>
                 <Button x:Name="shutDownButton" WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource ShutdownButtonStyle}" FontSize="20" Content="×" Click="ShutdownButton_Click" Height="30" Width="40" Canvas.Right="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Canvas>
-            
-            <Canvas x:Name="leftDock"  Height="510" Canvas.Top="30" Width="150">
-                <Canvas.Background>
-                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                        <GradientStop Color="#A0C5E0" Offset="0.2" />
-                        <GradientStop Color="#1F67B3" Offset="1" />
-                    </LinearGradientBrush>
-                </Canvas.Background>
-                <Canvas x:Name="homePageCanvas" Height="40" Width="150" Canvas.Top="40">
-                    <Button x:Name="homePageButton"  Style="{StaticResource DockButton}" VerticalAlignment="Center" Height="40" Width="150"
+
+            <Canvas x:Name="activicyZone" Height="510" Width="820" Canvas.Top="30">
+                <Canvas x:Name="leftDock"  Height="510" Width="150">
+                    <Canvas.Background>
+                        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                            <GradientStop Color="#A0C5E0" Offset="0.2" />
+                            <GradientStop Color="#1F67B3" Offset="1" />
+                        </LinearGradientBrush>
+                    </Canvas.Background>
+                    <Canvas x:Name="homePageCanvas" Height="40" Width="150" Canvas.Top="40">
+                        <Button x:Name="homePageButton"  Style="{StaticResource DockButton}" VerticalAlignment="Center" Height="40" Width="150"
                 Content="            首页" IsEnabled="False"  Foreground="#1F67B3" FontSize="16" FontFamily="Microsoft Yahei" FontWeight="Bold" HorizontalAlignment="Left" Click="DockButtonAction" MouseEnter="DockButtonEnter" MouseLeave="DockButtonLeave"/>
-                    <Image x:Name="homeImage"  Height="24" Width="24" Canvas.Top="8" Canvas.Left="20" IsHitTestVisible="False" Source="\image\icons\Home_b.png"/>
-                </Canvas>
+                        <Image x:Name="homeImage"  Height="24" Width="24" Canvas.Top="8" Canvas.Left="20" IsHitTestVisible="False" Source="\image\icons\Home_b.png"/>
+                    </Canvas>
 
-                <Canvas x:Name="cleanPageCanvas" Height="40" Width="150" Canvas.Top="80">
-                    <Button x:Name="cleanPageButton" Style="{StaticResource DockButton}" VerticalAlignment="Center" Height="40" Width="150"
+                    <Canvas x:Name="cleanPageCanvas" Height="40" Width="150" Canvas.Top="80">
+                        <Button x:Name="cleanPageButton" Style="{StaticResource DockButton}" VerticalAlignment="Center" Height="40" Width="150"
                 Content="            清理" TextBlock.Foreground="White" FontSize="16" FontFamily="Microsoft Yahei" FontWeight="Bold" HorizontalAlignment="Left" Click="DockButtonAction" MouseEnter="DockButtonEnter" MouseLeave="DockButtonLeave"/>
-                    <Image x:Name="cleanImage"  Height="24" Width="24" Canvas.Top="8" Canvas.Left="20" IsHitTestVisible="False" Source="\image\icons\Clean.png"/>
-                </Canvas>
+                        <Image x:Name="cleanImage"  Height="24" Width="24" Canvas.Top="8" Canvas.Left="20" IsHitTestVisible="False" Source="\image\icons\Clean.png"/>
+                    </Canvas>
 
-                <Canvas x:Name="PCTestCanvas" Height="40" Width="150" Canvas.Top="120">
-                    <Button x:Name="PCTestPageButton" Style="{StaticResource DockButton}" VerticalAlignment="Center" Height="40" Width="150"
+                    <Canvas x:Name="PCTestCanvas" Height="40" Width="150" Canvas.Top="120">
+                        <Button x:Name="PCTestPageButton" Style="{StaticResource DockButton}" VerticalAlignment="Center" Height="40" Width="150"
                 Content="            测试" TextBlock.Foreground="White" FontSize="16" FontFamily="Microsoft Yahei" FontWeight="Bold" HorizontalAlignment="Left" Click="DockButtonAction" MouseEnter="DockButtonEnter" MouseLeave="DockButtonLeave"/>
-                    <Image x:Name="testImage"  Height="24" Width="24" Canvas.Top="8" Canvas.Left="20" IsHitTestVisible="False" Source="\image\icons\PCTest.png"/>
-                </Canvas>
+                        <Image x:Name="testImage"  Height="24" Width="24" Canvas.Top="8" Canvas.Left="20" IsHitTestVisible="False" Source="\image\icons\PCTest.png"/>
+                    </Canvas>
 
-                <Canvas x:Name="toolsCanvas" Height="40" Width="150" Canvas.Top="160">
-                    <Button x:Name="toolsPageButton" Style="{StaticResource DockButton}" VerticalAlignment="Center" Height="40" Width="150"
+                    <Canvas x:Name="toolsCanvas" Height="40" Width="150" Canvas.Top="160">
+                        <Button x:Name="toolsPageButton" Style="{StaticResource DockButton}" VerticalAlignment="Center" Height="40" Width="150"
                 Content="            工具" TextBlock.Foreground="White" FontSize="16" FontFamily="Microsoft Yahei" FontWeight="Bold" HorizontalAlignment="Left" Click="DockButtonAction" MouseEnter="DockButtonEnter" MouseLeave="DockButtonLeave"/>
-                    <Image  x:Name="toolsImage"  Height="24" Width="24" Canvas.Top="8" Canvas.Left="20" IsHitTestVisible="False" Source="\image\icons\Tools.png"/>
-                </Canvas>
+                        <Image  x:Name="toolsImage"  Height="24" Width="24" Canvas.Top="8" Canvas.Left="20" IsHitTestVisible="False" Source="\image\icons\Tools.png"/>
+                    </Canvas>
 
-                <Canvas x:Name="settingCanvas" Height="40" Width="150" Canvas.Top="410">
-                    <Button x:Name="settingPageButton" Style="{StaticResource DockButton}" VerticalAlignment="Center" Height="40" Width="150"
+                    <Canvas x:Name="settingCanvas" Height="40" Width="150" Canvas.Top="410">
+                        <Button x:Name="settingPageButton" Style="{StaticResource DockButton}" VerticalAlignment="Center" Height="40" Width="150"
                 Content="            设置" TextBlock.Foreground="White" FontSize="16" FontFamily="Microsoft Yahei" FontWeight="Bold" HorizontalAlignment="Left" Click="DockButtonAction" MouseEnter="DockButtonEnter" MouseLeave="DockButtonLeave"/>
-                    <Image  x:Name="settingImage" Height="24" Width="24" Canvas.Top="8" Canvas.Left="20" IsHitTestVisible="False" Source="\image\icons\setting.png"/>
-                </Canvas>
+                        <Image  x:Name="settingImage" Height="24" Width="24" Canvas.Top="8" Canvas.Left="20" IsHitTestVisible="False" Source="\image\icons\setting.png"/>
+                    </Canvas>
 
-                <Canvas x:Name="PageSilder" Width="5" Height="20" Background="Transparent" Canvas.Left="5" Canvas.Top="50">
-                    <Border Background="#1F67B3" Width="5" Height="20" CornerRadius="2"/>
-                </Canvas>
+                    <Canvas x:Name="PageSilder" Width="5" Height="20" Background="Transparent" Canvas.Left="5" Canvas.Top="50">
+                        <Border Background="#1F67B3" Width="5" Height="20" CornerRadius="2"/>
+                    </Canvas>
 
-                <Label x:Name="TaskListMessage" WindowChrome.IsHitTestVisibleInChrome="True" Background="Transparent" BorderThickness="0" FontSize="12" Foreground="White" Content="无任务" Height="30" Width="120" Canvas.Right="0" Canvas.Bottom="0" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                <Image Source="\image\icons\Task.png" Width="20" Height="20" Canvas.Left="5" Canvas.Bottom="5"/>
-                <Button x:Name="TaskListButton" Click="TaskListButton_Click" Style="{StaticResource minButtonStyle}" Opacity="0.3" Height="30" Width="30" Canvas.Left="0" Canvas.Bottom="0"/>
-            </Canvas>
-            <Canvas x:Name="actionZone" Background="#F1F9FE" Canvas.Right="0" Canvas.Top="30" Height="510" Width="670">
-                <Frame  x:Name="actionFrame"  BorderThickness="0" Background="Transparent" NavigationUIVisibility="Hidden" Height="510" Width="670"/>
-            </Canvas>
+                    <Label x:Name="TaskListMessage" WindowChrome.IsHitTestVisibleInChrome="True" Background="Transparent" BorderThickness="0" FontSize="12" Foreground="White" Content="无任务" Height="30" Width="120" Canvas.Right="0" Canvas.Bottom="0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <Image Source="\image\icons\Task.png" Width="20" Height="20" Canvas.Left="5" Canvas.Bottom="5"/>
+                    <Button x:Name="TaskListButton" Click="TaskListButton_Click" Style="{StaticResource minButtonStyle}" Opacity="0.3" Height="30" Width="30" Canvas.Left="0" Canvas.Bottom="0"/>
+                </Canvas>
+                <Canvas x:Name="actionZone" Background="#F1F9FE" Canvas.Right="0" Height="510" Width="670">
+                    <Frame  x:Name="actionFrame"  BorderThickness="0" Background="Transparent" NavigationUIVisibility="Hidden" Height="510" Width="670"/>
+                </Canvas>
+                <Canvas x:Name="TasksListShowZone" Width="820" Height="510" Visibility="Collapsed">
+                    <Button x:Name="OtherZoneButton" Width="820" Height="510" Opacity="0" Click="OtherZoneButton_Click"/>
+                    <Canvas Width="390" Height="130" Canvas.Left="10" Canvas.Bottom="40" Background="Transparent">
+                        <Border Width="390" Height="130" Background="#F1F9FE" CornerRadius="5">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="1" BlurRadius="5"/>
+                            </Border.Effect>
+                        </Border>
+                        <hc:ScrollViewer  x:Name="ScorllZone" CanContentScroll="False"  Height="130" Width="390" VerticalScrollBarVisibility="Visible">
+                            <Canvas x:Name="ScorllCanvas" VerticalAlignment="Top" Width="390"  Height="0">
 
-            <Canvas x:Name="TasksListShowZone" Width="820" Height="510" Canvas.Top="30" Visibility="Collapsed">
-                <Button x:Name="OtherZoneButton" Width="820" Height="540" Opacity="0" Click="OtherZoneButton_Click"/>
-                <Canvas Width="390" Height="130" Canvas.Left="10" Canvas.Bottom="40" Background="Transparent">
-                    <Border Width="390" Height="130" Background="#F1F9FE" CornerRadius="5">
-                        <Border.Effect>
-                            <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="1" BlurRadius="5"/>
-                        </Border.Effect>
-                    </Border>
-                    <hc:ScrollViewer  x:Name="ScorllZone" CanContentScroll="False"  Height="130" Width="390" VerticalScrollBarVisibility="Visible">
-                        <Canvas x:Name="ScorllCanvas" VerticalAlignment="Top" Width="390"  Height="0">
-                            
-                        </Canvas>
-                    </hc:ScrollViewer>
+                            </Canvas>
+                        </hc:ScrollViewer>
+                    </Canvas>
                 </Canvas>
             </Canvas>
+            <Border x:Name = "messageMask"  Canvas.Top="0" Height="540" Width="820" Background="Black" IsHitTestVisible="False" Opacity="0"/>
         </Canvas>
-        <Label x:Name = "messageMask"  Height="540" Width="820" Background="Black" IsHitTestVisible="False" Opacity="0"/>
     </Grid>
 </Window>

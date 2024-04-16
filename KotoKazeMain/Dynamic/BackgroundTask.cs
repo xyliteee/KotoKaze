@@ -177,22 +177,20 @@ namespace KotoKaze.Dynamic
                 try
                 {
                     Task<string?> readLineTask = taskProcess.StandardOutput.ReadLineAsync();
-                    int index = 0;
-                    while (!(isCancle || isError || isFinished) && GlobalData.IsRunning)
+                    while (GlobalData.IsRunning)
                     {
-                        if (readLineTask.IsCompleted)
-                        {
-                            if (!string.IsNullOrEmpty(readLineTask.Result)) 
-                            {
-                                Description = readLineTask.Result;
-                            }
-                            readLineTask = taskProcess.StandardOutput.ReadLineAsync();
-                        }
-                        else
+                        if (isCancle || isError || isFinished) break;
+                        if (!readLineTask.IsCompleted)
                         {
                             Thread.Sleep(16);
+                            continue;
                         }
-                        index++;
+                        if (string.IsNullOrEmpty(readLineTask.Result)) 
+                        {
+                            readLineTask = taskProcess.StandardOutput.ReadLineAsync();
+                            continue;
+                        }
+                        Description = readLineTask.Result;
                     }
                 }
                 catch (InvalidOperationException) { }
@@ -320,7 +318,8 @@ namespace KotoKaze.Dynamic
             this.downloader = downloader;
             this.downloader.action = new Action(() => 
             {
-                Description = $"已下载：{downloader.FileDateHaveAlreadyDownloaded * 100 / downloader.fileSize}% [{new string('*', (int)(downloader.FileDateHaveAlreadyDownloaded * 35 / downloader.fileSize))}]";
+                double percentage = downloader.FileDateHaveAlreadyDownloaded * 100 / downloader.fileSize;
+                Description = $"已下载：{percentage}% [{new string('*', (int)(percentage*0.35))}]";
             });
         }
         private static void ButtonCLick(object sender, RoutedEventArgs e)

@@ -1,9 +1,11 @@
 ﻿
+using CleanContent;
 using KotoKaze.Static;
 using SevenZip.Compression.LZ;
 using System.Diagnostics;
 using System.IO;
 using System.Management;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
@@ -51,11 +53,11 @@ namespace XyliteeeMainForm.Views
                 {
                     while (GlobalData.IsRunning)
                     {
+ 
                         memoryAvailable = ramCounter.NextValue();
                         memoryUsed = Convert.ToDouble(systemInfo.RamNumber) - memoryAvailable;
                         ramUseRate = (int)(memoryUsed / systemInfo.RamNumber * 100);
-
-                        DriveInfo systemDrive = new("C:\\");
+                        DriveInfo systemDrive = new($"{CleanRules.SystemDisk}:\\");
                         diskTotal = systemDrive.TotalSize;
                         diskAvailable = systemDrive.TotalFreeSpace;
                         diskUsed = diskTotal - diskAvailable;

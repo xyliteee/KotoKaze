@@ -10,11 +10,8 @@
 
     <Grid>
         <Canvas x:Name="Base" >
-            <Image Canvas.Left="-10" Canvas.Top="-10" x:Name="BackgroundImage" Width="840" Height="320" Stretch="UniformToFill" Opacity="0.8">
-                <Image.Effect>
-                    <BlurEffect KernelType="Gaussian" Radius="0"/>
-                </Image.Effect>
-            </Image>
+            <Image Canvas.Left="-10" Canvas.Top="-10" x:Name="BackgroundImage" Width="840" Height="320" Stretch="UniformToFill" Opacity="0.8"/>
+
             <Border Background="#F1F9FE" Width="820" Height="150" Canvas.Bottom="0" Opacity="0.9"/>
             <Canvas Width="450" Height="100" Canvas.Left="185" Canvas.Top="20">
                 <Border Width="450" Height="100" Background="White" CornerRadius="10">

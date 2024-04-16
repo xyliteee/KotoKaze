@@ -7,6 +7,9 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using static KotoKaze.Dynamic.BackgroundTaskList;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Text.RegularExpressions;
+using static KotoKaze.Dynamic.Network;
 
 
 namespace KotoKaze.Views.toolsPages
@@ -36,6 +39,42 @@ namespace KotoKaze.Views.toolsPages
             if (r.IsYes)
             {
                 GPEDITTASK = new() { Title = "组策略添加" };
+                GPEDITTASK.outputThreadAction = new(() => 
+                {
+                    try
+                    {
+
+                        Task<string?> readLineTask = GPEDITTASK.taskProcess.StandardOutput.ReadLineAsync();
+                        int index = 1;
+                        double percentage;
+                        while (GlobalData.IsRunning)
+                        {
+                            if (GPEDITTASK.isCancle || GPEDITTASK.isError || GPEDITTASK.isFinished) break;
+                            if (!readLineTask.IsCompleted)
+                            {
+                                Thread.Sleep(16);
+                                continue;
+                            }
+                            if (string.IsNullOrEmpty(readLineTask.Result) || !readLineTask.Result.StartsWith('['))
+                            {
+                                readLineTask = GPEDITTASK.taskProcess.StandardOutput.ReadLineAsync();
+                                continue;
+                            }
+                            var match = MyRegex().Match(readLineTask.Result);
+                            if (!match.Success)
+                            {
+                                readLineTask = GPEDITTASK.taskProcess.StandardOutput.ReadLineAsync();
+                                continue;
+                            }
+                            percentage = double.Parse(match.Value);
+                            GPEDITTASK.Description = $"正在安装第{index}/4个包：{percentage}% [{new string('*', (int)(percentage * 0.2))}]";
+                            if (percentage == 100) index++;
+                            readLineTask = GPEDITTASK.taskProcess.StandardOutput.ReadLineAsync();
+                        }
+
+                    }
+                    catch (InvalidOperationException) { }
+                });
                 GPEDITTASK.Start();
                 string[] commands = 
                 [
@@ -100,5 +139,8 @@ namespace KotoKaze.Views.toolsPages
                 });
             });
         }
+
+        [GeneratedRegex(@"\d+")]
+        private static partial Regex MyRegex();
     }
 }

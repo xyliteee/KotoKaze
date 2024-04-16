@@ -128,11 +128,7 @@ namespace KotoKaze.Windows
         }
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            GlobalData.messageBoxList.Remove(this);
-            if (GlobalData.messageBoxList.Count == 0)
-            {
-                Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0, 0.1);
-            }
+            KotoMessageBox.RunClose(this);
             base.OnClosing(e);
         }
     }

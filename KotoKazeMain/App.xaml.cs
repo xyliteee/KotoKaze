@@ -2,9 +2,11 @@
 using KotoKaze.Static;
 using KotoKaze.Windows;
 using SevenZip.Compression.LZ;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 using System.Windows.Threading;
 using XyliteeeMainForm.Views;
 
@@ -27,9 +29,27 @@ namespace XyliteeeMainForm
         private MainWindow mainWindow;
         public App()
         {
+            _ = new Mutex(true, "ElectronicNeedleTherapySystem", out bool ret);
+
+            if (!ret)
+            {
+
+                MessageBox.Show("The applicaiton is already running now","Launching Warring");
+                Environment.Exit(0);
+            }
+            else
+            {
+                DataInit();
+            }
+        }
+        void DataInit()
+        {
             var UpdateLevel = DispatcherPriority.Background;
             StartLoadingWindow s = new();
-            void DataInit()
+            BlurEffect? blurEffect = new() { KernelType = KernelType.Gaussian };
+            s.BackgroundImage.Effect = blurEffect;
+
+            void UISetting()
             {
                 s.LoadinText.Content = "正在进行应用程序设置";
                 Dispatcher.Invoke(() =>
@@ -39,6 +59,7 @@ namespace XyliteeeMainForm
                     FileManager.WorkDirectory.CreatWorkFile();
                 }, UpdateLevel);
                 s.progressBar.Width = 120;
+                blurEffect.Radius = 20;
 
                 s.LoadinText.Content = "正在初始化信息页面";
                 Dispatcher.Invoke(() =>
@@ -47,6 +68,7 @@ namespace XyliteeeMainForm
                     GlobalData.HomePageInstance = homePage;
                 }, UpdateLevel);
                 s.progressBar.Width = 410;
+                blurEffect.Radius = 16;
 
                 s.LoadinText.Content = "正在初始化清理页面";
                 Dispatcher.Invoke(() =>
@@ -55,6 +77,7 @@ namespace XyliteeeMainForm
                     GlobalData.CleanPageInstance = cleanPage;
                 }, UpdateLevel);
                 s.progressBar.Width = 460;
+                blurEffect.Radius = 10;
 
                 s.LoadinText.Content = "正在初始化测试页面";
                 Dispatcher.Invoke(() =>
@@ -63,6 +86,7 @@ namespace XyliteeeMainForm
                     GlobalData.PCTestPageInstance = PCTestPage;
                 }, UpdateLevel);
                 s.progressBar.Width = 580;
+                blurEffect.Radius = 6;
 
                 s.LoadinText.Content = "正在初始化工具页面";
                 Dispatcher.Invoke(() =>
@@ -71,6 +95,7 @@ namespace XyliteeeMainForm
                     GlobalData.ToolsPageInstance = toolsPage;
                 }, UpdateLevel);
                 s.progressBar.Width = 610;
+                blurEffect.Radius = 4;
 
                 s.LoadinText.Content = "正在初始化设置页面";
                 Dispatcher.Invoke(() =>
@@ -79,6 +104,7 @@ namespace XyliteeeMainForm
                     GlobalData.SettingPageInstance = settingPage;
                 }, UpdateLevel);
                 s.progressBar.Width = 640;
+                blurEffect.Radius = 2;
 
                 s.LoadinText.Content = "即将启动......";
                 Dispatcher.Invoke(() =>
@@ -87,9 +113,10 @@ namespace XyliteeeMainForm
                     GlobalData.MainWindowInstance = mainWindow;
                 }, UpdateLevel);
                 s.progressBar.Width = 720;
+                blurEffect = null;
             }
             s.Show();
-            DataInit();
+            UISetting();
             s.Close();
             mainWindow.Show();
         }

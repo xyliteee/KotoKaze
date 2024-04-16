@@ -324,22 +324,29 @@ namespace XyliteeeMainForm.Views
 
 
             BitmapImage softWareIconImage;
-            try 
+            if (File.Exists(softWare.displayIcon))
             {
-                System.Drawing.Bitmap a = System.Drawing.Icon.ExtractAssociatedIcon(softWare.displayIcon).ToBitmap();
-                var m = new MemoryStream();
-                a.Save(m, System.Drawing.Imaging.ImageFormat.Png);
-                m.Position = 0;
-                softWareIconImage = new BitmapImage();
-                softWareIconImage.BeginInit();
-                softWareIconImage.StreamSource = m;
-                softWareIconImage.EndInit();
+                try
+                {
+                    System.Drawing.Bitmap a = System.Drawing.Icon.ExtractAssociatedIcon(softWare.displayIcon).ToBitmap();
+                    var m = new MemoryStream();
+                    a.Save(m, System.Drawing.Imaging.ImageFormat.Png);
+                    m.Position = 0;
+                    softWareIconImage = new BitmapImage();
+                    softWareIconImage.BeginInit();
+                    softWareIconImage.StreamSource = m;
+                    softWareIconImage.EndInit();
+                }
+                catch
+                {
+                    softWareIconImage = defaultIcon;
+                }
+            }
+            else
+            {
+                softWareIconImage = defaultIcon;
+            }
 
-            }
-            catch
-            {
-                softWareIconImage = defaultIcon; 
-            }
 
             Image image = new()
             {
@@ -408,7 +415,7 @@ namespace XyliteeeMainForm.Views
 
             else if (softWare.uninstallString.Contains('"'))
             {
-                var match = Regex.Match(softWare.uninstallString, @"^""([^""]+)""\s*(.*)");
+                var match = MyRegex().Match(softWare.uninstallString);
                 if (match.Success)
                 {
                     uninstallFileName = match.Groups[1].Value;
@@ -488,7 +495,11 @@ namespace XyliteeeMainForm.Views
             ScorllCanvas.Height = 20 + 80 * softWares.Count;
             for (int index = 0; index < softWares.Count; index++)
             {
-                CreatSingleCard(index, softWares[index]);
+                Dispatcher.Invoke(() => 
+                {
+                    CreatSingleCard(index, softWares[index]);
+                },DispatcherPriority.Background);
+                
                 await Task.Delay(10);
             }
             ScorllCanvas.Opacity = 1;
@@ -500,6 +511,9 @@ namespace XyliteeeMainForm.Views
         {
             return key.GetValue(valueName) as string ?? "未提供";
         }
+
+        [GeneratedRegex(@"^""([^""]+)""\s*(.*)")]
+        private static partial Regex MyRegex();
     }
 
     public partial class SoftWare

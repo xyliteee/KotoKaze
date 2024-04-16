@@ -226,5 +226,6 @@
             { "Charge capacity history of the system's batteries","系统实际充满容量历史情况"},
         };
 
+
     }
 }
