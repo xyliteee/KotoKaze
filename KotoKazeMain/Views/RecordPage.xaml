@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:KotoKaze.Views"
+      xmlns:hc="https://handyorg.github.io/handycontrol"
       xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
       mc:Ignorable="d" 
       d:DesignHeight="510" d:DesignWidth="670"
@@ -11,13 +12,53 @@
 
     <Grid>
         <Canvas Background="#F3F8FE">
-            <lvc:CartesianChart  x:Name="CPU_Chrat" LegendLocation="Bottom" Height="300" Width="630" Canvas.Left="20" Canvas.Top="20"/>
+            <Border Background="White" Width="630" Height="300" CornerRadius="5" Canvas.Left="20" Canvas.Top="20">
+                <Border.Effect>
+                    <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
+                </Border.Effect>
+            </Border>
+            <hc:ScrollViewer Height="300" Width="630" Canvas.Left="20" Canvas.Top="20">
+                <Canvas  Width="630" Height="920" CacheMode="BitmapCache">
+                    <Canvas Width="630" Height="300">
+                        <Label BorderThickness="0" Background="Transparent" Width="610" Canvas.Left="10" Canvas.Top="0" Content="CPU监测结果" FontSize="16" Foreground="Gray"/>
+                        <lvc:CartesianChart  x:Name="CPU_Chrat" LegendLocation="Bottom" Height="270" Canvas.Top="25" Width="610" Canvas.Left="10"/>
+                    </Canvas>
+                    <Canvas Width="630" Height="300" Canvas.Top="310">
+                        <Label BorderThickness="0" Background="Transparent" Width="610" Canvas.Left="10" Canvas.Top="0" Content="GPU监测结果" FontSize="16" Foreground="Gray"/>
+                        <lvc:CartesianChart  x:Name="GPU_Chrat" LegendLocation="Bottom" Height="270" Width="610" Canvas.Left="10" Canvas.Top="25"/>
+                    </Canvas>
+                    <Canvas Width="630" Height="300" Canvas.Top="620">
+                        <Label BorderThickness="0" Background="Transparent" Width="610" Canvas.Left="10" Canvas.Top="0" Content="RAM监测结果" FontSize="16" Foreground="Gray"/>
+                        <lvc:CartesianChart  x:Name="RAM_Chrat" LegendLocation="Bottom" Height="270" Width="610" Canvas.Left="10" Canvas.Top="25"/>
+                    </Canvas>
+                </Canvas>
+            </hc:ScrollViewer>
             <Canvas Canvas.Left="20" Canvas.Bottom="20" Height="150" Width="630">
                 <Border Background="White" Width="630" Height="150" CornerRadius="5">
                     <Border.Effect>
                         <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                     </Border.Effect>
                 </Border>
+                <Canvas x:Name="CPULoadAVGCanvas" Width="120" Height="60" Canvas.Top="10" Canvas.Left="10">
+                    <Label  BorderThickness="0" Background="Transparent" Content="CPU平均负载" FontSize="12" Height="20" Padding="0,0,0,0" Width="120" Foreground="#1F67B3"/>
+                    <Label x:Name="CPULoadAVGLable" BorderThickness="0" Background="Transparent" Content="..." Width="120" FontSize="20" FontWeight="Bold" Foreground="#1F67B3" Height="40" Canvas.Top="20"/>
+                </Canvas>
+                <Canvas x:Name="CPULoadMaxCanvas" Width="120" Height="60" Canvas.Top="10" Canvas.Left="130">
+                    <Label  BorderThickness="0" Background="Transparent" Content="CPU最大负载" FontSize="12" Height="20" Padding="0,0,0,0" Width="120" Foreground="#1F67B3"/>
+                    <Label x:Name="CPULoadMaxLable" BorderThickness="0" Background="Transparent" Content="..." Width="120" FontSize="20" FontWeight="Bold" Foreground="#1F67B3" Height="40" Canvas.Top="20"/>
+                </Canvas>
+                <Canvas x:Name="CPUPowerAvgCanvas" Width="120" Height="60" Canvas.Top="10" Canvas.Left="255">
+                    <Label  BorderThickness="0" Background="Transparent" Content="CPU平均功耗" FontSize="12" Height="20" Padding="0,0,0,0" Width="120" Foreground="#1F67B3"/>
+                    <Label x:Name="CPUPowerAvgLable" BorderThickness="0" Background="Transparent" Content="..." Width="120" FontSize="20" FontWeight="Bold" Foreground="#1F67B3" Height="40" Canvas.Top="20"/>
+                </Canvas>
+                <Canvas x:Name="CPUPowerMaxCanvas" Width="120" Height="60" Canvas.Top="10" Canvas.Left="380">
+                    <Label  BorderThickness="0" Background="Transparent" Content="CPU峰值功耗" FontSize="12" Height="20" Padding="0,0,0,0" Width="120" Foreground="#1F67B3"/>
+                    <Label x:Name="CPUPowerMaxLable" BorderThickness="0" Background="Transparent" Content="..." Width="120" FontSize="20" FontWeight="Bold" Foreground="#1F67B3" Height="40" Canvas.Top="20"/>
+                </Canvas>
+                <Canvas x:Name="CPUTempMaxCanvas" Width="120" Height="60" Canvas.Top="10" Canvas.Left="500">
+                    <Label  BorderThickness="0" Background="Transparent" Content="CPU最高温度" FontSize="12" Height="20" Padding="0,0,0,0" Width="120" Foreground="#1F67B3"/>
+                    <Label x:Name="CPUTempMaxLable" BorderThickness="0" Background="Transparent" Content="..." Width="120" FontSize="20" FontWeight="Bold" Foreground="#1F67B3" Height="40" Canvas.Top="20"/>
+                </Canvas>
             </Canvas>
         </Canvas>
     </Grid>

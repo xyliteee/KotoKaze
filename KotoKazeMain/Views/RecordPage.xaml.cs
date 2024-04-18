@@ -29,6 +29,7 @@ namespace KotoKaze.Views
         private readonly List<double> GPUPower;
         private readonly List<double> RAMLoad;
         private readonly List<double> CPUTemp;
+        private readonly Axis Time;
         public RecordPage(Dictionary<string, List<double>> recordData)
         {
             InitializeComponent();
@@ -38,7 +39,24 @@ namespace KotoKaze.Views
             GPUPower = recordData["CoreGPU_Power"];
             RAMLoad = recordData["RAM_Load"];
             CPUTemp = recordData["CPU_Temp"];
-            SeriesCollection series =
+            Time = new()
+            {
+                MinValue = 0,
+                MaxValue = CPULoad.Count,
+                LabelFormatter = value => value.ToString() + "秒",
+            };
+            DrawChart();
+            DataSummary();
+        }
+        private void DrawChart() 
+        {
+            DrawCPU();
+            DrawRAM();
+            DrawGPU();
+        }
+        private void DrawCPU() 
+        {
+            SeriesCollection CPUseries =
             [
                 new LineSeries
                 {
@@ -47,6 +65,7 @@ namespace KotoKaze.Views
                     Fill=new SolidColorBrush(Colors.Transparent),
                     Title = "CPU占用",
                     ScalesYAt = 0,
+                    ScalesXAt = 0,
                 },
                 new LineSeries
                 {
@@ -55,14 +74,16 @@ namespace KotoKaze.Views
                     Fill=new SolidColorBrush(Colors.Transparent),
                     Title = "CPU功耗",
                     ScalesYAt = 1,
+                    ScalesXAt = 0,
                 },
                 new LineSeries
                 {
                     Values = new ChartValues<double>(CPUTemp),
-                    Stroke = new SolidColorBrush(Colors.MediumVioletRed),
+                    Stroke = new SolidColorBrush(Colors.OrangeRed),
                     Fill=new SolidColorBrush(Colors.Transparent),
                     Title = "CPU温度",
                     ScalesYAt = 2,
+                    ScalesXAt = 0,
                 }
 
             ];
@@ -74,21 +95,96 @@ namespace KotoKaze.Views
             };
             Axis powerY = new()
             {
-                 MinValue = 0,
-                 MaxValue = CPUPower.Max(),
-                 LabelFormatter = value => value.ToString() + "W"
+                MinValue = 0,
+                MaxValue = CPUPower.Max(),
+                LabelFormatter = value => value.ToString() + "W"
             };
             Axis tempY = new()
             {
                 MinValue = 0,
                 MaxValue = 100,
-                LabelFormatter = value => value.ToString() + "°C"
+                LabelFormatter = value => value.ToString() + "°C",
+                Position = AxisPosition.RightTop
+
             };
             CPU_Chrat.AxisY.Clear();
+            CPU_Chrat.AxisX.Clear();
             CPU_Chrat.AxisY.Add(loadY);
             CPU_Chrat.AxisY.Add(powerY);
             CPU_Chrat.AxisY.Add(tempY);
-            CPU_Chrat.Series = series;
+            CPU_Chrat.AxisX.Add(Time);
+            CPU_Chrat.Series = CPUseries;
+        }
+        private void DrawRAM() 
+        {
+            SeriesCollection RAMseries =
+            [
+                new LineSeries
+                {
+                    Values = new ChartValues<double>(RAMLoad),
+                    Stroke = new SolidColorBrush(Colors.Chocolate),
+                    Fill=new SolidColorBrush(Colors.Transparent),
+                    Title = "内存占用",
+                    ScalesYAt = 0,
+                    ScalesXAt = 0,
+                },
+            ];
+            Axis loadY = new()
+            {
+                MinValue = 0,
+                MaxValue = 110,
+                LabelFormatter = value => value.ToString() + "%",
+            };
+            RAM_Chrat.AxisY.Clear();
+            RAM_Chrat.AxisX.Clear();
+            RAM_Chrat.AxisY.Add(loadY);
+            RAM_Chrat.AxisX.Add(Time);
+            RAM_Chrat.Series = RAMseries;
+        }
+        private void DrawGPU() 
+        {
+            SeriesCollection GPUseries =
+            [
+                new LineSeries
+                {
+                    Values = new ChartValues<double>(GPUPower),
+                    Stroke = new SolidColorBrush(Colors.DeepSkyBlue),
+                    Fill=new SolidColorBrush(Colors.Transparent),
+                    Title = "核心显卡功耗",
+                    ScalesYAt = 0,
+                    ScalesXAt = 0,
+                },
+            ];
+            Axis powerY = new()
+            {
+                MinValue = 0,
+                MaxValue = GPUPower.Max(),
+                LabelFormatter = value => value.ToString() + "W"
+            };
+            GPU_Chrat.AxisY.Clear();
+            GPU_Chrat.AxisX.Clear();
+            GPU_Chrat.AxisY.Add(powerY);
+            GPU_Chrat.AxisX.Add(Time);
+            GPU_Chrat.Series = GPUseries;
+        }
+        private void DataSummary() 
+        {
+            Task.Run(() => 
+            {
+                double CPULoadAvg = Math.Round(CPULoad.Average(),2);
+                double CPULoadMax = CPULoad.Max();
+                double CPUPowerAvg = Math.Round(CPUPower.Average(),2);
+                double CPUPowerMax = CPUPower.Max();
+                double CPUTempMax = CPUTemp.Max();
+                Dispatcher.Invoke(() => 
+                {
+                    CPULoadAVGLable.Content = CPULoadAvg + "%";
+                    CPULoadMaxLable.Content = CPULoadMax + "%";
+                    CPUPowerAvgLable.Content = CPUPowerAvg + "W";
+                    CPUPowerMaxLable.Content = CPUPowerMax + "W";
+                    CPUTempMaxLable.Content = CPUTempMax + "°C";
+                });
+            });
         }
     }
 }
