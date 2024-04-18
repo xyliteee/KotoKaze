@@ -34,13 +34,16 @@
     <None Remove="image\icons\PCTest.png" />
     <None Remove="image\icons\PCTest_b.png" />
     <None Remove="image\icons\RAM.png" />
+    <None Remove="image\icons\Record.png" />
     <None Remove="image\icons\Recyclebin.png" />
     <None Remove="image\icons\scan.png" />
     <None Remove="image\icons\scaning.png" />
     <None Remove="image\icons\Setting.png" />
     <None Remove="image\icons\Setting_an.png" />
     <None Remove="image\icons\setting_b.png" />
+    <None Remove="image\icons\startButton.png" />
     <None Remove="image\icons\startclean.png" />
+    <None Remove="image\icons\stopButton.png" />
     <None Remove="image\icons\Task.png" />
     <None Remove="image\icons\Tools.png" />
     <None Remove="image\icons\Tools_b.png" />
@@ -59,6 +62,9 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </Resource>
+    <Resource Include="image\icons\Record.png" />
+    <Resource Include="image\icons\startButton.png" />
+    <Resource Include="image\icons\stopButton.png" />
     <Resource Include="image\icons\Task.png" />
     <Resource Include="image\Header\Test2.png" />
     <Resource Include="image\icons\cha.png" />
@@ -77,7 +83,10 @@
     <PackageReference Include="HandyControl" Version="3.4.0" />
     <PackageReference Include="HandyControls" Version="3.5.0" />
     <PackageReference Include="HelixToolkit" Version="2.24.0" />
+    <PackageReference Include="LiveCharts" Version="0.9.7" />
+    <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
     <PackageReference Include="Markdig" Version="0.34.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="SevenZip" Version="19.0.0" />
     <PackageReference Include="SkiaSharp" Version="2.88.7" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
@@ -113,6 +122,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CleanContent\CleanContent.csproj" />
+    <ProjectReference Include="..\openhardwaremonitor-master\OpenHardwareMonitorLib.csproj" />
     <ProjectReference Include="..\Translation\Translation.csproj" />
     <ProjectReference Include="..\WorkLoad\TestContent.csproj" />
   </ItemGroup>

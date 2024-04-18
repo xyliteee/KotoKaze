@@ -7,12 +7,10 @@ namespace KotoKaze.Dynamic
     public class BackgroundTaskList<T> : List<T>
     {
         public delegate void ChangeHandler(object sender, EventArgs e);
-        public Action OnChange;
-        public BackgroundTaskList() => OnChange = new Action(BackgroundTask.RefreshTaskList);
         public new void Add(T item)
         {
             base.Add(item);
-            OnChange.Invoke();
+            BackgroundTask.RefreshTaskList();
         }
 
         public new bool Remove(T item)
@@ -20,7 +18,7 @@ namespace KotoKaze.Dynamic
             var result = base.Remove(item);
             if (result)
             {
-                OnChange.Invoke();
+                BackgroundTask.RefreshTaskList();
             }
             return result;
         }
@@ -30,7 +28,7 @@ namespace KotoKaze.Dynamic
     {
         public static bool IsTaskRunning(BackgroundTask? backgroundTask)
         {
-            if (backgroundTask == null) { return false; }
+            if (backgroundTask == null)  return false; 
             if (GlobalData.TasksList.Contains(backgroundTask)) return true;
             return false;
         }

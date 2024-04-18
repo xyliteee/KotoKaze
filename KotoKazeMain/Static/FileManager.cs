@@ -15,14 +15,18 @@ namespace KotoKaze.Static
             public static readonly string backupDirectory = Path.Combine(rootDirectory, "Backup");
             public static readonly string BinDirectory = Path.Combine(rootDirectory, "Bin");
             public static readonly string logfileDirectory = Path.Combine(rootDirectory, "logs");
+            public static readonly string outPutDirectory = Path.Combine(rootDirectory, "Output");
             public static readonly string softwareTempDirectory = Path.Combine(CleanRules.APPDATE, "Local\\Temp\\KotoKaze");
 
             public static void CreatWorkDirectory()
             {
                 Directory.CreateDirectory(backupDirectory);
                 Directory.CreateDirectory(BinDirectory);
+                Directory.CreateDirectory(Path.Combine(outPutDirectory, "BatteryReport"));
+                Directory.CreateDirectory(Path.Combine(outPutDirectory, "RecordData"));
                 Directory.CreateDirectory(softwareTempDirectory);
                 Directory.CreateDirectory(logfileDirectory);
+                Directory.CreateDirectory(outPutDirectory);
             }
 
 

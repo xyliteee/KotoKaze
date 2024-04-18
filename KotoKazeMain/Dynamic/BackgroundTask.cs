@@ -146,7 +146,13 @@ namespace KotoKaze.Dynamic
         private Thread outputThread;
         public Action errorThreadAction;
         private Thread errorThread;
-        private readonly CancellationTokenSource cts = new ();
+        public  static readonly ProcessStartInfo startInfoWithWindow = new()
+        {
+            FileName = "cmd.exe",
+            RedirectStandardInput = true,
+            CreateNoWindow = false,
+            UseShellExecute = false
+        };
         private static readonly ProcessStartInfo startInfo = new()
         {
             FileName = "cmd.exe",
@@ -185,12 +191,13 @@ namespace KotoKaze.Dynamic
                             Thread.Sleep(16);
                             continue;
                         }
-                        if (string.IsNullOrEmpty(readLineTask.Result)) 
+                        if (string.IsNullOrEmpty(readLineTask.Result))
                         {
                             readLineTask = taskProcess.StandardOutput.ReadLineAsync();
                             continue;
                         }
                         Description = readLineTask.Result;
+                        readLineTask = taskProcess.StandardOutput.ReadLineAsync();
                     }
                 }
                 catch (InvalidOperationException) { }
@@ -281,20 +288,11 @@ namespace KotoKaze.Dynamic
                 });
             }
             Description = "正在取消......";
-            taskProcess.Close();//手动关闭进程
+            taskProcess.Kill();//手动关闭进程
             Task.Run(() => 
             {
                 try
                 {
-                    if (!taskProcess.WaitForExit(5000))
-                    {
-                        taskProcess.Kill();
-                    };
-                    SetShutdown();
-                }
-                catch (InvalidOperationException)
-                {
-                    //表明进程已经因为Close方法立刻响应而退出，taskProcess.WaitForExits是无意义的,不需要额外处理,继续设置即可
                     SetShutdown();
                 }
 

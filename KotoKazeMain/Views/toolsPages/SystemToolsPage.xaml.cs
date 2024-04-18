@@ -96,9 +96,13 @@ namespace KotoKaze.Views.toolsPages
             if (r.IsClose) return;
             if (r.IsYes)
             {
+                KotoMessageBoxSingle.ShowDialog("该任务耗时非常长，进程不由本程序接管\n注意检查弹出的窗口");
                 SFCSCANNOW = new() { Title = "SFC系统修复" };
+                SFCSCANNOW.taskProcess.StartInfo = CMDBackgroundTask.startInfoWithWindow;
+                SFCSCANNOW.errorThreadAction = new(() => { });
+                SFCSCANNOW.outputThreadAction = new(() => { });
                 SFCSCANNOW.Start();
-                SFCSCANNOW.CommandWrite(["SFC /SCANNOW"]);
+                SFCSCANNOW.CommandWrite(["sfc /scannow"]);
                 SFCSCANNOW.StreamProcess();
             }
         }
@@ -111,9 +115,10 @@ namespace KotoKaze.Views.toolsPages
             }
             GETBATTERYREPORT = new() { Title = "获取电池报告" };
             Task.Run(() => 
-            { 
+            {
+                string time = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
                 GETBATTERYREPORT.Start();
-                string reportFilePath = Path.Combine(FileManager.WorkDirectory.BinDirectory, "BatteryReport.html");
+                string reportFilePath = Path.Combine(FileManager.WorkDirectory.outPutDirectory, $"BatteryReport/{time}.html");
                 string reportFilePathTemp = Path.Combine(FileManager.WorkDirectory.softwareTempDirectory, "BatteryReport.html");
                 File.Delete(reportFilePathTemp);
                 GETBATTERYREPORT.CommandWrite([$"powercfg /batteryreport /output \"{reportFilePathTemp}\""]);
@@ -125,12 +130,11 @@ namespace KotoKaze.Views.toolsPages
                 string reportTextToChinese = TranslationRules.Translate(reportText, TranslationRules.batteryReport);
 
                 GETBATTERYREPORT.SetFinished();
-                File.Delete(reportFilePath);
                 File.WriteAllText(reportFilePath, reportTextToChinese);
 
                 Dispatcher.Invoke(() =>
                 {
-                    var r = KotoMessageBox.ShowDialog("报告文件已保存在程序目录的/Bin文件夹下,是否打开？");
+                    var r = KotoMessageBox.ShowDialog("报告文件已保存在程序目录的/Output文件夹下,是否打开？");
                     if (r.IsClose) return;
                     if (r.IsYes)
                     {

@@ -42,6 +42,7 @@ namespace XyliteeeMainForm
             actionFrame.Navigated += PageChanged;
             buttons = [homePageButton, cleanPageButton, PCTestPageButton, toolsPageButton, settingPageButton];
             WindowStyle = WindowStyle.SingleBorderWindow;
+            messageMask.Visibility = Visibility.Visible;
             CheckFirstUse();
             BackroundTaskViewInit();
         }
@@ -112,6 +113,10 @@ namespace XyliteeeMainForm
             {
                 backButton.Visibility = Visibility.Visible;//将返回按钮显示
             }
+            else if (currentPage is homePage && homePage.secondActionFrame.Visibility == Visibility.Visible) 
+            {
+                backButton.Visibility = Visibility.Visible;//将返回按钮显示
+            }
             else { backButton.Visibility = Visibility.Collapsed; }
         }
 
@@ -164,6 +169,10 @@ namespace XyliteeeMainForm
             if (currentPage is toolsPage && toolsPage.secondActionFrame.Visibility == Visibility.Visible)//如果当前页面是工具页面且二级页面处于开启状态
             {
                 toolsPage.secondActionFrame.Visibility = Visibility.Collapsed;//按钮可以将二级页面关闭
+            }
+            if (currentPage is homePage && homePage.secondActionFrame.Visibility == Visibility.Visible) 
+            {
+                homePage.secondActionFrame.Visibility = Visibility.Collapsed;
             }
             backButton.Visibility = Visibility.Collapsed;//然后按钮关闭
         }

@@ -1,0 +1,395 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <RootNamespace>OpenHardwareMonitor</RootNamespace>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AssemblyTitle>Open Hardware Monitor Library</AssemblyTitle>
+    <Product>Open Hardware Monitor Library</Product>
+    <Copyright>Copyright © 2009-2020 Michael Möller</Copyright>
+    <AssemblyVersion>0.9.6.0</AssemblyVersion>
+    <InformationalVersion>0.9.6</InformationalVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Hardware\WinRing0.sys" />
+    <EmbeddedResource Include="Hardware\WinRing0x64.sys" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.IO.Ports" Version="8.0.0" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="External\Aga.Controls\BitmapHelper.cs" />
+    <Compile Remove="External\Aga.Controls\GifDecoder.cs" />
+    <Compile Remove="External\Aga.Controls\NumericTextBox.cs" />
+    <Compile Remove="External\Aga.Controls\PerformanceAnalyzer.cs" />
+    <Compile Remove="External\Aga.Controls\Properties\AssemblyInfo.cs" />
+    <Compile Remove="External\Aga.Controls\Properties\Resources.Designer.cs" />
+    <Compile Remove="External\Aga.Controls\ResourceHelper.cs" />
+    <Compile Remove="External\Aga.Controls\StringCollectionEditor.cs" />
+    <Compile Remove="External\Aga.Controls\TextHelper.cs" />
+    <Compile Remove="External\Aga.Controls\Threading\AbortableThreadPool.cs" />
+    <Compile Remove="External\Aga.Controls\Threading\WorkItem.cs" />
+    <Compile Remove="External\Aga.Controls\Threading\WorkItemStatus.cs" />
+    <Compile Remove="External\Aga.Controls\TimeCounter.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\AutoRowHeightLayout.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\ColumnCollection.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\DrawContext.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\DropNodeValidatingEventArgs.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\DropPosition.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\EditorContext.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\Enums.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\FixedRowHeightLayout.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\IncrementalSearch.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\Input\ClickColumnState.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\Input\ColumnState.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\Input\InputState.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\Input\InputWithControl.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\Input\InputWithShift.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\Input\NormalInputState.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\Input\ReorderColumnState.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\Input\ResizeColumnState.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\IRowLayout.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\IToolTipProvider.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\ITreeModel.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\ListModel.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\MemberAdapter.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\NativeMethods.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\Node.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\NodeControlInfo.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\NodeControls\BaseTextControl.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\NodeControls\BindableControl.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\NodeControls\DrawEventArgs.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\NodeControls\EditableControl.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\NodeControls\EditEventArgs.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\NodeControls\ExpandingIcon.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\NodeControls\InteractiveControl.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\NodeControls\LabelEventArgs.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\NodeControls\NodeCheckBox.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\NodeControls\NodeComboBox.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\NodeControls\NodeControl.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\NodeControls\NodeControlsCollection.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\NodeControls\NodeControlValueEventArgs.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\NodeControls\NodeDecimalTextBox.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\NodeControls\NodeEventArgs.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\NodeControls\NodeIcon.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\NodeControls\NodeIntegerTextBox.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\NodeControls\NodeNumericUpDown.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\NodeControls\NodePlusMinus.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\NodeControls\NodeStateIcon.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\NodeControls\NodeTextBox.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\SortedTreeModel.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\TreeColumn.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\TreeColumnCollection.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\TreeColumnEventArgs.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\TreeListAdapter.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\TreeModel.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\TreeModelBase.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\TreeModelEventArgs.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\TreeNodeAdv.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\TreeNodeAdvMouseEventArgs.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\TreePath.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\TreePathEventArgs.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\TreeViewAdv.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\TreeViewAdv.Designer.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\TreeViewAdv.Draw.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\TreeViewAdv.Editor.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\TreeViewAdv.Input.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\TreeViewAdv.Properties.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\TreeViewAdvCancelEventArgs.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\TreeViewAdvEventArgs.cs" />
+    <Compile Remove="External\Aga.Controls\Tree\TreeViewRowDrawEventArgs.cs" />
+    <Compile Remove="External\OxyPlot\GlobalAssemblyInfo.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot.WindowsForms\GraphicsRenderContext.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot.WindowsForms\HashSet.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot.WindowsForms\Helpers\ConverterExtensions.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot.WindowsForms\NamespaceDoc.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot.WindowsForms\Plot.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot.WindowsForms\PlotControl.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot.WindowsForms\PngExporter.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot.WindowsForms\Properties\AssemblyInfo.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Annotations\Annotation.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Annotations\AnnotationLayer.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Annotations\ArrowAnnotation.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Annotations\EllipseAnnotation.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Annotations\ImageAnnotation.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Annotations\LineAnnotation.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Annotations\LineAnnotationType.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Annotations\PolygonAnnotation.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Annotations\RectangleAnnotation.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Annotations\TextAnnotation.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Annotations\TextualAnnotation.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Annotations\TileMapAnnotation.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Axes\AngleAxis.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Axes\Axis.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Axes\AxisChangedEventArgs.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Axes\AxisChangeTypes.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Axes\AxisLayer.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Axes\AxisPosition.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Axes\CategoryAxis.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Axes\ColorAxis.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Axes\DateTimeAxis.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Axes\DateTimeIntervalType.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Axes\LinearAxis.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Axes\LogarithmicAxis.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Axes\MagnitudeAxis.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Axes\RangeAxis.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Axes\TickStyle.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Axes\TimeAxis.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Axes\TimeSpanAxis.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\ArrayHelper.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\CanonicalSplineHelper.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\CodeGenerator\CodeGenerationAttribute.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\CodeGenerator\CodeGenerator.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\CodeGenerator\CodeGeneratorStringExtensions.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\CodeGenerator\ICodeGenerating.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\CohenSutherlandClipping.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\Color.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\Colors.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\Conrec.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\DataPoint.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\DataPointConverter.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\DoubleExtensions.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\FontWeights.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\FractionHelper.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\HorizontalAlignment.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\IDataPoint.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\IDataPointProvider.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\LineStyle.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\LineStyleHelper.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\ListFiller.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\MarkerType.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\OxyColor.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\OxyColorConverter.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\OxyColors.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\OxyImage.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\OxyPalette.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\OxyPalettes.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\OxyPen.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\OxyPenLineJoin.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\OxyRect.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\OxySize.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\OxyThickness.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\Pen.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\PlotLength.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\PlotLengthUnit.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\PngEncoder.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\Point.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\Rectangle.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\ReflectionHelper.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\ScreenPoint.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\ScreenPointHelper.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\ScreenVector.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\Size.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\StreamExtensions.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\StringHelper.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\SutherlandHodgmanClipping.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\VerticalAlignment.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Foundation\XmlWriterBase.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\LibraryDoc.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Manipulators\CursorType.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Manipulators\IPlotControl.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Manipulators\ManipulationEventArgs.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Manipulators\ManipulatorBase.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Manipulators\PanManipulator.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Manipulators\ResetManipulator.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Manipulators\TrackerHitResult.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Manipulators\TrackerManipulator.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Manipulators\ZoomManipulator.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Manipulators\ZoomRectangleManipulator.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Manipulators\ZoomStepManipulator.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\MouseActions\MouseAction.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\MouseActions\SliderAction.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\NamespaceDoc.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\PlotModel\HitTestResult.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\PlotModel\OxyMouseButton.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\PlotModel\OxyMouseEventArgs.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\PlotModel\PlotElement.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\PlotModel\PlotModel.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\PlotModel\PlotModel.Legends.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\PlotModel\PlotModel.MouseEvents.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\PlotModel\PlotModel.Rendering.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\PlotModel\SelectablePlotElement.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\PlotModel\UIPlotElement.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Properties\AssemblyInfo.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Render\AngleAxisRenderer.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Render\AxisRenderer.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Render\AxisRendererBase.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Render\HorizontalAndVerticalAxisRenderer.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Render\IRenderContext.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Render\MagnitudeAxisRenderer.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Render\MathRenderingExtensions.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Render\PlotRenderer.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Render\RenderContextBase.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Render\RenderingExtensions.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Render\VerticalAxisRenderer.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\NamespaceDoc.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\ReportWriters\HtmlReportWriter.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\ReportWriters\IReportWriter.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\ReportWriters\StringExtensions.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\ReportWriters\TextReportWriter.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\ReportWriters\WikiReportWriter.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\Report\Content.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\Report\Drawing.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\Report\DrawingFigure.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\Report\Equation.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\Report\Figure.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\Report\Header.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\Report\HeaderHelper.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\Report\Image.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\Report\ItemsTable.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\Report\ItemsTableField.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\Report\Paragraph.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\Report\ParagraphStyle.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\Report\Plot.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\Report\PlotFigure.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\Report\PropertyTable.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\Report\Report.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\Report\ReportItem.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\Report\ReportSection.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\Report\ReportStyle.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\Report\Table.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\Report\TableColumn.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Reporting\Report\TableOfContents.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\AreaSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\BarSeries\BarItem.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\BarSeries\BarItemBase.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\BarSeries\BarSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\BarSeries\BarSeriesBase.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\BarSeries\BarSeriesBase{T}.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\BarSeries\CategorizedItem.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\BarSeries\CategorizedSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\BarSeries\ColumnItem.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\BarSeries\ColumnSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\BarSeries\ErrorColumnItem.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\BarSeries\ErrorColumnSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\BarSeries\IntervalBarItem.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\BarSeries\IntervalBarSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\BarSeries\IStackableSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\BarSeries\LabelPlacement.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\BarSeries\RectangleBarItem.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\BarSeries\RectangleBarSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\BarSeries\TornadoBarItem.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\BarSeries\TornadoBarSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\BoxPlotItem.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\BoxPlotSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\CandleStickSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\ContourSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\DataPointSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\FunctionSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\HeatMapSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\HighLowItem.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\HighLowSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\ItemsSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\ITrackableSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\LineLegendPosition.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\LineSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\PieSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\PieSlice.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\PlotSeriesBase.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\ScatterPoint.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\ScatterSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\Series.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\StairStepSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\StemSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\TwoColorLineSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Series\XYAxisSeries.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Svg\NativeMethods.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Svg\SvgExporter.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Svg\SvgRenderContext.cs" />
+    <Compile Remove="External\OxyPlot\OxyPlot\Svg\SvgWriter.cs" />
+    <Compile Remove="GUI\AboutBox.cs" />
+    <Compile Remove="GUI\AboutBox.Designer.cs" />
+    <Compile Remove="GUI\CrashForm.cs" />
+    <Compile Remove="GUI\CrashForm.Designer.cs" />
+    <Compile Remove="GUI\DpiHelper.cs" />
+    <Compile Remove="GUI\Gadget.cs" />
+    <Compile Remove="GUI\GadgetWindow.cs" />
+    <Compile Remove="GUI\HardwareNode.cs" />
+    <Compile Remove="GUI\HardwareTypeImage.cs" />
+    <Compile Remove="GUI\MainForm.cs" />
+    <Compile Remove="GUI\MainForm.Designer.cs" />
+    <Compile Remove="GUI\Node.cs" />
+    <Compile Remove="GUI\NotifyIconAdv.cs" />
+    <Compile Remove="GUI\ParameterForm.cs" />
+    <Compile Remove="GUI\ParameterForm.Designer.cs" />
+    <Compile Remove="GUI\PlotPanel.cs" />
+    <Compile Remove="GUI\PortForm.cs" />
+    <Compile Remove="GUI\PortForm.Designer.cs" />
+    <Compile Remove="GUI\ReportForm.cs" />
+    <Compile Remove="GUI\ReportForm.Designer.cs" />
+    <Compile Remove="GUI\SensorGadget.cs" />
+    <Compile Remove="GUI\SensorNode.cs" />
+    <Compile Remove="GUI\SensorNotifyIcon.cs" />
+    <Compile Remove="GUI\ShowDesktop.cs" />
+    <Compile Remove="GUI\SplitContainerAdv.cs" />
+    <Compile Remove="GUI\StartupManager.cs" />
+    <Compile Remove="GUI\SystemTray.cs" />
+    <Compile Remove="GUI\TaskScheduler.cs" />
+    <Compile Remove="GUI\TreeModel.cs" />
+    <Compile Remove="GUI\TypeNode.cs" />
+    <Compile Remove="GUI\UnitManager.cs" />
+    <Compile Remove="GUI\UpdateVisitor.cs" />
+    <Compile Remove="GUI\UserOption.cs" />
+    <Compile Remove="GUI\UserRadioGroup.cs" />
+    <Compile Remove="Program.cs" />
+    <Compile Remove="Properties\AssemblyInfo.cs" />
+    <Compile Remove="Utilities\EmbeddedResources.cs" />
+    <Compile Remove="Utilities\HttpServer.cs" />
+    <Compile Remove="Utilities\HttpUtility.cs" />
+    <Compile Remove="Utilities\IconFactory.cs" />
+    <Compile Remove="Utilities\Logger.cs" />
+    <Compile Remove="Utilities\PersistentSettings.cs" />
+    <Compile Remove="WMI\Hardware.cs" />
+    <Compile Remove="WMI\IWmiObject.cs" />
+    <Compile Remove="WMI\Sensor.cs" />
+    <Compile Remove="WMI\WmiProvider.cs" />
+    <EmbeddedResource Remove="External\Aga.Controls\Properties\Resources.resx" />
+    <EmbeddedResource Remove="External\Aga.Controls\Tree\TreeViewAdv.resx" />
+    <EmbeddedResource Remove="GUI\AboutBox.resx" />
+    <EmbeddedResource Remove="GUI\CrashForm.resx" />
+    <EmbeddedResource Remove="GUI\MainForm.resx" />
+    <EmbeddedResource Remove="GUI\ParameterForm.resx" />
+    <EmbeddedResource Remove="GUI\PortForm.resx" />
+    <EmbeddedResource Remove="GUI\ReportForm.resx" />
+  </ItemGroup>
+</Project>

@@ -11,8 +11,8 @@
 
     <Grid>
         <Canvas Background="#F3F8FE" >
-            <Canvas x:Name="basicalInfoBar" Width="630" Canvas.Left="20" Height="200" Canvas.Top="20">
-                <Border Width="630" Height="200" CornerRadius="20" Background="White">
+            <Canvas x:Name="basicalInfoBar" Width="580" Canvas.Left="20" Height="200" Canvas.Top="20">
+                <Border Width="580" Height="200" CornerRadius="5" Background="White">
                     <Border.Effect>
                         <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                     </Border.Effect>
@@ -26,31 +26,43 @@
                     <Label x:Name="userName" Background="Transparent" Content="账户名称：" Height="30" BorderThickness="0" Canvas.Left="0" Canvas.Top="122" FontSize="16"/>
                 </Canvas>
             </Canvas>
+            <Canvas Canvas.Top="20" Canvas.Right="20" Width="40" Height="40">
+                <Button x:Name="RecordButton" Width="40" Height="40" Style="{StaticResource NomalButtonStyle}" Click="RecordButton_Click"/>
+                <Image x:Name="RecordButtonImage"   Width="30" Height="40" Canvas.Left="5" IsHitTestVisible="False"  Source="/image/icons/startButton.png"/>
+            </Canvas>
+            <Canvas Height="40" Width="40" Canvas.Top="70" Canvas.Right="20">
+                <Button x:Name="ShowChartButton" Height="40" Width="40" Style="{StaticResource NomalButtonStyle}" Click="ShowChartButton_Click"/>
+                <Image Height="40" Width="30" Canvas.Left="5" Source="/image/icons/Record.png" IsHitTestVisible="False"/>
+            </Canvas>
 
             <Canvas x:Name="diskInfoBar" Width="240" Height="240" Canvas.Left="20" Canvas.Bottom="20">
-                <Border Width="240" Height="240" CornerRadius="20" Background="White">
+                <Border Width="240" Height="240" CornerRadius="5" Background="White">
                     <Border.Effect>
                         <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                     </Border.Effect>
                 </Border>
                 <hc:CircleProgressBar x:Name="cpuCircleBar" Width="200" Height="200" Canvas.Left="20" Canvas.Top="20" ArcThickness="10" Text="" Foreground="#1F67B3"/>
-                <Label x:Name="cpuLabel" Width="140" Background="Transparent" Canvas.Left="50" Height="40" Canvas.Top="140" BorderThickness="0" TextBlock.TextAlignment="Center" TextBlock.FontSize="16" FontWeight="Bold" Content="收集数据中"/>
-                <Image Height="80" Width="80" Canvas.Left="80" Canvas.Top="60" Source="\image\icons\CPU.png"/>
+                <Label x:Name="cpuUsedLabel" Width="140" Background="Transparent" Canvas.Left="50" Canvas.Top="110" BorderThickness="0" TextBlock.TextAlignment="Center" TextBlock.FontSize="16" FontWeight="Bold" Content="收集数据中"/>
+                <Label x:Name="cpuPowerLabel" Width="140" Background="Transparent" Canvas.Left="50" Canvas.Top="130" BorderThickness="0" TextBlock.TextAlignment="Center" TextBlock.FontSize="12"  Foreground="Gray" Content="收集数据中"/>
+                <Label x:Name="cpuTempLabel" Width="140" Background="Transparent" Canvas.Left="50" Canvas.Top="145" BorderThickness="0" TextBlock.TextAlignment="Center" TextBlock.FontSize="12"  Foreground="Gray" Content="收集数据中"/>
+                <Label x:Name="gpuPowerLabel" Width="140" Background="Transparent" Canvas.Left="50" Canvas.Top="160" BorderThickness="0" TextBlock.TextAlignment="Center" TextBlock.FontSize="12"  Foreground="Gray" Content="收集数据中"/>
+
+                <Image Height="60" Width="60" Canvas.Left="90" Canvas.Top="50" Source="\image\icons\CPU.png"/>
             </Canvas>
 
             <Canvas Width="360" Height="110" Canvas.Right="20" Canvas.Bottom ="150" >
-                <Border Width="360" Height="110" CornerRadius="20" Background="White">
+                <Border Width="360" Height="110" CornerRadius="5" Background="White">
                     <Border.Effect>
                         <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                     </Border.Effect>
                 </Border>
                 <Image Width="60" Height="60" Canvas.Left="10" Canvas.Top="10" Source="/image/icons/Disk.png"/>
                 <ProgressBar x:Name="DiskBar" Canvas.Left="10" Canvas.Bottom="15" Width="340" Value="0" Foreground="#1F67B3"/>
-                <Label x:Name="diskLabel" BorderThickness="0" Background="Transparent" Content="系统分区使用情况：收集数据中" Canvas.Left="80" Canvas.Top="30" FontSize="14"/>
+                <Label x:Name="diskLabel" BorderThickness="0" Background="Transparent" Content="硬盘使用情况：收集数据中" Canvas.Left="80" Canvas.Top="30" FontSize="14"/>
             </Canvas>
 
             <Canvas Width="360" Height="110" Canvas.Bottom="20" Canvas.Right="20">
-                <Border Width="360" Height="110" CornerRadius="20" Background="White">
+                <Border Width="360" Height="110" CornerRadius="5" Background="White">
                     <Border.Effect>
                         <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                     </Border.Effect>
@@ -63,5 +75,6 @@
             </Canvas>
 
         </Canvas>
+        <Frame  x:Name="secondActionFrame"  BorderThickness="0" Background="Transparent" Visibility="Collapsed"  NavigationUIVisibility="Hidden" Height="510" Width="670"/>
     </Grid>
 </Page>

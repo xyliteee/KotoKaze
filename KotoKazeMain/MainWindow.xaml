@@ -98,7 +98,7 @@
                     </Canvas>
                 </Canvas>
             </Canvas>
-            <Border x:Name = "messageMask"  Canvas.Top="0" Height="540" Width="820" Background="Black" IsHitTestVisible="False" Opacity="0"/>
+            <Border x:Name = "messageMask"  Canvas.Top="0" Height="540" Width="820" Background="Black" IsHitTestVisible="False" Opacity="0" Visibility="Collapsed"/>
         </Canvas>
     </Grid>
 </Window>
