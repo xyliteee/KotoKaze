@@ -80,9 +80,9 @@ namespace XyliteeeMainForm.Views
                     while (GlobalData.IsRunning)
                     {
                         myComputer.Accept(updateVisitor);
-                        CPUInformation = [];
-                        RAMInformation = [];
-                        DiskInformation = [];
+                        CPUInformation.Clear();
+                        RAMInformation.Clear();
+                        DiskInformation.Clear();
                         foreach (var hardwareItem in myComputer.Hardware)
                         {
                             if (hardwareItem.HardwareType == HardwareType.CPU)
@@ -152,7 +152,15 @@ namespace XyliteeeMainForm.Views
                         Thread.Sleep(1000);
                     }
                 }
-                catch (Exception e) { Debug.WriteLine(e.ToString()); }
+                catch (ThreadAbortException) { }
+                catch (TaskCanceledException) { }
+                catch(Exception ex) 
+                {
+                    Task.Run(async() => 
+                    {
+                        await FileManager.LogManager.LogWriteAsync("Get DeviceInformation Error",ex.ToString());
+                    });
+                }
 
             });
         }
