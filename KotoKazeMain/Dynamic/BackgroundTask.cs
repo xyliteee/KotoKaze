@@ -5,7 +5,7 @@ using KotoKaze.Static;
 using System.Windows.Threading;
 using System.Diagnostics;
 using KotoKaze.Windows;
-using System;
+using FileControl;
 using System.IO;
 using HelixToolkit.Logger;
 

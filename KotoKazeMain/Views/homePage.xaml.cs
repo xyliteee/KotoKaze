@@ -8,12 +8,14 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using OpenHardwareMonitor.Hardware;
-using static KotoKaze.Dynamic.BCDEDIT;
+using FileControl;
 using System.Drawing.Printing;
 using Newtonsoft.Json;
 using KotoKaze.Windows;
 using KotoKaze.Views;
 using Microsoft.Win32;
+using System.Windows.Threading;
+using System.Text;
 
 #pragma warning disable CS8602
 namespace XyliteeeMainForm.Views
@@ -24,21 +26,14 @@ namespace XyliteeeMainForm.Views
         private readonly Computer myComputer = new();
         private readonly UpdateVisitor updateVisitor = new();
         private static bool IsRecord = false;
-        private Dictionary<string, List<double>> DataRecord = new() 
-        {
-            { "CPU_Load" , [] },
-            { "CPU_Power", [] },
-            { "CPU_Temp" , [] },
-            { "CoreGPU_Power", [] },
-            { "RAM_Load" , [] },
-        };
-        public  Dictionary<string, float?> CPUInformation=[];
-        public Dictionary<string, float?> RAMInformation=[];
-        public Dictionary<string, float?> DiskInformation=[];
+        private double  recordTime = 0;
+
+        private Dictionary<string, List<double>> DataRecord = [];
+        
+
         public homePage()
         {
             InitializeComponent();
-
             myComputer.Open();
             myComputer.MainboardEnabled = true;
             myComputer.CPUEnabled = true;
@@ -64,112 +59,130 @@ namespace XyliteeeMainForm.Views
             }
             GetCurrentData();
         }
-        private void GetCurrentData()
+        private async void GetCurrentData()
         {
-            
-            double cpuUsage=0;
+            double CPUUsage=0;
             double ramUseRate = 0;
+            double ramUsage = 0;
             double diskUseRate = 0;
             double CPUpower = 0;
             double CPUTemp = 0;
             double SocGPUPower = 0;
-            Task.Run(() => 
+            string key = string.Empty;
+            try
             {
-                try
+                while (GlobalData.IsRunning)
                 {
-                    while (GlobalData.IsRunning)
+                    myComputer.Accept(updateVisitor);
+                    foreach (var hardwareItem in myComputer.Hardware)
                     {
-                        myComputer.Accept(updateVisitor);
-                        CPUInformation.Clear();
-                        RAMInformation.Clear();
-                        DiskInformation.Clear();
-                        foreach (var hardwareItem in myComputer.Hardware)
+                        if (hardwareItem.HardwareType == HardwareType.CPU)
                         {
-                            if (hardwareItem.HardwareType == HardwareType.CPU)
+                            foreach (var sensor in hardwareItem.Sensors)
                             {
-                                foreach (var sensor in hardwareItem.Sensors)
-                                {
-                                    string key = sensor.Name + "_" + sensor.SensorType;
-                                    CPUInformation[key] = sensor.Value;
-                                }
-                                if(CPUInformation.TryGetValue("CPU Total_Load",out float? cpuUsed_temp))
-                                {
-                                    if (cpuUsed_temp != null) cpuUsage = (int)cpuUsed_temp;
-                                };
-                                if (CPUInformation.TryGetValue("CPU Package_Power", out float? cpuPower_temp)) 
-                                {
-                                    if(cpuPower_temp!=null) CPUpower = Math.Round((double)cpuPower_temp, 2);
-                                }
-                                if (CPUInformation.TryGetValue("CPU Package_Temperature", out float? cpuTemp_temp))
-                                {
-                                    if (cpuTemp_temp != null) CPUTemp = (double)cpuTemp_temp;
-                                }
-                                if (CPUInformation.TryGetValue("CPU Graphics_Power", out float? gpuPower_temp))
-                                {
-                                    if (gpuPower_temp != null) SocGPUPower = Math.Round((double)gpuPower_temp, 2);
-                                }
-                            }
-                            else if (hardwareItem.HardwareType == HardwareType.RAM)
-                            {
-                                foreach (var sensor in hardwareItem.Sensors) 
-                                {
-                                    string key = sensor.Name + "_" + sensor.SensorType;
-                                    RAMInformation[key] = sensor.Value;
-                                }
-                                ramUseRate = Math.Round((double)RAMInformation["Used Memory_Data"]! / systemInfo.RamNumber,2);
-                                RAMInformation["RAM_Load"] = (float)ramUseRate;
-                            }
-                            else if (hardwareItem.HardwareType == HardwareType.HDD)
-                            {
-                                foreach (var sensor in hardwareItem.Sensors) 
-                                {
-                                    string key = sensor.Name + "_" + sensor.SensorType;
-                                    DiskInformation[key] = sensor.Value;
-                                }
-                                diskUseRate = Math.Round((double)DiskInformation["Used Space_Load"]!);
+                                key = sensor.Name + "_" + sensor.SensorType;
+                                if (key == "CPU Total_Load") CPUUsage = (int)sensor.Value!;
+                                else if(key == "CPU Package_Power") CPUpower = Math.Round((double)sensor.Value!,2);
+                                else if(key == "CPU Package_Temperature") CPUTemp = Math.Round((double)sensor.Value!,2);
+                                else if(key == "CPU Graphics_Power") SocGPUPower = Math.Round((double)sensor.Value!,2);
                             }
                         }
-                        if (IsRecord) 
+                        else if (hardwareItem.HardwareType == HardwareType.RAM)
                         {
-                            DataRecord["CPU_Load"].Add(cpuUsage);
-                            DataRecord["CPU_Power"].Add(CPUpower);
-                            DataRecord["CPU_Temp"].Add(CPUTemp);
-                            DataRecord["CoreGPU_Power"].Add(SocGPUPower);
-                            DataRecord["RAM_Load"].Add(ramUseRate*100);
+                            foreach (var sensor in hardwareItem.Sensors)
+                            {
+                                key = sensor.Name + "_" + sensor.SensorType;
+                                if(key == "Used Memory_Data") 
+                                {
+                                    ramUsage = Math.Round((double)sensor.Value!,2);
+                                    break;
+                                }
+                            }
+                            ramUseRate = Math.Round(ramUsage / systemInfo.RamNumber, 2);
                         }
-                        Dispatcher.Invoke(() => 
+                        else if (hardwareItem.HardwareType == HardwareType.HDD)
                         {
-                            cpuCircleBar.Value = cpuUsage;
-                            cpuUsedLabel.Content = $"CPU占用{cpuUsage}%";
-                            cpuPowerLabel.Content = $"封装功耗:{CPUpower}W";
-                            gpuPowerLabel.Content = $"核显功耗:{SocGPUPower}W";
-                            cpuTempLabel.Content = $"封装温度:{CPUTemp}°C";
-                            ramBar.Value = ramUseRate*100;
-                            ramLabel.Content = $"内存使用情况：{Math.Round((double)RAMInformation["Used Memory_Data"]!,2)}GB/{systemInfo.RamNumber}GB";
-                            DiskBar.Value = diskUseRate;
-                            diskLabel.Content = $"硬盘使用情况：{diskUseRate*systemInfo.diskTotal/100}GB/{systemInfo.diskTotal}GB";
-                        });
-                        Thread.Sleep(1000);
+                            foreach (var sensor in hardwareItem.Sensors)
+                            {
+                                key = sensor.Name + "_" + sensor.SensorType;
+                                if (key == "Used Space_Load") 
+                                {
+                                    diskUseRate = (int)sensor.Value!;
+                                    break;
+                                }
+                            }
+                        }
                     }
-                }
-                catch (ThreadAbortException) { }
-                catch (TaskCanceledException) { }
-                catch(Exception ex) 
-                {
-                    Task.Run(async() => 
+                    if (IsRecord) 
                     {
-                        await FileManager.LogManager.LogWriteAsync("Get DeviceInformation Error",ex.ToString());
+                        if (recordTime > 1800)
+                        {
+                            OutofTime();
+                            continue;
+                        }
+                        DataRecord["CPU_Load"].Add(CPUUsage);
+                        DataRecord["CPU_Power"].Add(CPUpower);
+                        DataRecord["CPU_Temp"].Add(CPUTemp);
+                        DataRecord["CoreGPU_Power"].Add(SocGPUPower);
+                        DataRecord["RAM_Load"].Add(ramUseRate*100);
+                        int minutes = (int)(recordTime / 60);
+                        double second = recordTime - 60 * minutes;
+                        Dispatcher.Invoke(()=>
+                        {
+                            recordTimeText.Text = $"{minutes}分\n{second}秒";
+                        });
+                        recordTime+= GlobalData.RefreshTime;
+                    }
+
+                    Dispatcher.Invoke(() =>
+                    {
+                        cpuCircleBar.Value = CPUUsage;
+                        cpuUsedLabel.Content = $"CPU占用{CPUUsage}%";
+                        cpuPowerLabel.Content = $"封装功耗:{CPUpower}W";
+                        gpuPowerLabel.Content = $"核显功耗:{SocGPUPower}W";
+                        cpuTempLabel.Content = $"封装温度:{CPUTemp}°C";
+                        ramBar.Value = ramUseRate * 100;
+                        ramLabel.Content = $"内存使用情况：{ramUsage}GB/{systemInfo.RamNumber}GB";
+                        DiskBar.Value = diskUseRate;
+                        diskLabel.Content = $"硬盘使用情况：{diskUseRate * systemInfo.diskTotal / 100}GB/{systemInfo.diskTotal}GB";
                     });
+                    
+                    await Task.Delay((int)(GlobalData.RefreshTime*1000));
                 }
-
-            });
+            }
+            catch (ThreadAbortException) { }
+            catch (TaskCanceledException) { }
+            catch(Exception ex) 
+            {
+                await FileManager.LogManager.LogWriteAsync("Get DeviceInformation Error",ex.ToString());
+            }
         }
-
-        private async void RecordButton_Click(object sender, RoutedEventArgs e)
+        private void OutofTime() 
         {
-            if (IsRecord) 
+            Dispatcher.Invoke(async() => 
             {
                 RecordButton.IsEnabled = false;
+                recordTimeText.Text = "...";
+                IsRecord = false;
+                RecordButtonImage.Source = BitmapImages.startImage;
+                string json = JsonConvert.SerializeObject(DataRecord, Formatting.Indented);
+                string time = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
+                await File.WriteAllTextAsync(Path.Combine(FileManager.WorkDirectory.outPutDirectory, $"RecordData/{time}.json"), json);
+                KotoMessageBoxSingle.ShowDialog("录制超时，已自动保存");
+                RecordButton.IsEnabled = true;
+                var rr = KotoMessageBox.ShowDialog("是否绘制表格？");
+                if (rr.IsYes)
+                {
+                    ReadRecord(DataRecord);
+                }
+            });
+        } 
+        private async void RecordButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (IsRecord)
+            {
+                RecordButton.IsEnabled = false;
+                recordTimeText.Text = "...";
                 IsRecord = false;
                 RecordButtonImage.Source = BitmapImages.startImage;
                 string json = JsonConvert.SerializeObject(DataRecord, Formatting.Indented);
@@ -177,18 +190,32 @@ namespace XyliteeeMainForm.Views
                 await File.WriteAllTextAsync(Path.Combine(FileManager.WorkDirectory.outPutDirectory, $"RecordData/{time}.json"), json);
                 KotoMessageBoxSingle.ShowDialog("已记录数据");
                 RecordButton.IsEnabled = true;
+                SettingButton.IsEnabled  = true;
                 var rr = KotoMessageBox.ShowDialog("是否绘制表格？");
-                if (rr.IsYes) 
+                if (rr.IsYes)
                 {
                     ReadRecord(DataRecord);
                 }
-                return;
             }
-            var r = KotoMessageBox.ShowDialog("是否录制资源占用信息？");
-            if (r.IsYes) 
+            else 
             {
-                IsRecord = true;
-                RecordButtonImage.Source = BitmapImages.StopImage;
+                var r = KotoMessageBox.ShowDialog("是否录制资源占用信息？");
+                if (r.IsYes)
+                {
+                    SettingButton.IsEnabled = false;
+                    recordTime = 0;
+                    DataRecord = new()
+                    {
+                    { "Refresh_Time",[GlobalData.RefreshTime]},
+                    { "CPU_Load" , [] },
+                    { "CPU_Power", [] },
+                    { "CPU_Temp" , [] },
+                    { "CoreGPU_Power", [] },
+                    { "RAM_Load" , [] },
+                    };
+                    IsRecord = true;
+                    RecordButtonImage.Source = BitmapImages.StopImage;
+                }
             }
         }
         private void ReadRecord(Dictionary<string, List<double>> data) 
@@ -217,6 +244,11 @@ namespace XyliteeeMainForm.Views
                 ReadRecord(data);
             }
             
+        }
+
+        private void SettingButton_Click(object sender, RoutedEventArgs e)
+        {
+            RecordSettingWindow.ShowSettingPage();
         }
     }
 

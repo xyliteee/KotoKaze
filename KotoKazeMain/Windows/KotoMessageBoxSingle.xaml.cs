@@ -1,6 +1,7 @@
 ﻿using KotoKaze.Static;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace KotoKaze.Windows
         {
             public bool IsYes { get; set; } = true;
             public bool IsClose { get; set; } = false;
+            public KotoMessageBoxSingle? messageBox;
         }
         public class MessageBoxEventArgs : EventArgs
         {
@@ -36,7 +38,7 @@ namespace KotoKaze.Windows
             get { return TB_Context.Text; }
             set { TB_Context.Text = value; }
         }
-        bool _isLegal = false;
+        public bool _isLegal = false;
 #pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
         public KotoMessageBoxSingle()
 #pragma warning restore CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
@@ -52,7 +54,7 @@ namespace KotoKaze.Windows
             mb.Result += result;
             mb.Show();
         }
-        public static MessageResult ShowDialog(string context)
+        public static MessageResult ShowDialog(string context,bool flag = true)
         {
             MessageResult r = new();
             ProcessControl.UpdateUI(() => 
@@ -62,11 +64,24 @@ namespace KotoKaze.Windows
                     Context = context,
                     Owner = GlobalData.MainWindowInstance
                 };
-                KotoMessageBox.RunShow(kotoMessageBox);
+                if (flag) 
+                {
+                    KotoMessageBox.RunShow(kotoMessageBox);
+                }
                 kotoMessageBox.Result += (s, e) => {
                     r = e.Result;
                 };
-                kotoMessageBox.ShowDialog();
+
+                if (!flag)
+                {
+                    kotoMessageBox.Show();
+                    kotoMessageBox._isLegal = true;
+                    kotoMessageBox.Close();
+                }
+                else
+                {
+                    kotoMessageBox.ShowDialog();
+                }
             });
             return r;
         }

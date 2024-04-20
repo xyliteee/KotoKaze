@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
-using static KotoKaze.Static.FileManager.IniManager;
+using static FileControl.FileManager.IniManager;
+using FileControl;
 using System.Windows.Media;
 using System.Diagnostics;
 using System.Windows.Media.Animation;
@@ -20,6 +21,7 @@ namespace XyliteeeMainForm.Views
         private readonly WorkLoadTest.CPU CPUTest;
         private readonly WorkLoadTest.RAM RAMTest;
         private readonly WorkLoadTest.Disk DiskTest;
+        private static bool isFirstView = true;
         private GPUTestWindow GPUWindow;
         private int CPUScore = 0;
         private int GPUScore = 0;
@@ -255,7 +257,7 @@ namespace XyliteeeMainForm.Views
             Animations.ImageTurnRound(TestImage, true);
             SetAllButtonState(false);
             ScoreLabel.Content = "正在测试";
-            Task.Run(() => 
+            Thread thread = new(() =>
             {
                 try
                 {
@@ -264,7 +266,10 @@ namespace XyliteeeMainForm.Views
                 }
                 catch (ThreadAbortException) { }
                 catch (TaskCanceledException) { }
-            });
+            })
+            {
+                Priority = ThreadPriority.Highest
+            };
         }
 
         private void GPUTestButton_Click(object sender, RoutedEventArgs e)
@@ -289,7 +294,8 @@ namespace XyliteeeMainForm.Views
             Animations.ImageTurnRound(TestImage, true);
             SetAllButtonState(false);
             ScoreLabel.Content = "正在测试";
-            Task.Run(() =>
+
+            Thread thread = new(() =>
             {
                 try
                 {
@@ -298,8 +304,13 @@ namespace XyliteeeMainForm.Views
                 }
                 catch (ThreadAbortException) { }
                 catch (TaskCanceledException) { }
-            });
+            })
+            {
+                Priority = ThreadPriority.Highest
+            };
+            thread.Start();
         }
+
 
         private void DiskTestButton_Click(object sender, RoutedEventArgs e)
         {
@@ -526,16 +537,13 @@ namespace XyliteeeMainForm.Views
 
             public void RunTest() 
             {
-
-
                 ParentClass.Dispatcher.Invoke(() => { ParentClass.RAMDialogScoreLabel.Content = "内存写入测试"; });
                 writeSpeed = WorkLoad.RAM.RamWriteSpeed();
+                writeScore = (int)(writeSpeed * 0.5 / 8.4);
 
                 ParentClass.Dispatcher.Invoke(() => {ParentClass.RAMDialogScoreLabel.Content = "内存读取测试"; });
                 readSpeed = WorkLoad.RAM.RamReadSpeed();
-
-                readScore = (int)(readSpeed* 0.5 / 8.4);
-                writeScore = (int)(writeSpeed* 0.5 / 8.4);
+                readScore = (int)(readSpeed * 0.5 / 8.4);
             }
         }
 

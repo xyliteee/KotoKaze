@@ -1,5 +1,5 @@
 ﻿using KotoKaze.Static;
-using static KotoKaze.Static.FileManager.IniManager;
+using static FileControl.FileManager.IniManager;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -82,6 +82,7 @@ namespace XyliteeeMainForm
         {
             Task.Run(() => 
             {
+                KotoMessageBoxSingle.ShowDialog("", false);//闪现一下窗口罢了
                 string value = IniFileRead("Application.ini", "SETTING", "ISFIRST_USE");
                 if (value == "FALSE") return;
                 else if (value == "TRUE")

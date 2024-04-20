@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using static KotoKaze.Static.FileManager;
+using static FileControl.FileManager;
 using static KotoKaze.Dynamic.Network.Downloader;
 using System.Diagnostics;
 

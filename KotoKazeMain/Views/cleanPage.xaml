@@ -1,13 +1,15 @@
 ﻿<Page
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:XyliteeeMainForm.Views"
-      xmlns:hc="https://handyorg.github.io/handycontrol" x:Class="XyliteeeMainForm.Views.cleanPage"
-      mc:Ignorable="d" 
-      d:DesignHeight="510" d:DesignWidth="670"
-      Title="cleanPage">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:XyliteeeMainForm.Views"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    x:Class="XyliteeeMainForm.Views.cleanPage"
+    xmlns:fluent ="http://schemas.inkore.net/lib/ui/wpf/modern"
+    mc:Ignorable="d" 
+    d:DesignHeight="510" d:DesignWidth="670"
+    Title="cleanPage">
 
     <Grid>
         <Canvas Background="#F3F8FE">
@@ -65,10 +67,9 @@
                     </Border.Effect>
                 </Border>
 
-                <hc:ScrollViewer  x:Name="ScorllZone" CanContentScroll="False"  Height="470" Width="370" VerticalScrollBarVisibility="Visible">
-                    <Canvas x:Name="ScorllCanvas" VerticalAlignment="Top" Width="370"  Height="0">
-                    </Canvas>
-                </hc:ScrollViewer>
+                <fluent:ScrollViewerEx  x:Name="ScorllZone" CanContentScroll="False"  Height="470" Width="370" VerticalScrollBarVisibility="Visible">
+                    <Canvas x:Name="ScorllCanvas" VerticalAlignment="Top" Width="370"  Height="0"/>
+                </fluent:ScrollViewerEx>
                 
                 <Canvas x:Name="RefreshButtonZone"  Background="Transparent"  Canvas.Top="-20" Canvas.Right="165" Width="40" Height="40">
                     <Border x:Name="RefreshButtonBorder" Width="40" Height="40" CornerRadius="100" Background="#F3F8FE">

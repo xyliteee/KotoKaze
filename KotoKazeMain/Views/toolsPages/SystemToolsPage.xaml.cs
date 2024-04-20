@@ -7,7 +7,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using static KotoKaze.Dynamic.BackgroundTaskList;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using FileControl;
 using System.Text.RegularExpressions;
 using static KotoKaze.Dynamic.Network;
 

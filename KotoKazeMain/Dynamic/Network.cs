@@ -1,4 +1,4 @@
-﻿using static KotoKaze.Static.FileManager;
+﻿using static FileControl.FileManager;
 using System.IO;
 using System.Linq;
 using System.Net.Http;

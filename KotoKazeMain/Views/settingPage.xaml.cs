@@ -4,7 +4,7 @@ using KotoKaze.Windows;
 using Microsoft.Win32;
 using System.IO;
 using System.Windows.Controls;
-using static KotoKaze.Static.FileManager;
+using static FileControl.FileManager;
 using static KotoKaze.Dynamic.BackgroundTaskList;
 using static KotoKaze.Dynamic.Network.Downloader;
 using System.Diagnostics;
@@ -20,6 +20,7 @@ namespace XyliteeeMainForm.Views
         public settingPage()
         {
             InitializeComponent();
+            SetAnimationLevelDefault();
         }
 
         private void ChangeStartWindowWallpaperButton_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -108,6 +109,30 @@ namespace XyliteeeMainForm.Views
                 GlobalData.TasksList[0].Shutdown(false);
             }
             KotoMessageBoxSingle.ShowDialog("已终止所有任务");
+        }
+
+        private void AnimationLevelList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int selectedIndex = ((ComboBox)sender).SelectedIndex;
+            switch (selectedIndex)
+            {
+                case 0:
+                    GlobalData.AnimationLevel = 0;
+                    break;
+                case 1:
+                    GlobalData.AnimationLevel = 1;
+                    break;
+                case 2:
+                    GlobalData.AnimationLevel = 2;
+                    break;
+            }
+            IniManager.IniFileWrite("Application.ini", "SETTING", "ANIMATION_LEVEL", GlobalData.AnimationLevel.ToString());
+        }
+        private void SetAnimationLevelDefault()
+        {
+            if (GlobalData.AnimationLevel == 0) AnimationLevelList.SelectedIndex = 0;
+            else if (GlobalData.AnimationLevel == 1) AnimationLevelList.SelectedIndex = 1;
+            else if (GlobalData.AnimationLevel == 2) AnimationLevelList.SelectedIndex = 2;
         }
     }
 }

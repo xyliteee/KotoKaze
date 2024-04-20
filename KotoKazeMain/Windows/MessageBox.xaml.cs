@@ -59,7 +59,7 @@ namespace KotoKaze.Windows
         public static MessageResult ShowDialog(string context)
         {
             MessageResult r = new();
-            ProcessControl.UpdateUI(() => 
+            ProcessControl.UpdateUI(() =>
             {
                 KotoMessageBox kotoMessageBox = new()
                 {
@@ -67,7 +67,8 @@ namespace KotoKaze.Windows
                     Owner = GlobalData.MainWindowInstance
                 };
                 RunShow(kotoMessageBox);
-                kotoMessageBox.Result += (s, e) => {
+                kotoMessageBox.Result += (s, e) =>
+                {
                     r = e.Result;
                 };
                 kotoMessageBox.ShowDialog();
@@ -106,8 +107,8 @@ namespace KotoKaze.Windows
         }
         public static void RunClose(FrameworkElement frameworkElement) 
         {
-            GlobalData.messageBoxList.Remove(frameworkElement);
-            if (GlobalData.messageBoxList.Count == 0)
+            GlobalData.MessageBoxList.Remove(frameworkElement);
+            if (GlobalData.MessageBoxList.Count == 0)
             {
                 Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0, 0);
                 Animations.ChangeBlur(GlobalData.MainWindowInstance.mainBase, 0, null, 0);
@@ -116,7 +117,7 @@ namespace KotoKaze.Windows
         public static void RunShow(FrameworkElement kotoMessageBox)
         {
             FrameworkElement window = (FrameworkElement)kotoMessageBox.FindName("window")!;
-            GlobalData.messageBoxList.Add(window);
+            GlobalData.MessageBoxList.Add(window);
             Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0.3, AnimationTimeline);
             Animations.ChangeSize(window, AnimationTimeline, 0.95, 1);
             Animations.ChangeBlur(GlobalData.MainWindowInstance.mainBase, AnimationTimeline, null, 5);
@@ -125,16 +126,6 @@ namespace KotoKaze.Windows
         {
             RunClose(this);
             base.OnClosing(e);
-        }
-        private void MinButton_Click(object sender, RoutedEventArgs e)//窗口最小化按钮
-        {
-            WindowState = WindowState.Minimized;
-
-        }
-        private void ShutdownWindowButton_Click(object sender, RoutedEventArgs e)//关闭按钮
-        {
-            GlobalData.IsRunning = false;
-            Application.Current.Shutdown();
         }
     }
 }

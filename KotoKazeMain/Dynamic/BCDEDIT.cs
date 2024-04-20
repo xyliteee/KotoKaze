@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using FileControl;
 using System.Threading.Tasks;
 using static KotoKaze.Dynamic.BCDEDIT;
 

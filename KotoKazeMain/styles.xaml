@@ -92,8 +92,6 @@
         </Setter>
     </Style>
 
-    
-
     <Style x:Key="DockButton" TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>

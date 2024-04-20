@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Threading;
 using XyliteeeMainForm.Views;
+using FileControl;
 
 
 namespace XyliteeeMainForm
@@ -60,7 +61,8 @@ namespace XyliteeeMainForm
                     FileManager.WorkDirectory.CreatWorkDirectory();
                     FileManager.WorkDirectory.CreatWorkFile();
                 }, UpdateLevel);
-                s.progressBar.Width = 120;
+                s.leftBar.Value = 10;
+                s.rightBar.Value = 10;
                 blurEffect.Radius = 20;
 
                 s.LoadinText.Content = "正在初始化信息页面";
@@ -69,7 +71,8 @@ namespace XyliteeeMainForm
                     homePage = new();
                     GlobalData.HomePageInstance = homePage;
                 }, UpdateLevel);
-                s.progressBar.Width = 410;
+                s.leftBar.Value = 50;
+                s.rightBar.Value = 50;
                 blurEffect.Radius = 16;
 
                 s.LoadinText.Content = "正在初始化清理页面";
@@ -78,7 +81,8 @@ namespace XyliteeeMainForm
                     cleanPage = new();
                     GlobalData.CleanPageInstance = cleanPage;
                 }, UpdateLevel);
-                s.progressBar.Width = 460;
+                s.leftBar.Value = 60;
+                s.rightBar.Value = 60;
                 blurEffect.Radius = 10;
 
                 s.LoadinText.Content = "正在初始化测试页面";
@@ -87,7 +91,8 @@ namespace XyliteeeMainForm
                     PCTestPage = new();
                     GlobalData.PCTestPageInstance = PCTestPage;
                 }, UpdateLevel);
-                s.progressBar.Width = 580;
+                s.leftBar.Value = 70;
+                s.rightBar.Value = 70;
                 blurEffect.Radius = 6;
 
                 s.LoadinText.Content = "正在初始化工具页面";
@@ -96,7 +101,8 @@ namespace XyliteeeMainForm
                     toolsPage = new();
                     GlobalData.ToolsPageInstance = toolsPage;
                 }, UpdateLevel);
-                s.progressBar.Width = 610;
+                s.leftBar.Value = 80;
+                s.rightBar.Value = 80;
                 blurEffect.Radius = 4;
 
                 s.LoadinText.Content = "正在初始化设置页面";
@@ -105,7 +111,8 @@ namespace XyliteeeMainForm
                     settingPage = new();
                     GlobalData.SettingPageInstance = settingPage;
                 }, UpdateLevel);
-                s.progressBar.Width = 640;
+                s.leftBar.Value = 90;
+                s.rightBar.Value = 90;
                 blurEffect.Radius = 2;
 
                 s.LoadinText.Content = "即将启动......";
@@ -114,7 +121,8 @@ namespace XyliteeeMainForm
                     mainWindow = new(homePage, cleanPage, PCTestPage, toolsPage, settingPage);
                     GlobalData.MainWindowInstance = mainWindow;
                 }, UpdateLevel);
-                s.progressBar.Width = 720;
+                s.leftBar.Value = 100;
+                s.rightBar.Value = 100;
                 blurEffect = null;
             }
             s.Show();

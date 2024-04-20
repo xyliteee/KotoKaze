@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:XyliteeeMainForm"
         xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:fluent ="http://schemas.inkore.net/lib/ui/wpf/modern"
         mc:Ignorable="d"
         Title="KotoKaze" WindowStyle="None" Height="540" Width="820" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" StateChanged="Window_StateChanged">
     <WindowChrome.WindowChrome>
@@ -90,11 +91,9 @@
                                 <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="1" BlurRadius="5"/>
                             </Border.Effect>
                         </Border>
-                        <hc:ScrollViewer  x:Name="ScorllZone" CanContentScroll="False"  Height="130" Width="390" VerticalScrollBarVisibility="Visible">
-                            <Canvas x:Name="ScorllCanvas" VerticalAlignment="Top" Width="390"  Height="0">
-
-                            </Canvas>
-                        </hc:ScrollViewer>
+                        <fluent:ScrollViewerEx  x:Name="ScorllZone" CanContentScroll="False"  Height="130" Width="390" VerticalScrollBarVisibility="Visible">
+                            <Canvas x:Name="ScorllCanvas" VerticalAlignment="Top" Width="390"  Height="0"/>
+                        </fluent:ScrollViewerEx>
                     </Canvas>
                 </Canvas>
             </Canvas>

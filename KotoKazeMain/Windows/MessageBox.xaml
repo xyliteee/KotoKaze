@@ -20,11 +20,8 @@
     <Grid  Width="400" Height="200">
         <Canvas x:Name="BackCanvas" Background="Transparent">
             <Canvas x:Name="MessageBox" Width="400" Height="200" Background="Transparent" >
-                <Border Width="400" Height="200" Background="White" CornerRadius="10">
-                    <Border.Effect>
-                        <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="10"/>
-                    </Border.Effect>
-                </Border>
+                <Border Width="400" Height="200" Background="White" CornerRadius="5"/>
+
                 <Border Width="400" Height="30" Background="#F3F8FE" CornerRadius="10">
                     <Button x:Name="ShutdownButton" Canvas.Right="0" Height="30" Width="40" Background="Transparent" Click="ShutdownButton_Click" FontSize="20" Padding="0,0,0,0" Content="×" Foreground="Black" BorderThickness="0" Margin="360,0,0,0"/>
                 </Border>

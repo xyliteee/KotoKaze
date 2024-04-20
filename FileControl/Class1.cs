@@ -1,11 +1,10 @@
-﻿using System.Diagnostics;
-using System.IO;
 using System.IO.Compression;
-using System.Text;
+using System.IO;
 using System.Text.Json;
+using System.Text;
 using CleanContent;
 
-namespace KotoKaze.Static
+namespace FileControl
 {
     public class FileManager
     {
@@ -30,9 +29,9 @@ namespace KotoKaze.Static
             }
 
 
-            public static void CreatWorkFile() 
+            public static void CreatWorkFile()
             {
-                if (!Path.Exists(Path.Combine(BinDirectory, "Performance.ini"))) 
+                if (!Path.Exists(Path.Combine(BinDirectory, "Performance.ini")))
                 {
                     IniManager.IniFileSetDefault("Performance.ini");
                 }
@@ -44,9 +43,9 @@ namespace KotoKaze.Static
         }
         public static class IniManager
         {
-            public static void IniFileSetDefault(string fileName) 
+            public static void IniFileSetDefault(string fileName)
             {
-                switch (fileName) 
+                switch (fileName)
                 {
                     case "Performance.ini":
                         IniFileWrite("Performance.ini", "VALUE", "CPU_MULTI_SCORE", "");
@@ -59,6 +58,8 @@ namespace KotoKaze.Static
                         break;
                     case "Application.ini":
                         IniFileWrite("Application.ini", "SETTING", "ISFIRST_USE", "TRUE");
+                        IniFileWrite("Application.ini", "SETTING", "REFRESH_TIME", "1");
+                        IniFileWrite("Application.ini", "SETTING", "ANIMATION_LEVEL", "0");
                         IniFileWrite("Application.ini", "VALUE", "VERSION", "114.514");
                         break;
                 }
@@ -100,7 +101,7 @@ namespace KotoKaze.Static
                 }
                 data[section][key] = value;
 
-                using StreamWriter sw = new (filePath, false, Encoding.Default);
+                using StreamWriter sw = new(filePath, false, Encoding.Default);
                 foreach (var sectionPair in data)
                 {
                     sw.WriteLine("[" + sectionPair.Key + "]");
@@ -194,16 +195,16 @@ namespace KotoKaze.Static
         }
         public static class LogManager
         {
-            private readonly static JsonSerializerOptions jsonSerializerOptions = new() 
+            private readonly static JsonSerializerOptions jsonSerializerOptions = new()
             {
                 WriteIndented = true,
                 Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             };
-            public async static Task LogWriteAsync(string title, string message,string suggestion = "None")
+            public async static Task LogWriteAsync(string title, string message, string suggestion = "None")
             {
                 string time = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
                 string fileName = time + ".log";
-                var log = new { Title = title, Message = message,Time = time ,Suggestion = suggestion};
+                var log = new { Title = title, Message = message, Time = time, Suggestion = suggestion };
                 string json = JsonSerializer.Serialize(log, jsonSerializerOptions);
                 string filePath = Path.Combine(WorkDirectory.logfileDirectory, fileName);
                 await File.WriteAllTextAsync(filePath, json);
@@ -219,7 +220,7 @@ namespace KotoKaze.Static
             }
         }
 
-        public async static Task<bool> UnzipAsync(string filePath, string targetPath,string title = "UnZip")
+        public async static Task<bool> UnzipAsync(string filePath, string targetPath, string title = "UnZip")
         {
             try
             {
@@ -234,4 +235,5 @@ namespace KotoKaze.Static
             }
         }
     }
+
 }

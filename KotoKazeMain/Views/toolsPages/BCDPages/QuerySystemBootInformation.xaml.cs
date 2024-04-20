@@ -6,6 +6,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using KotoKaze.Windows;
 using static KotoKaze.Dynamic.BCDEDIT;
+using FileControl;
 using System.IO;
 
 namespace KotoKaze.Views.toolsPages.BCDPages

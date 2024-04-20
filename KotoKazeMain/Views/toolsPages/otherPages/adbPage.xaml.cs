@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using static KotoKaze.Dynamic.ADBINFO;
+using FileControl;
 using KotoKaze.Static;
 
 namespace KotoKaze.Views.toolsPages.otherPages

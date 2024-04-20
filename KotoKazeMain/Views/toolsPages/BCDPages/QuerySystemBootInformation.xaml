@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:KotoKaze.Views.toolsPages.BCDPages"
-      xmlns:hc="https://handyorg.github.io/handycontrol"
+      xmlns:fluent ="http://schemas.inkore.net/lib/ui/wpf/modern"
       mc:Ignorable="d" 
       d:DesignHeight="510" d:DesignWidth="670"
       Title="QuerySystemBootInformation" >
@@ -29,10 +29,10 @@
                         <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                     </Border.Effect>
                 </Border>
-                <hc:ScrollViewer Height="330" Width="305" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                    <Canvas x:Name="ScrollCanvas" Height="0" Width="305" VerticalAlignment="Top">
-                    </Canvas>
-                </hc:ScrollViewer>
+                <fluent:ScrollViewerEx Height="330" Width="305" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <Canvas x:Name="ScrollCanvas" Height="0" Width="305" VerticalAlignment="Top"/>
+
+                </fluent:ScrollViewerEx>
             </Canvas>
             <Canvas x:Name="SystemInformationDetail" Canvas.Top="20" Canvas.Right="20" Height="470" Width="305">
                 <Border Height="470" Width="305" Background="White" CornerRadius="10">

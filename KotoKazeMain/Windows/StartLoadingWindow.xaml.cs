@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using FileControl;
 
 namespace KotoKaze.Windows
 {

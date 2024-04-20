@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using static KotoKaze.Dynamic.BackgroundTaskList;
+using FileControl;
 
 namespace KotoKaze.Dynamic
 {
