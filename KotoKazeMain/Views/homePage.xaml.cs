@@ -152,7 +152,6 @@ namespace XyliteeeMainForm.Views
                         if (ramUseRate <= 50) ramBar.Foreground = blue;
                         else if (ramUsage <= 80) ramBar.Foreground = orange;
                         else ramBar.Foreground = red;
-                        Debug.WriteLine(ramUseRate);
                         ramLabel.Content = $"内存使用情况：{ramUsage}GB/{systemInfo.RamNumber}GB";
                         DiskBar.Value = diskUseRate;
                         if (diskUseRate <= 50) DiskBar.Foreground = blue;

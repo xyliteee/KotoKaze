@@ -147,8 +147,6 @@ namespace XyliteeeMainForm.Views
             });
             IniFileWrite("Performance.ini", "VALUE", "CPU_SINGLE_SCORE", CPUTest.CPUSingleCoreScore.ToString());
             IniFileWrite("Performance.ini", "VALUE", "CPU_MULTI_SCORE", CPUTest.CPUMultiCoreScore.ToString());
-            GC.Collect();
-            Thread.Sleep(1000);
         }
         private void RunGPUTest()
         {
@@ -190,8 +188,6 @@ namespace XyliteeeMainForm.Views
             });
             IniFileWrite("Performance.ini", "VALUE", "RAM_WRITE_SCORE",RAMTest.writeScore.ToString());
             IniFileWrite("Performance.ini", "VALUE", "RAM_READ_SCORE", RAMTest.readScore.ToString());
-            GC.Collect();
-            Thread.Sleep(1000);
         }
         private async void RunDiskTest()
         {
@@ -211,7 +207,6 @@ namespace XyliteeeMainForm.Views
             });
             IniFileWrite("Performance.ini", "VALUE", "DISK_WRITE_SCORE", DiskTest.writeScore.ToString());
             IniFileWrite("Performance.ini", "VALUE", "DISK_READ_SCORE", DiskTest.readScore.ToString());
-            GC.Collect();
         }
 
         private void GetScore() 
@@ -229,7 +224,7 @@ namespace XyliteeeMainForm.Views
             Animations.ImageTurnRound(TestImage, true);                                                                 //按下按钮，图标开始转
             SetAllButtonState(false);                                                                               //此时禁用按钮
             ScoreLabel.Content = "正在测试";
-            Task.Run(() => 
+            Thread thread = new(() => 
             {
                 try
                 {
@@ -241,7 +236,11 @@ namespace XyliteeeMainForm.Views
                 }
                 catch (ThreadAbortException) { }
                 catch (TaskCanceledException) { }
-            });
+            })
+            {
+                Priority = ThreadPriority.Highest
+            };
+            thread.Start();
         }
 
         private void SetAllButtonState(bool flag) 
@@ -270,6 +269,7 @@ namespace XyliteeeMainForm.Views
             {
                 Priority = ThreadPriority.Highest
             };
+            thread.Start();
         }
 
         private void GPUTestButton_Click(object sender, RoutedEventArgs e)
@@ -539,11 +539,11 @@ namespace XyliteeeMainForm.Views
             {
                 ParentClass.Dispatcher.Invoke(() => { ParentClass.RAMDialogScoreLabel.Content = "内存写入测试"; });
                 writeSpeed = WorkLoad.RAM.RamWriteSpeed();
-                writeScore = (int)(writeSpeed * 0.5 / 8.4);
+                writeScore = (int)(writeSpeed * 0.0667);
 
                 ParentClass.Dispatcher.Invoke(() => {ParentClass.RAMDialogScoreLabel.Content = "内存读取测试"; });
                 readSpeed = WorkLoad.RAM.RamReadSpeed();
-                readScore = (int)(readSpeed * 0.5 / 8.4);
+                readScore = (int)(readSpeed * 0.0667);
             }
         }
 
@@ -566,8 +566,8 @@ namespace XyliteeeMainForm.Views
                 writeSpeed = WorkLoad.Disk.DiskWriteRandomSpeed();
                 ParentClass.Dispatcher.BeginInvoke(() => { ParentClass.DiskDialogScoreLabel.Content = "硬盘读取测试"; });
                 readSpeed = WorkLoad.Disk.DiskReadRandomSpeed();
-                readScore = (int)(readSpeed * 0.04);
-                writeScore = (int)(writeSpeed * 0.3);
+                readScore = (int)(readSpeed * 0.0476);
+                writeScore = (int)(writeSpeed * 0.358);
             }
         }
     }
