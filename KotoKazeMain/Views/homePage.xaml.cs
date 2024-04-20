@@ -16,8 +16,9 @@ using KotoKaze.Views;
 using Microsoft.Win32;
 using System.Windows.Threading;
 using System.Text;
+using System.Windows.Media;
+using System.Windows.Controls.Primitives;
 
-#pragma warning disable CS8602
 namespace XyliteeeMainForm.Views
 {
     public partial class homePage : Page
@@ -27,6 +28,9 @@ namespace XyliteeeMainForm.Views
         private readonly UpdateVisitor updateVisitor = new();
         private static bool IsRecord = false;
         private double  recordTime = 0;
+        private readonly SolidColorBrush blue = new BrushConverter().ConvertFrom("#1F67B3") as SolidColorBrush;
+        private readonly SolidColorBrush orange = new BrushConverter().ConvertFrom("#FF8000") as SolidColorBrush;
+        private readonly SolidColorBrush red = new BrushConverter().ConvertFrom("#E81123") as SolidColorBrush;
 
         private Dictionary<string, List<double>> DataRecord = [];
         
@@ -98,7 +102,7 @@ namespace XyliteeeMainForm.Views
                                     break;
                                 }
                             }
-                            ramUseRate = Math.Round(ramUsage / systemInfo.RamNumber, 2);
+                            ramUseRate = (int)(ramUsage*100 / systemInfo.RamNumber);
                         }
                         else if (hardwareItem.HardwareType == HardwareType.HDD)
                         {
@@ -124,7 +128,7 @@ namespace XyliteeeMainForm.Views
                         DataRecord["CPU_Power"].Add(CPUpower);
                         DataRecord["CPU_Temp"].Add(CPUTemp);
                         DataRecord["CoreGPU_Power"].Add(SocGPUPower);
-                        DataRecord["RAM_Load"].Add(ramUseRate*100);
+                        DataRecord["RAM_Load"].Add(ramUseRate);
                         int minutes = (int)(recordTime / 60);
                         double second = recordTime - 60 * minutes;
                         Dispatcher.Invoke(()=>
@@ -137,13 +141,23 @@ namespace XyliteeeMainForm.Views
                     Dispatcher.Invoke(() =>
                     {
                         cpuCircleBar.Value = CPUUsage;
+                        if (CPUUsage <= 50) cpuCircleBar.Foreground = blue;
+                        else if (CPUUsage <= 80) cpuCircleBar.Foreground = orange;
+                        else cpuCircleBar.Foreground = red;
                         cpuUsedLabel.Content = $"CPU占用{CPUUsage}%";
                         cpuPowerLabel.Content = $"封装功耗:{CPUpower}W";
                         gpuPowerLabel.Content = $"核显功耗:{SocGPUPower}W";
                         cpuTempLabel.Content = $"封装温度:{CPUTemp}°C";
-                        ramBar.Value = ramUseRate * 100;
+                        ramBar.Value = ramUseRate;
+                        if (ramUseRate <= 50) ramBar.Foreground = blue;
+                        else if (ramUsage <= 80) ramBar.Foreground = orange;
+                        else ramBar.Foreground = red;
+                        Debug.WriteLine(ramUseRate);
                         ramLabel.Content = $"内存使用情况：{ramUsage}GB/{systemInfo.RamNumber}GB";
                         DiskBar.Value = diskUseRate;
+                        if (diskUseRate <= 50) DiskBar.Foreground = blue;
+                        else if (diskUseRate <= 80) DiskBar.Foreground = orange;
+                        else DiskBar.Foreground = red;
                         diskLabel.Content = $"硬盘使用情况：{diskUseRate * systemInfo.diskTotal / 100}GB/{systemInfo.diskTotal}GB";
                     });
                     
@@ -170,6 +184,7 @@ namespace XyliteeeMainForm.Views
                 await File.WriteAllTextAsync(Path.Combine(FileManager.WorkDirectory.outPutDirectory, $"RecordData/{time}.json"), json);
                 KotoMessageBoxSingle.ShowDialog("录制超时，已自动保存");
                 RecordButton.IsEnabled = true;
+                SettingButton.IsEnabled = true;
                 var rr = KotoMessageBox.ShowDialog("是否绘制表格？");
                 if (rr.IsYes)
                 {
@@ -273,7 +288,7 @@ namespace XyliteeeMainForm.Views
             ManagementObjectSearcher osSearcher = new("SELECT * FROM Win32_OperatingSystem");
             foreach (ManagementObject osInfo in osSearcher.Get().Cast<ManagementObject>())
             {
-                SystemName = osInfo["Caption"].ToString().Replace("Microsoft", "");
+                SystemName = osInfo["Caption"].ToString()!.Replace("Microsoft", "");
                 SystemVersion = osInfo["Version"].ToString();
             }
             foreach (var hardwareItem in myComputer.Hardware)
