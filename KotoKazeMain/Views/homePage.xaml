@@ -55,7 +55,8 @@
                         <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                     </Border.Effect>
                 </Border>
-                <hc:CircleProgressBar x:Name="cpuCircleBar" Width="200" Height="200" Canvas.Left="20" Canvas.Top="20" ArcThickness="5" Text="" Foreground="#1F67B3"/>
+                <hc:CircleProgressBar Width="198" Height="198" Canvas.Left="21" Canvas.Top="21" ArcThickness="1" Text="" Foreground="Transparent" Background="#777777"/>
+                <hc:CircleProgressBar x:Name="cpuCircleBar" Width="200" Height="200" Canvas.Left="20" Canvas.Top="20" ArcThickness="3" Text="" Foreground="#1F67B3" Background="Transparent"/>
                 <Label x:Name="cpuUsedLabel" Width="140" Background="Transparent" Canvas.Left="50" Canvas.Top="110" BorderThickness="0" TextBlock.TextAlignment="Center" TextBlock.FontSize="16" FontWeight="Bold" Content="收集数据中"/>
                 <Label x:Name="cpuPowerLabel" Width="140" Background="Transparent" Canvas.Left="50" Canvas.Top="130" BorderThickness="0" TextBlock.TextAlignment="Center" TextBlock.FontSize="12"  Foreground="Gray" Content="收集数据中"/>
                 <Label x:Name="cpuTempLabel" Width="140" Background="Transparent" Canvas.Left="50" Canvas.Top="145" BorderThickness="0" TextBlock.TextAlignment="Center" TextBlock.FontSize="12"  Foreground="Gray" Content="收集数据中"/>

@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:KotoKaze.Views"
+      xmlns:fluent ="http://schemas.inkore.net/lib/ui/wpf/modern"
       xmlns:hc="https://handyorg.github.io/handycontrol"
       xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
       mc:Ignorable="d" 
@@ -17,8 +18,8 @@
                     <DropShadowEffect Color="#AAAAAA" Direction="270" ShadowDepth="0" Opacity="0.2" BlurRadius="5"/>
                 </Border.Effect>
             </Border>
-            <hc:ScrollViewer Height="300" Width="630" Canvas.Left="20" Canvas.Top="20">
-                <Canvas  Width="630" Height="920" CacheMode="BitmapCache">
+            <fluent:ScrollViewerEx Height="300" Width="630" Canvas.Left="20" Canvas.Top="20">
+                <Canvas  Width="630" Height="920">
                     <Canvas Width="630" Height="300">
                         <Label BorderThickness="0" Background="Transparent" Width="610" Canvas.Left="10" Canvas.Top="0" Content="CPU监测结果" FontSize="16" Foreground="Gray"/>
                         <lvc:CartesianChart  x:Name="CPU_Chrat" LegendLocation="Bottom" Height="270" Canvas.Top="25" Width="610" Canvas.Left="10" DisableAnimations="True" Hoverable="False"  DataTooltip="{x:Null}" />
@@ -32,7 +33,7 @@
                         <lvc:CartesianChart  x:Name="RAM_Chrat" LegendLocation="Bottom" Height="270" Width="610" Canvas.Left="10" Canvas.Top="25" DisableAnimations="True" Hoverable="False"  DataTooltip="{x:Null}" />
                     </Canvas>
                 </Canvas>
-            </hc:ScrollViewer>
+            </fluent:ScrollViewerEx>
             <Canvas Canvas.Left="20" Canvas.Bottom="20" Height="150" Width="630">
                 <Border Background="White" Width="630" Height="150" CornerRadius="5">
                     <Border.Effect>

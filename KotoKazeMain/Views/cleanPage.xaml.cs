@@ -32,6 +32,7 @@ namespace XyliteeeMainForm.Views
         private readonly List<Button> uninstallerButtons = [];
         private List<SoftWare> softWares = [];
         private readonly BitmapImage defaultIcon = new(new Uri("pack://application:,,,/image/icons/windows11.png"));
+        private readonly BitmapCache bitmapCache = new();
         public cleanPage()
         {
             InitializeComponent();
@@ -300,6 +301,7 @@ namespace XyliteeeMainForm.Views
         {
 
             Canvas card = new();
+            card.CacheMode = bitmapCache;
             Canvas.SetTop(card, 20+80*index);
             Canvas.SetLeft(card, 20);
             card.Width = 330;

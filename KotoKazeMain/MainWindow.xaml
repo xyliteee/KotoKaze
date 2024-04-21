@@ -73,7 +73,7 @@
                     </Canvas>
 
                     <Canvas x:Name="PageSilder" Width="5" Height="20" Background="Transparent" Canvas.Left="5" Canvas.Top="50">
-                        <Border Background="#1F67B3" Width="5" Height="20" CornerRadius="2"/>
+                        <Border Background="#1F67B3" Width="5" Height="20" CornerRadius="2" CacheMode="BitmapCache"/>
                     </Canvas>
 
                     <Label x:Name="TaskListMessage" WindowChrome.IsHitTestVisibleInChrome="True" Background="Transparent" BorderThickness="0" FontSize="12" Foreground="White" Content="无任务" Height="30" Width="120" Canvas.Right="0" Canvas.Bottom="0" HorizontalAlignment="Center" VerticalAlignment="Center" />

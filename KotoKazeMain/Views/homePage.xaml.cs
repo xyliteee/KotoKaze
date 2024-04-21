@@ -63,7 +63,7 @@ namespace XyliteeeMainForm.Views
             }
             GetCurrentData();
         }
-        private async void GetCurrentData()
+        private void GetCurrentData()
         {
             double CPUUsage=0;
             double ramUseRate = 0;
@@ -73,102 +73,106 @@ namespace XyliteeeMainForm.Views
             double CPUTemp = 0;
             double SocGPUPower = 0;
             string key = string.Empty;
-            try
+            Task.Run(async() => 
             {
-                while (GlobalData.IsRunning)
+                try
                 {
-                    myComputer.Accept(updateVisitor);
-                    foreach (var hardwareItem in myComputer.Hardware)
+                    while (GlobalData.IsRunning)
                     {
-                        if (hardwareItem.HardwareType == HardwareType.CPU)
+                        myComputer.Accept(updateVisitor);
+                        foreach (var hardwareItem in myComputer.Hardware)
                         {
-                            foreach (var sensor in hardwareItem.Sensors)
+                            if (hardwareItem.HardwareType == HardwareType.CPU)
                             {
-                                key = sensor.Name + "_" + sensor.SensorType;
-                                if (key == "CPU Total_Load") CPUUsage = (int)sensor.Value!;
-                                else if(key == "CPU Package_Power") CPUpower = Math.Round((double)sensor.Value!,2);
-                                else if(key == "CPU Package_Temperature") CPUTemp = Math.Round((double)sensor.Value!,2);
-                                else if(key == "CPU Graphics_Power") SocGPUPower = Math.Round((double)sensor.Value!,2);
-                            }
-                        }
-                        else if (hardwareItem.HardwareType == HardwareType.RAM)
-                        {
-                            foreach (var sensor in hardwareItem.Sensors)
-                            {
-                                key = sensor.Name + "_" + sensor.SensorType;
-                                if(key == "Used Memory_Data") 
+                                foreach (var sensor in hardwareItem.Sensors)
                                 {
-                                    ramUsage = Math.Round((double)sensor.Value!,2);
-                                    break;
+                                    key = sensor.Name + "_" + sensor.SensorType;
+                                    if (key == "CPU Total_Load") CPUUsage = (int)sensor.Value!;
+                                    else if (key == "CPU Package_Power") CPUpower = Math.Round((double)sensor.Value!, 2);
+                                    else if (key == "CPU Package_Temperature") CPUTemp = Math.Round((double)sensor.Value!, 2);
+                                    else if (key == "CPU Graphics_Power") SocGPUPower = Math.Round((double)sensor.Value!, 2);
                                 }
                             }
-                            ramUseRate = (int)(ramUsage*100 / systemInfo.RamNumber);
-                        }
-                        else if (hardwareItem.HardwareType == HardwareType.HDD)
-                        {
-                            foreach (var sensor in hardwareItem.Sensors)
+                            else if (hardwareItem.HardwareType == HardwareType.RAM)
                             {
-                                key = sensor.Name + "_" + sensor.SensorType;
-                                if (key == "Used Space_Load") 
+                                foreach (var sensor in hardwareItem.Sensors)
                                 {
-                                    diskUseRate = (int)sensor.Value!;
-                                    break;
+                                    key = sensor.Name + "_" + sensor.SensorType;
+                                    if (key == "Used Memory_Data")
+                                    {
+                                        ramUsage = Math.Round((double)sensor.Value!, 2);
+                                        break;
+                                    }
+                                }
+                                ramUseRate = (int)(ramUsage * 100 / systemInfo.RamNumber);
+                            }
+                            else if (hardwareItem.HardwareType == HardwareType.HDD)
+                            {
+                                foreach (var sensor in hardwareItem.Sensors)
+                                {
+                                    key = sensor.Name + "_" + sensor.SensorType;
+                                    if (key == "Used Space_Load")
+                                    {
+                                        diskUseRate = (int)sensor.Value!;
+                                        break;
+                                    }
                                 }
                             }
                         }
-                    }
-                    if (IsRecord) 
-                    {
-                        if (recordTime > 1800)
+                        if (IsRecord)
                         {
-                            OutofTime();
-                            continue;
+                            if (recordTime > 1800)
+                            {
+                                OutofTime();
+                                continue;
+                            }
+                            DataRecord["CPU_Load"].Add(CPUUsage);
+                            DataRecord["CPU_Power"].Add(CPUpower);
+                            DataRecord["CPU_Temp"].Add(CPUTemp);
+                            DataRecord["CoreGPU_Power"].Add(SocGPUPower);
+                            DataRecord["RAM_Load"].Add(ramUseRate);
+                            int minutes = (int)(recordTime / 60);
+                            double second = recordTime - 60 * minutes;
+                            Dispatcher.Invoke(() =>
+                            {
+                                recordTimeText.Text = $"{minutes}分\n{second}秒";
+                            });
+                            recordTime += GlobalData.RefreshTime;
                         }
-                        DataRecord["CPU_Load"].Add(CPUUsage);
-                        DataRecord["CPU_Power"].Add(CPUpower);
-                        DataRecord["CPU_Temp"].Add(CPUTemp);
-                        DataRecord["CoreGPU_Power"].Add(SocGPUPower);
-                        DataRecord["RAM_Load"].Add(ramUseRate);
-                        int minutes = (int)(recordTime / 60);
-                        double second = recordTime - 60 * minutes;
-                        Dispatcher.Invoke(()=>
-                        {
-                            recordTimeText.Text = $"{minutes}分\n{second}秒";
-                        });
-                        recordTime+= GlobalData.RefreshTime;
-                    }
 
-                    Dispatcher.Invoke(() =>
-                    {
-                        cpuCircleBar.Value = CPUUsage;
-                        if (CPUUsage <= 50) cpuCircleBar.Foreground = blue;
-                        else if (CPUUsage <= 80) cpuCircleBar.Foreground = orange;
-                        else cpuCircleBar.Foreground = red;
-                        cpuUsedLabel.Content = $"CPU占用{CPUUsage}%";
-                        cpuPowerLabel.Content = $"封装功耗:{CPUpower}W";
-                        gpuPowerLabel.Content = $"核显功耗:{SocGPUPower}W";
-                        cpuTempLabel.Content = $"封装温度:{CPUTemp}°C";
-                        ramBar.Value = ramUseRate;
-                        if (ramUseRate <= 50) ramBar.Foreground = blue;
-                        else if (ramUsage <= 80) ramBar.Foreground = orange;
-                        else ramBar.Foreground = red;
-                        ramLabel.Content = $"内存使用情况：{ramUsage}GB/{systemInfo.RamNumber}GB";
-                        DiskBar.Value = diskUseRate;
-                        if (diskUseRate <= 50) DiskBar.Foreground = blue;
-                        else if (diskUseRate <= 80) DiskBar.Foreground = orange;
-                        else DiskBar.Foreground = red;
-                        diskLabel.Content = $"硬盘使用情况：{diskUseRate * systemInfo.diskTotal / 100}GB/{systemInfo.diskTotal}GB";
-                    });
-                    
-                    await Task.Delay((int)(GlobalData.RefreshTime*1000));
+                        Dispatcher.Invoke(() =>
+                        {
+                            cpuCircleBar.Value = CPUUsage;
+                            if (CPUUsage <= 50) cpuCircleBar.Foreground = blue;
+                            else if (CPUUsage <= 80) cpuCircleBar.Foreground = orange;
+                            else cpuCircleBar.Foreground = red;
+                            cpuUsedLabel.Content = $"CPU占用{CPUUsage}%";
+                            cpuPowerLabel.Content = $"封装功耗:{CPUpower}W";
+                            gpuPowerLabel.Content = $"核显功耗:{SocGPUPower}W";
+                            cpuTempLabel.Content = $"封装温度:{CPUTemp}°C";
+                            ramBar.Value = ramUseRate;
+                            if (ramUseRate <= 50) ramBar.Foreground = blue;
+                            else if (ramUsage <= 80) ramBar.Foreground = orange;
+                            else ramBar.Foreground = red;
+                            ramLabel.Content = $"内存使用情况：{ramUsage}GB/{systemInfo.RamNumber}GB";
+                            DiskBar.Value = diskUseRate;
+                            if (diskUseRate <= 50) DiskBar.Foreground = blue;
+                            else if (diskUseRate <= 80) DiskBar.Foreground = orange;
+                            else DiskBar.Foreground = red;
+                            diskLabel.Content = $"硬盘使用情况：{diskUseRate * systemInfo.diskTotal / 100}GB/{systemInfo.diskTotal}GB";
+                        });
+
+                        await Task.Delay((int)(GlobalData.RefreshTime * 1000));
+                    }
                 }
-            }
-            catch (ThreadAbortException) { }
-            catch (TaskCanceledException) { }
-            catch(Exception ex) 
-            {
-                await FileManager.LogManager.LogWriteAsync("Get DeviceInformation Error",ex.ToString());
-            }
+                catch (ThreadAbortException) { }
+                catch (TaskCanceledException) { }
+                catch (Exception ex)
+                {
+                    await FileManager.LogManager.LogWriteAsync("Get DeviceInformation Error", ex.ToString());
+                }
+            });
+            
         }
         private void OutofTime() 
         {
