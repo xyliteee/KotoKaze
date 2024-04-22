@@ -96,7 +96,7 @@ namespace KotoKaze.Dynamic
 
             Button button = new()
             {
-                Style = (Style)Application.Current.FindResource("CancleButtonStyle"),
+                Style = (Style)Application.Current.FindResource("ButtonDanger"),
                 Width = 30,
                 Height = 30,
                 Content = "×",
@@ -307,7 +307,6 @@ namespace KotoKaze.Dynamic
             });
         }
     }
-
     public class NetworkBackgroundTask : BackgroundTask 
     {
         public Network.Downloader downloader;
