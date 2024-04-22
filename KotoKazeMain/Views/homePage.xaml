@@ -72,7 +72,7 @@
                     </Border.Effect>
                 </Border>
                 <Image Width="60" Height="60" Canvas.Left="10" Canvas.Top="10" Source="/image/icons/Disk.png"/>
-                    <fluent:ProgressBar Height="20" x:Name="DiskBar" Canvas.Left="10" Canvas.Bottom="15" Width="340" Foreground="#1F67B3" />
+                <fluent:ProgressBar Height="20" x:Name="DiskBar" Canvas.Left="10" Canvas.Bottom="15" Width="340" Foreground="#1F67B3" />
                 <Label x:Name="diskLabel" BorderThickness="0" Background="Transparent" Content="硬盘使用情况：收集数据中" Canvas.Left="80" Canvas.Top="30" FontSize="14"/>
             </Canvas>
 
