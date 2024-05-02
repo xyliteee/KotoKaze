@@ -8,6 +8,7 @@ using KotoKaze.Windows;
 using FileControl;
 using System.IO;
 using HelixToolkit.Logger;
+using XyliNet;
 
 namespace KotoKaze.Dynamic
 {
@@ -309,8 +310,8 @@ namespace KotoKaze.Dynamic
     }
     public class NetworkBackgroundTask : BackgroundTask 
     {
-        public Network.Downloader downloader;
-        public NetworkBackgroundTask(Network.Downloader downloader) 
+        public Downloader downloader;
+        public NetworkBackgroundTask(Downloader downloader) 
         {
             this.downloader = downloader;
             this.downloader.action = new Action(() => 

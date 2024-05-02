@@ -183,7 +183,8 @@
             { "LCSH92","红米Note"},
             { "HM2013023","红米手机"},
             { "PD2055","IQOO Neo5"},
-            { "PD2148","IQOO Z5"}
+            { "PD2148","IQOO Z5"},
+            { "PD2025","IQOO 5Pro"}
         };
 
         public readonly static Dictionary<string, string> batteryReport = new()

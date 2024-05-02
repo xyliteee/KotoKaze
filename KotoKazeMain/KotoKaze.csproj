@@ -126,6 +126,7 @@
     <ProjectReference Include="..\openhardwaremonitor-master\OpenHardwareMonitorLib.csproj" />
     <ProjectReference Include="..\Translation\Translation.csproj" />
     <ProjectReference Include="..\WorkLoad\TestContent.csproj" />
+    <ProjectReference Include="..\XyliNet\XyliNet.csproj" />
   </ItemGroup>
 
 </Project>

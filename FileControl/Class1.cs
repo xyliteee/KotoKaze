@@ -16,7 +16,6 @@ namespace FileControl
             public static readonly string logfileDirectory = Path.Combine(rootDirectory, "logs");
             public static readonly string outPutDirectory = Path.Combine(rootDirectory, "Output");
             public static readonly string softwareTempDirectory = Path.Combine(CleanRules.APPDATE, "Local\\Temp\\KotoKaze");
-
             public static void CreatWorkDirectory()
             {
                 Directory.CreateDirectory(backupDirectory);
@@ -27,8 +26,6 @@ namespace FileControl
                 Directory.CreateDirectory(logfileDirectory);
                 Directory.CreateDirectory(outPutDirectory);
             }
-
-
             public static void CreatWorkFile()
             {
                 if (!Path.Exists(Path.Combine(BinDirectory, "Performance.ini")))

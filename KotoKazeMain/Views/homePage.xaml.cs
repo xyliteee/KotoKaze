@@ -73,7 +73,7 @@ namespace XyliteeeMainForm.Views
             double CPUTemp = 0;
             double SocGPUPower = 0;
             string key = string.Empty;
-            Task.Run(async() => 
+            Task.Run(() => 
             {
                 try
                 {
@@ -162,14 +162,14 @@ namespace XyliteeeMainForm.Views
                             diskLabel.Content = $"硬盘使用情况：{diskUseRate * systemInfo.diskTotal / 100}GB/{systemInfo.diskTotal}GB";
                         });
 
-                        await Task.Delay((int)(GlobalData.RefreshTime * 1000));
+                        Thread.Sleep((int)(GlobalData.RefreshTime * 1000));
                     }
                 }
                 catch (ThreadAbortException) { }
                 catch (TaskCanceledException) { }
                 catch (Exception ex)
                 {
-                    await FileManager.LogManager.LogWriteAsync("Get DeviceInformation Error", ex.ToString());
+                    FileManager.LogManager.LogWrite("Get DeviceInformation Error", ex.ToString());
                 }
             });
             

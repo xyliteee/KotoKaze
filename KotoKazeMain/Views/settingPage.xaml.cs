@@ -6,7 +6,8 @@ using System.IO;
 using System.Windows.Controls;
 using static FileControl.FileManager;
 using static KotoKaze.Dynamic.BackgroundTaskList;
-using static KotoKaze.Dynamic.Network.Downloader;
+using XyliNet;
+using static XyliNet.Downloader;
 using System.Diagnostics;
 
 namespace XyliteeeMainForm.Views
@@ -51,7 +52,7 @@ namespace XyliteeeMainForm.Views
 
             var rr = KotoMessageBox.ShowDialog("是否重新安装ADB组件");
             if (!rr.IsYes) { return; }
-            ADBINSTALL = new(new Network.Downloader("ADB Download")) { Title = "ADB组件下载" };
+            ADBINSTALL = new(new Downloader("ADB Download")) { Title = "ADB组件下载" };
             ADBINSTALL.Start();
             string adbZipFile = Path.Combine(WorkDirectory.softwareTempDirectory, "adb.zip");//ADB压缩包的下载路径
             int isDownloadSuccessful;
@@ -69,6 +70,7 @@ namespace XyliteeeMainForm.Views
                 if (times == 4 && isDownloadSuccessful == isError) 
                 {
                     ADBINSTALL.SetFinished(() => { KotoMessageBoxSingle.ShowDialog("下载出错，建议检查网络状况"); });
+                    await LogManager.LogWriteAsync($"{ADBINSTALL.Title} Error", ADBINSTALL.downloader.errorMessage);
                     return;
                 } 
             }
@@ -81,11 +83,15 @@ namespace XyliteeeMainForm.Views
             }
             while (GlobalData.IsRunning) 
             {
-                try 
+                if (!Path.Exists(Path.Combine(WorkDirectory.BinDirectory, "platform-tools"))) 
+                {
+                    break;
+                }
+                try
                 {
                     Directory.Delete(Path.Combine(WorkDirectory.BinDirectory, "platform-tools"), true);
                     break;
-                } 
+                }
                 catch (Exception) { }
             }
             ADBINSTALL.Description = "正在解压....";

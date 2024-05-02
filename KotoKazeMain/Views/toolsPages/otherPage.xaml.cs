@@ -9,7 +9,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using static FileControl.FileManager;
-using static KotoKaze.Dynamic.Network.Downloader;
+using XyliNet;
+using static XyliNet.Downloader;
 using System.Diagnostics;
 
 
@@ -44,7 +45,7 @@ namespace KotoKaze.Views.toolsPages
 
             var rr = KotoMessageBox.ShowDialog("ADB组件缺失,是否下载?");
             if (!rr.IsYes){ return; }
-            ADBINSTALL = new(new Network.Downloader("ADB Download")) { Title = "ADB组件下载" };
+            ADBINSTALL = new(new Downloader("ADB Download")) { Title = "ADB组件下载" };
             ADBINSTALL.Start();
             string adbZipFile = Path.Combine(WorkDirectory.softwareTempDirectory, "adb.zip");//ADB压缩包的下载路径
             int isDownloadSuccessful;
@@ -64,6 +65,7 @@ namespace KotoKaze.Views.toolsPages
                     if (times == 4 && isDownloadSuccessful == isError)
                     {
                         ADBINSTALL.SetFinished(() => { KotoMessageBoxSingle.ShowDialog("下载出错，建议检查网络状况"); });
+                        await LogManager.LogWriteAsync($"{ADBINSTALL.Title} Error", ADBINSTALL.downloader.errorMessage);
                         return;
                     }
                 }

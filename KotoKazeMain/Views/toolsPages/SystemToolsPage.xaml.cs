@@ -9,7 +9,6 @@ using System.Windows.Controls;
 using static KotoKaze.Dynamic.BackgroundTaskList;
 using FileControl;
 using System.Text.RegularExpressions;
-using static KotoKaze.Dynamic.Network;
 
 
 namespace KotoKaze.Views.toolsPages
