@@ -31,9 +31,7 @@ namespace XyliteeeMainForm
         public App()
         {
             _ = new Mutex(true, "ElectronicNeedleTherapySystem", out bool ret);
-            Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
             if (!ret)
             {
 
@@ -130,23 +128,10 @@ namespace XyliteeeMainForm
             s.Close();
             mainWindow.Show();
         }
-
-        private void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
-        {
-            KotoMessageBoxSingle.ShowDialog("发生了致命性错误，已写入日志");
-            FileManager.LogManager.LogWrite("Unknown Error", e.Exception.ToString());
-        }
-
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             KotoMessageBoxSingle.ShowDialog("发生了致命性错误，已写入日志");
             FileManager.LogManager.LogWrite("Unknown Error", (e.ExceptionObject as Exception).Message);
-        }
-
-        private void Current_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
-        {
-            KotoMessageBoxSingle.ShowDialog("发生了致命性错误，已写入日志");
-            FileManager.LogManager.LogWrite("Unknown Error", e.Exception.ToString());
         }
     }
 

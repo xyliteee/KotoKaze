@@ -350,7 +350,7 @@ namespace OpenHardwareMonitor.Hardware {
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    private struct WriteIoPortInput {
+    public struct WriteIoPortInput {
       public uint PortNumber;
       public byte Value;
     }

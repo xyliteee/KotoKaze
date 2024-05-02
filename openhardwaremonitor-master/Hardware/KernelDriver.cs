@@ -9,6 +9,7 @@
 */
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Security.AccessControl;
@@ -101,10 +102,10 @@ namespace OpenHardwareMonitor.Hardware {
       if (device == null)
         return false;
 
-      uint bytesReturned;
+      //Debug.WriteLine("inBuffer type: " + inBuffer.GetType().FullName);
       bool b = NativeMethods.DeviceIoControl(device, ioControlCode,
         inBuffer, inBuffer == null ? 0 : (uint)Marshal.SizeOf(inBuffer),
-        null, 0, out bytesReturned, IntPtr.Zero);
+        null, 0, out _, IntPtr.Zero);
       return b;
     }
 
@@ -113,13 +114,13 @@ namespace OpenHardwareMonitor.Hardware {
     {
       if (device == null)
         return false;
-
+      //Debug.WriteLine("inBuffer type: " + inBuffer.GetType().FullName);
+      //Debug.WriteLine("outBuffer type: " + outBuffer.GetType().FullName);
       object boxedOutBuffer = outBuffer;
-      uint bytesReturned;
       bool b = NativeMethods.DeviceIoControl(device, ioControlCode,
         inBuffer, inBuffer == null ? 0 : (uint)Marshal.SizeOf(inBuffer),
         boxedOutBuffer, (uint)Marshal.SizeOf(boxedOutBuffer),
-        out bytesReturned, IntPtr.Zero);
+        out _, IntPtr.Zero);
       outBuffer = (T)boxedOutBuffer;
       return b;
     }

@@ -21,7 +21,6 @@ namespace XyliteeeMainForm.Views
         private readonly WorkLoadTest.CPU CPUTest;
         private readonly WorkLoadTest.RAM RAMTest;
         private readonly WorkLoadTest.Disk DiskTest;
-        private static bool isFirstView = true;
         private GPUTestWindow GPUWindow;
         private int CPUScore = 0;
         private int GPUScore = 0;
