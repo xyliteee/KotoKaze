@@ -140,5 +140,10 @@ namespace XyliteeeMainForm.Views
             else if (GlobalData.AnimationLevel == 1) AnimationLevelList.SelectedIndex = 1;
             else if (GlobalData.AnimationLevel == 2) AnimationLevelList.SelectedIndex = 2;
         }
+
+        private void ImportCleanRulesButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            CleanRuleEditWindow.ShowSettingPage();
+        }
     }
 }

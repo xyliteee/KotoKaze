@@ -81,14 +81,12 @@ namespace KotoKaze.Windows
         private void No_Button_Click(object sender, RoutedEventArgs e)
         {
             _isLegal = true;
-            Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0, 0.1);
             Close();
             Result?.Invoke(this, new MessageBoxEventArgs() { Result = new MessageResult() { IsYes = false } });
         }
         private void Yes_Button_Click(object sender, RoutedEventArgs e)
         {
             _isLegal = true;
-            Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0, 0.1);
             Close();
             Result?.Invoke(this, new MessageBoxEventArgs() { Result = new MessageResult() 
             { 
@@ -117,7 +115,6 @@ namespace KotoKaze.Windows
         {
             _isLegal = true;
             Close();
-            Animations.ChangeOP(GlobalData.MainWindowInstance.messageMask, null, 0, 0.05);
             Result?.Invoke(this, new MessageBoxEventArgs()
             {
                 Result = new MessageResult()

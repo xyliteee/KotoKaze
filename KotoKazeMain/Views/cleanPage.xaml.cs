@@ -14,6 +14,9 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using System.Diagnostics;
 using CleanContent;
+using FileControl;
+using KotoKaze.Windows;
+using System.Collections.Generic;
 
 #pragma warning disable CS8600
 #pragma warning disable CS8602
@@ -96,7 +99,7 @@ namespace XyliteeeMainForm.Views
                 case "temp":
                     trashTempFiles.Clear();
                     filePathes = CleanRules.tempFilesRules;
-                    foreach (string filePath in filePathes) 
+                    foreach (string filePath in filePathes)
                     {
                         if (!Directory.Exists(filePath)) continue;
                         foreach (var file in Directory.EnumerateFiles(filePath, "*.*", SearchOption.AllDirectories))
@@ -112,7 +115,7 @@ namespace XyliteeeMainForm.Views
                 case "update":
                     trashUpdateFiles.Clear();
                     filePathes = CleanRules.updateFilesRules;
-                    foreach (string filePath in filePathes) 
+                    foreach (string filePath in filePathes)
                     {
                         if (!Directory.Exists(filePath)) continue;
                         foreach (var file in Directory.EnumerateFiles(filePath, "*.*", SearchOption.AllDirectories))
@@ -128,7 +131,7 @@ namespace XyliteeeMainForm.Views
 
                 case "Recycle":
                     trashRecycleFiles.Clear();
-                    try 
+                    try
                     {
                         foreach (DriveInfo drive in DriveInfo.GetDrives())
                         {
@@ -142,18 +145,18 @@ namespace XyliteeeMainForm.Views
                                     trashRecycleFiles.Add(file);
                                     FileInfo fi = new(file);
                                     trashFilesSize += fi.Length;
-                                    Dispatcher.Invoke(() =>{RecycleFilesLabel.Content = $"已扫描{BytesToOthers(trashFilesSize)}";});
+                                    Dispatcher.Invoke(() => { RecycleFilesLabel.Content = $"已扫描{BytesToOthers(trashFilesSize)}"; });
                                 }
                             }
                         }
-                    } 
-                    catch{}
+                    }
+                    catch { }
                     break;
 
                 case "other":
                     trashOtherFiles.Clear();
                     filePathes = CleanRules.otherFilesRules;
-                    foreach (string filePath in filePathes) 
+                    foreach (string filePath in filePathes)
                     {
                         if (!Directory.Exists(filePath)) continue;
                         foreach (var file in Directory.EnumerateFiles(filePath, "*.*", SearchOption.AllDirectories))
@@ -164,10 +167,85 @@ namespace XyliteeeMainForm.Views
                             Dispatcher.Invoke(() => { OtherFilesLabel.Content = $"已扫描{BytesToOthers(trashFilesSize)}"; });
                         }
                     }
+
+                    List<CleanStruct>? cleanStructs = GetCleanStructs();
+                    if (cleanStructs != null) 
+                    {
+                        try
+                        {
+                            foreach (CleanStruct cs in cleanStructs)
+                            {
+                                if (cs.Type.Equals("Path"))
+                                {
+                                    if (!Directory.Exists(cs.Path) || cs.Path.Equals("Null")) continue;
+                                    foreach (var file in Directory.EnumerateFiles(cs.Path, "*.*", SearchOption.AllDirectories))
+                                    {
+                                        trashOtherFiles.Add(file);
+                                        FileInfo fi = new(file);
+                                        trashFilesSize += fi.Length;
+                                        Dispatcher.Invoke(() => { OtherFilesLabel.Content = $"已扫描{BytesToOthers(trashFilesSize)}"; });
+                                    }
+                                }
+                                if (cs.Type.Equals("Target"))
+                                {
+                                    string file = Path.Combine(cs.Path, cs.Key);
+                                    if (!File.Exists(file) || cs.Path.Equals("Null")) continue;
+                                    trashOtherFiles.Add(file);
+                                    FileInfo fi = new(file);
+                                    trashFilesSize += fi.Length;
+                                    Dispatcher.Invoke(() => { OtherFilesLabel.Content = $"已扫描{BytesToOthers(trashFilesSize)}"; });
+                                    break;
+                                }
+                                if (cs.Type.Equals("Type"))
+                                {
+                                    if (!Directory.Exists(cs.Path) || cs.Path.Equals("Null")) continue;
+                                    foreach (var file in Directory.EnumerateFiles(cs.Path, $"*.{cs.Key}", SearchOption.AllDirectories))
+                                    {
+                                        trashOtherFiles.Add(file);
+                                        FileInfo fi = new(file);
+                                        trashFilesSize += fi.Length;
+                                        Dispatcher.Invoke(() => { OtherFilesLabel.Content = $"已扫描{BytesToOthers(trashFilesSize)}"; });
+                                    }
+                                }
+                                if (cs.Type.Equals("Contain"))
+                                {
+                                    if (!Directory.Exists(cs.Path) || cs.Path.Equals("Null")) continue;
+                                    foreach (var file in Directory.EnumerateFiles(cs.Path, "*.*", SearchOption.AllDirectories))
+                                    {
+                                        var fileName = Path.GetFileNameWithoutExtension(file);
+                                        if (!fileName.Contains(cs.Key)) continue;
+                                        trashOtherFiles.Add(file);
+                                        FileInfo fi = new(file);
+                                        trashFilesSize += fi.Length;
+                                        Dispatcher.Invoke(() => { OtherFilesLabel.Content = $"已扫描{BytesToOthers(trashFilesSize)}"; });
+                                    }
+                                }
+                            }
+                        }
+                        catch(InvalidDataException){ }
+                    }
                     if (trashFilesSize == 0) { Dispatcher.Invoke(() => { OtherFilesLabel.Content = $"非常干净"; }); }
                     break;
-                    
             }
+        }
+
+        public static List<CleanStruct>? GetCleanStructs()
+        {
+            List<CleanStruct> list = null;
+            string ruleFilePath = Path.Combine(FileManager.WorkDirectory.BinDirectory, "clean.json");
+            if (File.Exists(ruleFilePath))
+            {
+                string json = File.ReadAllText(ruleFilePath);
+                try
+                {
+                    list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CleanStruct>>(json);
+                }
+                catch (Exception) 
+                {
+                    KotoMessageBoxSingle.ShowDialog("规则文件格式错误，请检查文件");
+                }
+            }
+            return list;
         }
 
         private void DeleteFilesAndUpdateUI(string fileType)

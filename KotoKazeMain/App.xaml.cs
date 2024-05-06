@@ -10,6 +10,9 @@ using System.Windows.Media.Effects;
 using System.Windows.Threading;
 using XyliteeeMainForm.Views;
 using FileControl;
+using CleanContent;
+using Newtonsoft.Json;
+using System.IO;
 
 
 namespace XyliteeeMainForm
@@ -58,7 +61,13 @@ namespace XyliteeeMainForm
                     InitializeComponent();
                     FileManager.WorkDirectory.CreatWorkDirectory();
                     FileManager.WorkDirectory.CreatWorkFile();
+                    if (!File.Exists(Path.Combine(FileManager.WorkDirectory.BinDirectory, "clean.json")))
+                    {
+                        string json = JsonConvert.SerializeObject(new List<CleanStruct> { }, Formatting.Indented);
+                        File.WriteAllText(Path.Combine(FileManager.WorkDirectory.BinDirectory, "clean.json"), json);
+                    }
                 }, UpdateLevel);
+                
                 s.leftBar.Value = 10;
                 s.rightBar.Value = 10;
                 blurEffect.Radius = 20;

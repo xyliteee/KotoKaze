@@ -1,4 +1,6 @@
-﻿namespace CleanContent
+﻿using Newtonsoft.Json;
+
+namespace CleanContent
 {
     public class CleanRules
     {
