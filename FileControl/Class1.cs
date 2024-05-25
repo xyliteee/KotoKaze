@@ -57,7 +57,7 @@ namespace FileControl
                         IniFileWrite("Application.ini", "SETTING", "ISFIRST_USE", "TRUE");
                         IniFileWrite("Application.ini", "SETTING", "REFRESH_TIME", "1");
                         IniFileWrite("Application.ini", "SETTING", "ANIMATION_LEVEL", "0");
-                        IniFileWrite("Application.ini", "VALUE", "VERSION", "114.514");
+                        IniFileWrite("Application.ini", "VALUE", "VERSION", "Release");
                         break;
                 }
             }
