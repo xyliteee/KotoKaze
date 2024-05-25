@@ -45,6 +45,7 @@ namespace XyliteeeMainForm
             messageMask.Visibility = Visibility.Visible;
             CheckFirstUse();
             BackroundTaskViewInit();
+            
         }
 
         private void BackroundTaskViewInit() 
@@ -101,6 +102,7 @@ namespace XyliteeeMainForm
                     }, DispatcherPriority.Background);
                     IniFileSetDefault("Application.ini");
                 }
+               
             });
         }
 
