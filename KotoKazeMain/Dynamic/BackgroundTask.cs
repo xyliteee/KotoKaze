@@ -154,7 +154,7 @@ namespace KotoKaze.Dynamic
             CreateNoWindow = false,
             UseShellExecute = false
         };
-        private static readonly ProcessStartInfo startInfo = new()
+        public static ProcessStartInfo startInfo { get; } = new()
         {
             FileName = "cmd.exe",
             RedirectStandardInput = true,

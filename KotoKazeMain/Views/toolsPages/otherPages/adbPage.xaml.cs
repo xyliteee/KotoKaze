@@ -17,27 +17,47 @@ namespace KotoKaze.Views.toolsPages.otherPages
     {
         private PhoneInfo phoneInfo = new();
         private readonly CMDBackgroundTask APKINSTALLTASK = new();
+        private readonly CMDBackgroundTask ACTIVESCENE = new() { Title = "激活Scene" };
+        private readonly CMDBackgroundTask ACTIVESHIZUKU = new() { Title = "激活Shizuku" };
         private readonly SolidColorBrush XiaomiColor = new BrushConverter().ConvertFrom("#FF6600") as SolidColorBrush;
         private readonly SolidColorBrush defaultColor = new BrushConverter().ConvertFrom("#1F67B3") as SolidColorBrush;
         private readonly SolidColorBrush vivotColor = new BrushConverter().ConvertFrom("#415FFF") as SolidColorBrush;
+        private bool _isConnected = false;
+        private bool IsConnected 
+        {
+            get => _isConnected;
+            set 
+            {
+                _isConnected = value;
+                if (_isConnected) 
+                {
+                    SetButtonState(true);
+                    return;
+                }
+                SetButtonState(false);
+            }
+        }
         public ADBPage()
         {
             InitializeComponent();
             GetPhoneInfomation();
+            SetButtonState(false);
         }
 
-        private void SetButtonState(bool flag) 
+        private void SetButtonState(bool flag)
         {
             intallButton.IsEnabled = flag;
-        } 
+            SceneButotn.IsEnabled = flag;
+            ShizukuButotn.IsEnabled = flag;
+        }
 
-        private void GetPhoneInfomation() 
+        private void GetPhoneInfomation()
         {
             ConnectButotn.IsEnabled = false;
             Mask.Visibility = Visibility.Visible;
-            Animations.ImageTurnRound(SettingIcon,true,2);
+            Animations.ImageTurnRound(SettingIcon, true, 2);
             BrandBorder.Background = defaultColor;
-            Task.Run(() => 
+            Task.Run(() =>
             {
                 phoneInfo = ADBINFO.GetPhoneInfomation();
                 Dispatcher.Invoke(() =>
@@ -47,12 +67,12 @@ namespace KotoKaze.Views.toolsPages.otherPages
                         KotoMessageBoxSingle.ShowDialog("连接设备出错，未能读取到设备信息。请记得打开手机的USB调试模式");
                         Mask.Visibility = Visibility.Visible;
                         Animations.ImageTurnRound(SettingIcon, false);
-                        SetButtonState(false);
+                        IsConnected = false;
                         installDescripition.Content = "请连接设备";
                     }
                     else
                     {
-                        SetButtonState(true);
+                        IsConnected = true ;
                         Mask.Visibility = Visibility.Collapsed;
                         Animations.ImageTurnRound(SettingIcon, false);
                         if (TranslationRules.phoneModel.TryGetValue(phoneInfo.name.ToUpper(), out string? modelName))
@@ -74,7 +94,7 @@ namespace KotoKaze.Views.toolsPages.otherPages
                         {
                             BrandBorder.Background = XiaomiColor;
                         }
-                        else if (phoneInfo.brand.ToUpper().Equals("VIVO")) 
+                        else if (phoneInfo.brand.ToUpper().Equals("VIVO"))
                         {
                             BrandBorder.Background = vivotColor;
                         }
@@ -83,13 +103,14 @@ namespace KotoKaze.Views.toolsPages.otherPages
                     ConnectButotn.IsEnabled = true;
                 });
             });
-            
+
         }
         private void ConnectButotn_Click(object sender, RoutedEventArgs e)
         {
+            IsConnected = false;
             GetPhoneInfomation();
         }
-        private void UpdataFiles(object sender, RoutedEventArgs e) 
+        private void UpdataFiles(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dlg = new()
             {
@@ -101,8 +122,21 @@ namespace KotoKaze.Views.toolsPages.otherPages
             if (result == true)
             {
                 string selectedFilePath = dlg.FileName;
-                InstallAPK(selectedFilePath,APKINSTALLTASK);
+                InstallAPK(selectedFilePath, APKINSTALLTASK);
             }
         }
+
+        private void SceneButotn_Click(object sender, RoutedEventArgs e)
+        {
+            string activeCmd = $"{adb} shell sh /storage/emulated/0/Android/data/com.omarea.vtools";
+            Active(ACTIVESCENE,activeCmd);
+        }
+
+        private void ShizukuButotn_Click(object sender, RoutedEventArgs e)
+        {
+            string activeCmd = $"{adb} shell sh /storage/emulated/0/Android/data/moe.shizuku.privileged.api/start.sh";
+            Active(ACTIVESHIZUKU, activeCmd);
+        }
     }
+  
 }

@@ -13,7 +13,7 @@
             <Button x:Name="EnableGPEDIT" Canvas.Left="35" Canvas.Top="20" Width="120" Height="40" Style="{StaticResource FunctionButtonStyle}"  Content="开启组策略" FontSize="14" FontWeight="Bold" Click="EnableGPEDIT_Click"/>
             <Button x:Name="SFCSCNOW" Canvas.Left="195" Canvas.Top="20" Height="40" Width="120" Style="{StaticResource FunctionButtonStyle}" Content="SFC系统修复" FontSize="14" FontWeight="Bold" Click="SFCSCNOW_Click"/>
             <Button x:Name="BATTERYINFO" Canvas.Left="355" Canvas.Top="20" Height="40" Width="120" Style="{StaticResource FunctionButtonStyle}" Content="查看电池信息" FontSize="14" FontWeight="Bold" Click="BATTERYINFO_Click"/>
-            <Button x:Name="pps" Canvas.Left="515" Canvas.Top="20" Height="40" Width="120" Style="{StaticResource FunctionButtonStyle}" Content="占位置用的" FontSize="14" FontWeight="Bold"/>
+            <Button x:Name="ReturnToBios" Canvas.Left="515" Canvas.Top="20" Height="40" Width="120" Style="{StaticResource FunctionButtonStyle}" Content="进入Bios" FontSize="14" FontWeight="Bold" Click="ReturnToBios_Click"/>
         </Canvas>
     </Grid>
 </Page>

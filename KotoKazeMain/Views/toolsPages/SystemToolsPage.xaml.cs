@@ -145,5 +145,24 @@ namespace KotoKaze.Views.toolsPages
 
         [GeneratedRegex(@"\d+")]
         private static partial Regex MyRegex();
+
+        private void ReturnToBios_Click(object sender, RoutedEventArgs e)
+        {
+            Process process = new()
+            {
+                StartInfo = CMDBackgroundTask.startInfo
+            };
+            process.Start();
+            using (StreamWriter streamWriter = process.StandardInput)
+            {
+                string cmd = "shutdown /r /fw /t 1";
+                if (streamWriter.BaseStream.CanWrite)
+                {
+                    streamWriter.WriteLine(cmd);
+                }
+            }
+            process.WaitForExit();
+            process.Close();
+        }
     }
 }

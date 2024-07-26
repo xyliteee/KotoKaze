@@ -43,6 +43,9 @@
                 </Path>
                 <Button x:Name="intallButton" Opacity="0" Width="305" Height="160" Click="UpdataFiles" IsEnabled="False"/>
             </Canvas>
+            <Button x:Name="SceneButotn" Canvas.Right="20" Canvas.Top="20" Style="{StaticResource NomalButtonStyle}" Width="305" Height="30" Content="激活Scene" Click="SceneButotn_Click"/>
+            <Button x:Name="ShizukuButotn" Canvas.Right="20" Canvas.Top="70" Style="{StaticResource NomalButtonStyle}" Width="305" Height="30" Content="激活Shizuku" Click="ShizukuButotn_Click"/>
+
         </Canvas>
     </Grid>
 </Page>

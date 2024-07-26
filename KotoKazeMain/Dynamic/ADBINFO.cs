@@ -10,12 +10,13 @@ using System.Text;
 using System.Text.RegularExpressions;
 using static KotoKaze.Dynamic.BackgroundTaskList;
 using FileControl;
+using iNKORE.UI.WPF.Modern.Controls.Primitives;
 
 namespace KotoKaze.Dynamic
 {
     public class ADBINFO
     {
-        private static readonly string adb = Path.Combine(FileManager.WorkDirectory.BinDirectory, "platform-tools/adb.exe");
+        public static string adb {get; } = Path.Combine(FileManager.WorkDirectory.BinDirectory, "platform-tools/adb.exe");
         
         public class PhoneInfo
         {
@@ -169,6 +170,24 @@ namespace KotoKaze.Dynamic
                     APKINSTALLTASK.Description = "Performing Streamed Install....";
                 });
                 APKINSTALLTASK.StreamProcess();
+            });
+        }
+        public static void Active(CMDBackgroundTask ActiveTask,string activeCmd) 
+        {
+            if (IsTaskRunning(ActiveTask))
+            {
+                KotoMessageBoxSingle.ShowDialog("该任务已存在,检查任务列表");
+                return;
+            }
+            Task.Run(() =>
+            {
+                ActiveTask.Start();
+                ActiveTask.CommandWrite([activeCmd]);
+                ActiveTask.outputThreadAction = new(() =>
+                {
+                    ActiveTask.Description = $"正在{ActiveTask.Title}";
+                });
+                ActiveTask.StreamProcess();
             });
         }
     }
