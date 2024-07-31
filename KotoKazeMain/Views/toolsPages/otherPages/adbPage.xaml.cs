@@ -128,7 +128,7 @@ namespace KotoKaze.Views.toolsPages.otherPages
 
         private void SceneButotn_Click(object sender, RoutedEventArgs e)
         {
-            string activeCmd = $"{adb} shell sh /storage/emulated/0/Android/data/com.omarea.vtools";
+            string activeCmd = $"{adb} shell sh /storage/emulated/0/Android/data/com.omarea.vtools";//未来可以添加其他的命令，adb命令挺多的
             Active(ACTIVESCENE,activeCmd);
         }
 

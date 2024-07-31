@@ -14,9 +14,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\toolsPages\SystemToolsPages\**" />
     <Compile Remove="Widgets\**" />
+    <EmbeddedResource Remove="Views\toolsPages\SystemToolsPages\**" />
     <EmbeddedResource Remove="Widgets\**" />
+    <None Remove="Views\toolsPages\SystemToolsPages\**" />
     <None Remove="Widgets\**" />
+    <Page Remove="Views\toolsPages\SystemToolsPages\**" />
     <Page Remove="Widgets\**" />
   </ItemGroup>
 
@@ -124,10 +128,6 @@
     <Resource Include="image\icons\windows10.png" />
     <Resource Include="image\icons\windows10black.png" />
     <Resource Include="image\icons\windows11.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\toolsPages\SystemToolsPages\" />
   </ItemGroup>
 
   <ItemGroup>
