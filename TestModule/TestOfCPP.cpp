@@ -7,6 +7,7 @@
 #include <thread>
 #include <fstream>
 #include <filesystem>
+#include <string>
 
 #pragma optimize("", off)
 Test_API int RamWriteSpeed()
