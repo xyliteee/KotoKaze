@@ -179,16 +179,13 @@ namespace KotoKaze.Dynamic
                 KotoMessageBoxSingle.ShowDialog("该任务已存在,检查任务列表");
                 return;
             }
-            Task.Run(() =>
+            ActiveTask.Start();
+            ActiveTask.CommandWrite([activeCmd]);
+            ActiveTask.outputThreadAction = new(() =>
             {
-                ActiveTask.Start();
-                ActiveTask.CommandWrite([activeCmd]);
-                ActiveTask.outputThreadAction = new(() =>
-                {
-                    ActiveTask.Description = $"正在{ActiveTask.Title}";
-                });
-                ActiveTask.StreamProcess();
+                ActiveTask.Description = $"正在{ActiveTask.Title}";
             });
+            ActiveTask.StreamProcess();
         }
     }
 }

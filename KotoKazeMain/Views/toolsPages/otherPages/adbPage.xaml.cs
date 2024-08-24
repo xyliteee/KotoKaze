@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using static KotoKaze.Dynamic.ADBINFO;
+using static KotoKaze.Dynamic.BackgroundTaskList;
 using FileControl;
 using KotoKaze.Static;
 
@@ -128,8 +129,16 @@ namespace KotoKaze.Views.toolsPages.otherPages
 
         private void SceneButotn_Click(object sender, RoutedEventArgs e)
         {
-            string activeCmd = $"{adb} shell sh /storage/emulated/0/Android/data/com.omarea.vtools";//未来可以添加其他的命令，adb命令挺多的
-            Active(ACTIVESCENE,activeCmd);
+            if (IsTaskRunning(ACTIVESCENE))
+            {
+                KotoMessageBoxSingle.ShowDialog("该任务已存在,检查任务列表");
+                return;
+            }
+            string activeCmd = $"{adb} shell sh /storage/emulated/0/Android/data/com.omarea.vtools/up.sh";
+            ACTIVESCENE.errorThreadAction = new(() => { });//Files Exits会返回错误，但不影响执行，因此把错误监察线程置空
+            ACTIVESCENE.Start();
+            ACTIVESCENE.CommandWrite([activeCmd]);
+            ACTIVESCENE.StreamProcess();
         }
 
         private void ShizukuButotn_Click(object sender, RoutedEventArgs e)
