@@ -30,8 +30,8 @@
                         <GradientStop Color="#A0C5E0" Offset="1" />
                     </LinearGradientBrush>
                 </Canvas.Background>
-                <Button x:Name="minButton" WindowChrome.IsHitTestVisibleInChrome="True" Click="MinButton_Click" FontSize="12" Content="—" Height="30" Width="40" Canvas.Right="40" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource minButtonStyle}"/>
-                <Button x:Name="shutDownButton" WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource ShutdownButtonStyle}" FontSize="20" Content="×" Click="ShutdownButton_Click" Height="30" Width="40" Canvas.Right="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Button x:Name="minButton" WindowChrome.IsHitTestVisibleInChrome="True" Click="MinButton_Click" FontSize="20" Content="&#xe624;" FontFamily="../#iconfont" Height="30" Width="40" Canvas.Right="40" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource minButtonStyle}"/>
+                <Button x:Name="shutDownButton" WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource ShutdownButtonStyle}" FontSize="20" Content="&#xe609;" FontFamily="../#iconfont" Click="ShutdownButton_Click" Height="30" Width="40" Canvas.Right="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Canvas>
 
             <Canvas x:Name="activicyZone" Height="510" Width="820" Canvas.Top="30">

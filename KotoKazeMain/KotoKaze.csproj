@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="iconfont.ttf" />
     <None Remove="image\Header\Test2.png" />
     <None Remove="image\icons\cha.png" />
     <None Remove="image\icons\Clean.png" />
@@ -70,6 +71,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="iconfont.ttf" />
     <Resource Include="image\icons\DownloadToPhone.png" />
     <Resource Include="image\icons\icon.png">
       <Pack>True</Pack>
